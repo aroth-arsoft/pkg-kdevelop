@@ -1,3 +1,9 @@
+kdevelop (4:4.5.80-0ubuntu0.1~aroth~ppa2) saucy; urgency=low
+
+  * make sure to use version 1.5.80 or higher of kdevplatform 
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Fri, 15 Nov 2013 13:02:21 +0100
+
 kdevelop (4:4.5.80-0ubuntu0.1~aroth~ppa1) saucy; urgency=low
 
   * new version 4.6 Beta 1
