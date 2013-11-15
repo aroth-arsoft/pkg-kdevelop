@@ -1,8 +1,8 @@
-kdevelop (4:4.5.60~0.1~git20131027+r16787-0daily7~ubuntu13.10.1) saucy; urgency=low
+kdevelop (4:4.5.80-0ubuntu0.1~aroth~ppa1) saucy; urgency=low
 
-  * Auto build.
+  * new version 4.6 Beta 1
 
- -- Andreas Roth <aroth@arsoft-online.com>  Sun, 27 Oct 2013 13:11:06 +0000
+ -- Andreas Roth <aroth@arsoft-online.com>  Fri, 15 Nov 2013 08:12:22 +0100
 
 kdevelop (4:4.5.60-0.1) raring; urgency=low
 
