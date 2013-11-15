@@ -1,0 +1,144 @@
+Source: kdevelop
+Section: devel
+Priority: optional
+Maintainer: Kubuntu Developers <kubuntu-devel@lists.ubuntu.com>
+XSBC-Original-Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+Uploaders: Fathi Boudra <fabo@debian.org>,
+           Jeremy Lainé <jeremy.laine@m4x.org>,
+           George Kiagiadakis <kiagiadakis.george@gmail.com>,
+           Andreas Cord-Landwehr <cola@uni-paderborn.de>
+Build-Depends: cdbs,
+               cmake,
+               debhelper (>= 7.4.15),
+               kde-workspace-dev (>= 4:4.5.2),
+               kdevplatform-dev (>= 1.5.60~),
+               libqtwebkit-dev,
+               okteta-dev (>= 4:4.10),
+               pkg-kde-tools (>= 0.9.0),
+               libqjson-dev,
+               shared-mime-info
+Standards-Version: 3.9.4
+Homepage: http://www.kdevelop.org/
+Vcs-Browser: http://git.debian.org/?p=pkg-kde/kde-std/kdevelop.git
+Vcs-Git: git://git.debian.org/pkg-kde/kde-std/kdevelop.git
+
+Package: kdevelop
+Architecture: any
+Depends: kdevelop-data (>= ${source:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends},
+         kate-data
+Recommends: g++, gcc, gdb (>= 7.0), make
+Replaces: kdevelop-custom-buildsystem
+Conflicts: kdevelop-custom-buildsystem
+Suggests: cmake, kapptemplate, kdevelop-l10n
+Description: integrated development environment for KDE
+ KDevelop is an easy to use integrated development environment for KDE.
+ It supports a wide range of programming languages and features project
+ management, an advanced editor, a class browser and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+
+Package: kdevelop-data
+Architecture: all
+Depends: ${misc:Depends}
+Breaks: kdevelop-doc (<< 4:4.3)
+Replaces: kdevelop-doc (<< 4:4.3)
+Description: data files for the KDevelop IDE
+ KDevelop is an easy to use integrated development environment for KDE.
+ It supports a wide range of programming languages and features project
+ management, an advanced editor, a class browser and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+ .
+ This package contains arch independent data for KDevelop.
+
+Package: kdevelop-dev
+Architecture: any
+Depends: kdelibs5-dev,
+         kdevelop (= ${binary:Version}),
+         kdevplatform-dev,
+         ${misc:Depends}
+Description: development files for the KDevelop IDE
+ KDevelop is an easy to use integrated development environment for KDE.
+ It supports a wide range of programming languages and features project
+ management, an advanced editor, a class browser and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+ .
+ This package contains development files for KDevelop.
+
+Package: kdevelop-dbg
+Section: debug
+Architecture: any
+Priority: extra
+Depends: kdelibs5-dbg, kdevelop (= ${binary:Version})
+Description: debugging symbols for KDevelop
+ KDevelop is an easy to use integrated development environment for KDE.
+ It supports a wide range of programming languages and features project
+ management, an advanced editor, a class browser and an integrated debugger.
+ .
+ The application wizard can generate fully functional projects
+ for terminal programs and GUI programs using Qt, KDE or GNOME.
+ .
+ This package contains debugging symbols for KDevelop.
+
+Package: kdevelop-l10n
+Section: localization
+Architecture: all
+Replaces: kdevelop-l10n-ca,
+          kdevelop-l10n-cavalencia,
+          kdevelop-l10n-da,
+          kdevelop-l10n-de,
+          kdevelop-l10n-engb,
+          kdevelop-l10n-es,
+          kdevelop-l10n-et,
+          kdevelop-l10n-fi,
+          kdevelop-l10n-fr,
+          kdevelop-l10n-gl,
+          kdevelop-l10n-it,
+          kdevelop-l10n-nds,
+          kdevelop-l10n-nl,
+          kdevelop-l10n-pt,
+          kdevelop-l10n-ptbr,
+          kdevelop-l10n-ru,
+          kdevelop-l10n-sl,
+          kdevelop-l10n-sv,
+          kdevelop-l10n-th,
+          kdevelop-l10n-tr,
+          kdevelop-l10n-uk,
+          kdevelop-l10n-zhcn,
+          kdevelop-l10n-zhtw
+Breaks: kdevelop-l10n-ca,
+        kdevelop-l10n-cavalencia,
+        kdevelop-l10n-da,
+        kdevelop-l10n-de,
+        kdevelop-l10n-engb,
+        kdevelop-l10n-es,
+        kdevelop-l10n-et,
+        kdevelop-l10n-fi,
+        kdevelop-l10n-fr,
+        kdevelop-l10n-gl,
+        kdevelop-l10n-it,
+        kdevelop-l10n-nds,
+        kdevelop-l10n-nl,
+        kdevelop-l10n-pt,
+        kdevelop-l10n-ptbr,
+        kdevelop-l10n-ru,
+        kdevelop-l10n-sl,
+        kdevelop-l10n-sv,
+        kdevelop-l10n-th,
+        kdevelop-l10n-tr,
+        kdevelop-l10n-uk,
+        kdevelop-l10n-zhcn,
+        kdevelop-l10n-zhtw
+Recommends: kdevplatform-l10n
+Description: localization files for the KDevelop IDE
+ KDevelop is an easy to use integrated development environment for KDE.
+ It supports a wide range of programming languages and features project
+ management, an advanced editor, a class browser and an integrated debugger.
+ .
+ This package contains the translations for KDevelop.
