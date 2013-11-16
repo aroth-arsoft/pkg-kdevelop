@@ -1,3 +1,10 @@
+kdevelop (4:4.5.80-0ubuntu0.2+git7566918fe417cd8b3664b99a7539dd77fe5b96ff~aroth~ppa3) saucy; urgency=low
+
+  * integrate latest fixes from origin/4.6
+  (7566918fe417cd8b3664b99a7539dd77fe5b96ff)
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Sat, 16 Nov 2013 08:06:44 +0100
+
 kdevelop (4:4.5.80-0ubuntu0.1~aroth~ppa2) saucy; urgency=low
 
   * make sure to use version 1.5.80 or higher of kdevplatform 
