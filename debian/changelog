@@ -1,3 +1,9 @@
+kdevelop (4:4.5.80-0ubuntu0.3+git108027d1f0b93bfe4b006bb70aa55d88fa0edf0b~aroth~ppa4) UNRELEASED; urgency=low
+
+  * integrate 108027d1f0b93bfe4b006bb70aa55d88fa0edf0b
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Fri, 22 Nov 2013 23:08:46 +0100
+
 kdevelop (4:4.5.80-0ubuntu0.2+git7566918fe417cd8b3664b99a7539dd77fe5b96ff~aroth~ppa3) saucy; urgency=low
 
   * integrate latest fixes from origin/4.6

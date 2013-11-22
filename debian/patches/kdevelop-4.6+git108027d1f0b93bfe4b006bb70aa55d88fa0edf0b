@@ -1,0 +1,2622 @@
+diff --git a/app/main.cpp b/app/main.cpp
+index a0393b1..0509be2 100644
+--- a/app/main.cpp
++++ b/app/main.cpp
+@@ -456,7 +456,7 @@ int main( int argc, char *argv[] )
+ 
+     KDevSplashScreen* splash = 0;
+     QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
+-    if( !splashFile.isEmpty() )
++    if( !splashFile.isEmpty() && !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") )
+     {
+         QPixmap pm;
+         pm.load( splashFile );
+diff --git a/debuggers/gdb/kdevgdb.desktop.cmake b/debuggers/gdb/kdevgdb.desktop.cmake
+index 8cb65bb..4286f25 100644
+--- a/debuggers/gdb/kdevgdb.desktop.cmake
++++ b/debuggers/gdb/kdevgdb.desktop.cmake
+@@ -3,7 +3,7 @@ Type=Service
+ Exec=blubb
+ Comment=This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.
+ Comment[bs]=Ovaj dodatak pruža link za GDB, ispravljač grešaka izvornog nivoa za C, C++ i druge.
+-Comment[ca]=Aquest connector proveeix d'un frontal per GDB, un depurador a nivell de codi per C,C++ i més llenguatges.
++Comment[ca]=Aquest connector proveeix d'un frontal per GDB, un depurador a nivell de codi per C, C++ i més llenguatges.
+ Comment[ca@valencia]=Este connector proveeix d'un frontal per GDB, un depurador a nivell de codi per C,C++ i més llenguatges.
+ Comment[da]=Dette plugin sørger for en brugerflade til GDB, en fejlsøger til C, C++ og mere.
+ Comment[de]=Dieses Modul stellt eine Oberfläche für GDB zur Verfügung. GDB ist ein Debugger für C, C++ und weitere Sprachen.
+diff --git a/debuggers/gdb/mi/milexer.cpp b/debuggers/gdb/mi/milexer.cpp
+index 06a74eb..9768060 100644
+--- a/debuggers/gdb/mi/milexer.cpp
++++ b/debuggers/gdb/mi/milexer.cpp
+@@ -139,7 +139,7 @@ int MILexer::nextToken(int &pos, int &len)
+         start = m_ptr;
+ 
+         ch = m_contents[m_ptr];
+-        Q_ASSERT(ch >= 0 && short(ch) < 128);
++        Q_ASSERT(ch >= 0);
+         (this->*s_scan_table[static_cast<uchar>(ch)])(&kind);
+ 
+         switch (kind) {
+diff --git a/file_templates/CMakeLists.txt b/file_templates/CMakeLists.txt
+index cf8c753..5ca00fd 100644
+--- a/file_templates/CMakeLists.txt
++++ b/file_templates/CMakeLists.txt
+@@ -23,6 +23,7 @@ kdevplatform_add_file_templates(${filetemplate_DIRS})
+ install ( FILES
+     common/method_declaration_cpp.txt
+     common/method_definition_cpp.txt
++    common/license_header_cpp.txt
+     common/class_declaration_cpp.txt
+     common/cpp_header.h
+     common/cpp_header_onlyfunctions.h
+diff --git a/file_templates/classes/c_gobject/class.c b/file_templates/classes/c_gobject/class.c
+index a0e9d34..1ae60fb 100644
+--- a/file_templates/classes/c_gobject/class.c
++++ b/file_templates/classes/c_gobject/class.c
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+-{{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #include "{{ output_file_header }}"
+diff --git a/file_templates/classes/c_gobject/class.h b/file_templates/classes/c_gobject/class.h
+index 22b8db3..13a6284 100644
+--- a/file_templates/classes/c_gobject/class.h
++++ b/file_templates/classes/c_gobject/class.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+-{{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ {% with namespaces|join:"_"|default:"___"|add:"_"|cut:"____"|upper as uc_prefix %}
+diff --git a/file_templates/classes/c_gobject_private/class.c b/file_templates/classes/c_gobject_private/class.c
+index 3f604b2..d931964 100644
+--- a/file_templates/classes/c_gobject_private/class.c
++++ b/file_templates/classes/c_gobject_private/class.c
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+-{{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #include "{{ output_file_header }}"
+diff --git a/file_templates/classes/c_gobject_private/class.h b/file_templates/classes/c_gobject_private/class.h
+index 93f2bfb..9786016 100644
+--- a/file_templates/classes/c_gobject_private/class.h
++++ b/file_templates/classes/c_gobject_private/class.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+-{{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ {% with namespaces|join:"_"|default:"___"|add:"_"|cut:"____"|upper as uc_prefix %}
+diff --git a/file_templates/classes/c_gobject_properties/class.c b/file_templates/classes/c_gobject_properties/class.c
+index a996d84..cbfb32b 100644
+--- a/file_templates/classes/c_gobject_properties/class.c
++++ b/file_templates/classes/c_gobject_properties/class.c
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+-{{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #include "{{ output_file_header }}"
+diff --git a/file_templates/classes/c_gobject_properties/class.h b/file_templates/classes/c_gobject_properties/class.h
+index 24b0a69..06f791f 100644
+--- a/file_templates/classes/c_gobject_properties/class.h
++++ b/file_templates/classes/c_gobject_properties/class.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+-{{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ {% with namespaces|join:"_"|default:"___"|add:"_"|cut:"____"|upper as uc_prefix %}
+diff --git a/file_templates/classes/private_pointer/class.cpp b/file_templates/classes/private_pointer/class.cpp
+index 822abc7..98fd9b0 100644
+--- a/file_templates/classes/private_pointer/class.cpp
++++ b/file_templates/classes/private_pointer/class.cpp
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #include "{{ output_file_header }}"
+diff --git a/file_templates/classes/private_pointer/class_p.h b/file_templates/classes/private_pointer/class_p.h
+index 61ff11b..be2634b 100644
+--- a/file_templates/classes/private_pointer/class_p.h
++++ b/file_templates/classes/private_pointer/class_p.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #ifndef {{ private_class_name|upper}}_H
+diff --git a/file_templates/classes/python_basic/class.py b/file_templates/classes/python_basic/class.py
+index 72f2441..52222c5 100644
+--- a/file_templates/classes/python_basic/class.py
++++ b/file_templates/classes/python_basic/class.py
+@@ -1,8 +1,12 @@
+ {% load kdev_filters %}
++{% block license_header %}
++{% if license %}
+ #
+ 
+ {{ license|lines_prepend:"# " }}
+ #
++{% endif %}
++{% endblock license_header %}
+ 
+ 
+ class {{ name }}{% if base_classes %}({% for inh in base_classes %}{{ inh.baseType }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}:
+diff --git a/file_templates/classes/qobject/qobject.desktop b/file_templates/classes/qobject/qobject.desktop
+index cd0a1d2..d5e1db6 100644
+--- a/file_templates/classes/qobject/qobject.desktop
++++ b/file_templates/classes/qobject/qobject.desktop
+@@ -4,7 +4,7 @@ Name[bs]=QObject podklasa
+ Name[ca]=Subclasse QObject
+ Name[ca@valencia]=Subclasse QObject
+ Name[da]=QObject-underklasse
+-Name[de]=GObject-Unterklasse
++Name[de]=QObject-Unterklasse
+ Name[el]=QObject subclass
+ Name[es]=Subclase de QObject
+ Name[et]=QObjecti alamklass
+@@ -32,7 +32,7 @@ Comment[bs]=QObject podklasa s svojstvima
+ Comment[ca]=Subclasse QObject amb propietats
+ Comment[ca@valencia]=Subclasse QObject amb propietats
+ Comment[da]=QObject-underklasse med egenskaber
+-Comment[de]=Eine GObject-Unterklasse mit Eigenschaften
++Comment[de]=Eine QObject-Unterklasse mit Eigenschaften
+ Comment[el]=QObject subclass με ιδιότητες
+ Comment[es]=Subclase de QObject con propiedades
+ Comment[et]=QObjecti alamklass omadustega
+diff --git a/file_templates/common/cpp_header.h b/file_templates/common/cpp_header.h
+index 61086a5..ac1a672 100644
+--- a/file_templates/common/cpp_header.h
++++ b/file_templates/common/cpp_header.h
+@@ -1,12 +1,5 @@
+ {% load kdev_filters %}
+-{% block license_header %}
+-{% if license %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
+-{% endif %}
+-{% endblock license_header %}
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ {% block include_guard_open %}
+diff --git a/file_templates/common/cpp_header_onlyfunctions.h b/file_templates/common/cpp_header_onlyfunctions.h
+index 3fec7c6..d6b7feb 100644
+--- a/file_templates/common/cpp_header_onlyfunctions.h
++++ b/file_templates/common/cpp_header_onlyfunctions.h
+@@ -1,10 +1,5 @@
+ {% load kdev_filters %}
+-{% block license_header %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
+-{% endblock license_header %}
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ {% block include_guard_open %}
+diff --git a/file_templates/common/cpp_implementation.cpp b/file_templates/common/cpp_implementation.cpp
+index 10800bd..07cb8af 100644
+--- a/file_templates/common/cpp_implementation.cpp
++++ b/file_templates/common/cpp_implementation.cpp
+@@ -1,10 +1,5 @@
+ {% load kdev_filters %}
+-{% block license_header %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
+-{% endblock license_header %}
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ {% block includes %}
+diff --git a/file_templates/common/license_header_cpp.txt b/file_templates/common/license_header_cpp.txt
+new file mode 100644
+index 0000000..622b9f7
+--- /dev/null
++++ b/file_templates/common/license_header_cpp.txt
+@@ -0,0 +1,9 @@
++{% load kdev_filters %}
++{% block license_header %}
++{% if license %}
++/*
++
++ {{ license|lines_prepend:" * " }}
++ */
++{% endif %}
++{% endblock license_header %}
+diff --git a/file_templates/testing/cpp_qtestlib/class.cpp b/file_templates/testing/cpp_qtestlib/class.cpp
+index f72984d..65dedee 100644
+--- a/file_templates/testing/cpp_qtestlib/class.cpp
++++ b/file_templates/testing/cpp_qtestlib/class.cpp
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ #include "{{ output_file_header }}"
+ 
+diff --git a/file_templates/testing/cpp_qtestlib/class.h b/file_templates/testing/cpp_qtestlib/class.h
+index f7f30b9..fee04cd 100644
+--- a/file_templates/testing/cpp_qtestlib/class.h
++++ b/file_templates/testing/cpp_qtestlib/class.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #ifndef {{ name|upper }}_H
+diff --git a/file_templates/testing/cpp_qtestlib_kde/class.cpp b/file_templates/testing/cpp_qtestlib_kde/class.cpp
+index 4e3ddad..db9b83e 100644
+--- a/file_templates/testing/cpp_qtestlib_kde/class.cpp
++++ b/file_templates/testing/cpp_qtestlib_kde/class.cpp
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #include "{{ output_file_header }}"
+diff --git a/file_templates/testing/cpp_qtestlib_kde/class.h b/file_templates/testing/cpp_qtestlib_kde/class.h
+index a169f64..a8038f3 100644
+--- a/file_templates/testing/cpp_qtestlib_kde/class.h
++++ b/file_templates/testing/cpp_qtestlib_kde/class.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #ifndef {{ name|upper }}_H
+diff --git a/file_templates/testing/cpp_qtestlib_kdevelop/class.cpp b/file_templates/testing/cpp_qtestlib_kdevelop/class.cpp
+index 2b3a851..6f978eb 100644
+--- a/file_templates/testing/cpp_qtestlib_kdevelop/class.cpp
++++ b/file_templates/testing/cpp_qtestlib_kdevelop/class.cpp
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #include "{{ output_file_header }}"
+diff --git a/file_templates/testing/cpp_qtestlib_kdevelop/class.h b/file_templates/testing/cpp_qtestlib_kdevelop/class.h
+index 11c4970..147586f 100644
+--- a/file_templates/testing/cpp_qtestlib_kdevelop/class.h
++++ b/file_templates/testing/cpp_qtestlib_kdevelop/class.h
+@@ -1,8 +1,5 @@
+ {% load kdev_filters %}
+-/*
+-
+- {{ license|lines_prepend:" * " }}
+- */
++{% include "license_header_cpp.txt" %}
+ 
+ 
+ #ifndef {{ name|upper }}_H
+diff --git a/file_templates/testing/php_phpunit/class.php b/file_templates/testing/php_phpunit/class.php
+index 89d6985..1e01171 100644
+--- a/file_templates/testing/php_phpunit/class.php
++++ b/file_templates/testing/php_phpunit/class.php
+@@ -1,11 +1,14 @@
+ {% load kdev_filters %}
+ <?php
+ 
+-
++{% block license_header %}
++{% if license %}
+ /*
+ 
+ {{ license|lines_prepend:" * " }}
+  */
++{% endif %}
++{% endblock license_header %}
+ 
+ 
+ class {{ name }} extends PHPUnit_Framework_TestCase
+diff --git a/file_templates/testing/python_pyunit/class.py b/file_templates/testing/python_pyunit/class.py
+index 6e24f83..3b13695 100644
+--- a/file_templates/testing/python_pyunit/class.py
++++ b/file_templates/testing/python_pyunit/class.py
+@@ -1,8 +1,12 @@
+ {% load kdev_filters %}
++{% block license_header %}
++{% if license %}
+ #
+ 
+  {{ license|lines_prepend:"# " }}
+ #
++{% endif %}
++{% endblock license_header %}
+ 
+ 
+ import unittest
+diff --git a/languages/cpp/cppduchain/cppducontext.h b/languages/cpp/cppduchain/cppducontext.h
+index aa405c9..f37b814 100644
+--- a/languages/cpp/cppduchain/cppducontext.h
++++ b/languages/cpp/cppduchain/cppducontext.h
+@@ -663,14 +663,12 @@ class CppDUContext : public BaseContext {
+         
+         l.unlock();
+         
+-        if(first->isAnonymous()) {
+-          Q_ASSERT(first->m_instantiatedFrom == this);
+-          delete first;
+-        } else {
+-          Q_ASSERT(first->m_instantiatedFrom == this);
+-          first->setInstantiatedFrom(0, InstantiationInformation());
+-          Q_ASSERT(first->m_instantiatedFrom == 0);
+-        }
++        ///TODO: anonymous contexts should get deleted but that is crashy
++        ///      see also declarationbuilder which also encountered this
++        ///      issue before and also removed the context deletion...
++        Q_ASSERT(first->m_instantiatedFrom == this);
++        first->setInstantiatedFrom(0, InstantiationInformation());
++        Q_ASSERT(first->m_instantiatedFrom == 0);
+         
+         oldFirst = first;
+         
+diff --git a/languages/cpp/cppduchain/expressionvisitor.cpp b/languages/cpp/cppduchain/expressionvisitor.cpp
+index 9b24b7c..6ad4ca8 100644
+--- a/languages/cpp/cppduchain/expressionvisitor.cpp
++++ b/languages/cpp/cppduchain/expressionvisitor.cpp
+@@ -207,13 +207,13 @@ void ExpressionVisitor::reportRealProblems(bool report) {
+   m_reportRealProblems = report;
+ }
+ 
+-void ExpressionVisitor::realProblem( ProblemPointer problem ) {
++void ExpressionVisitor::realProblem( const ProblemPointer& problem ) {
+   if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
+     m_problems << problem;
+   }
+ }
+ 
+-QList< KSharedPtr< KDevelop::Problem > > ExpressionVisitor::realProblems() const {
++QList<ProblemPointer> ExpressionVisitor::realProblems() const {
+   return m_problems;
+ }
+ 
+@@ -254,16 +254,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+ 
+     isConst |= isConstant(base);
+ 
+-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>( base.unsafeData() );
+     //Make sure that it is a structure-type, because other types do not have members
+-    StructureType* structureType = dynamic_cast<StructureType*>( base.unsafeData() );
++    const StructureType::Ptr& structureType = base.cast<StructureType>();
+ 
+-    if( !structureType || !idType ) {
++    if( !structureType ) {
+       problem( node, QString("findMember called on non-identified or non-structure type \"%1\"").arg(base ? base->toString() : "<type disappeared>") );
+       return;
+     }
+ 
+-    Declaration* declaration = idType->declaration(topContext());
++    Declaration* declaration = structureType->declaration(topContext());
+     MUST_HAVE(declaration);
+     MUST_HAVE(declaration->context());
+ 
+@@ -385,7 +384,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+ 
+     clearLast();
+ 
+-    PointerType* pnt = dynamic_cast<PointerType*>( base.unsafeData() );
++    const PointerType::Ptr& pnt = base.cast<PointerType>();
+     if( pnt ) {
+       if( constant )
+         (*constant) |= (pnt->modifiers() & AbstractType::ConstModifier);
+@@ -444,17 +443,16 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+ 
+       isConst |= isConstant(m_lastType);
+ 
+-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( m_lastType.unsafeData() );
+       //Make sure that it is a structure-type, because other types do not have members
+-      StructureType* structureType = dynamic_cast<StructureType*>( m_lastType.unsafeData() );
++      const StructureType::Ptr& structureType = m_lastType.cast<StructureType>();
+ 
+-      if( !structureType || !idType ) {
++      if( !structureType ) {
+         problem( node, QString("member searched in non-identified or non-structure type \"%1\"").arg(m_lastType ? m_lastType->toString() : "<type disappeared>") );
+         clearLast();
+         return;
+       }
+ 
+-      Declaration* declaration = idType->declaration(topContext());
++      Declaration* declaration = structureType->declaration(topContext());
+       MUST_HAVE(declaration);
+       MUST_HAVE(declaration->context());
+ 
+@@ -483,9 +481,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+     if( identifier == trueIdentifier || identifier == falseIdentifier ) {
+       ///We have a boolean constant, we need to catch that here
+       LOCKDUCHAIN;
+-      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
++      ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeBoolean));
++      type->setValue<qint64>( identifier == trueIdentifier );
++      m_lastType = type.cast<AbstractType>();
+       m_lastInstance = Instance( true );
+-      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( identifier == trueIdentifier );
+     } else {
+       LOCKDUCHAIN;
+ 
+@@ -510,7 +509,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+         missing->searchStartContext = const_cast<DUContext*>(m_currentContext);
+ 
+         if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
+-          KSharedPtr<KDevelop::Problem> problem(new Cpp::MissingDeclarationProblem(missing));
++          ProblemPointer problem(new Cpp::MissingDeclarationProblem(missing));
+           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
+           CppEditorIntegrator editor(session());
+           
+@@ -545,7 +544,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+           m_lastInstance = Instance(false);
+ 
+         //A CppTemplateParameterType represents an unresolved template-parameter, so create a DelayedType instead.
+-        if( dynamic_cast<CppTemplateParameterType*>(m_lastType.unsafeData()) )
++        if( m_lastType.cast<CppTemplateParameterType>() )
+           createDelayedType(node, false);
+       }
+     }
+@@ -604,11 +603,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+ 
+ 
+         if( num.endsWith('f') ) {
+-          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeFloat));
+-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<float>((float)val);
++          ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeFloat));
++          type->setValue<float>((float)val);
++          m_lastType = type.cast<AbstractType>();
+         } else {
+-          m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeDouble));
+-          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
++          ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeDouble));
++          type->setValue<double>(val);
++          m_lastType = type.cast<AbstractType>();
+         }
+       } else {
+         qint64 val = 0;
+@@ -637,7 +638,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+     } else if(token.kind == Token_char_literal) {
+       // char literal e.g. 'x'
+       LOCKDUCHAIN;
+-      ConstantIntegralType* charType = new ConstantIntegralType(IntegralType::TypeChar);
++      ConstantIntegralType::Ptr charType(new ConstantIntegralType(IntegralType::TypeChar));
+       if ( token.size == 3 ) {
+         charType->setValue<char>( m_session->token_stream->symbolByteArray(token).at(1) );
+       } else {
+@@ -663,14 +664,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
+         }
+       }
+ 
+-      m_lastType = AbstractType::Ptr(charType);
++      m_lastType = charType.cast<AbstractType>();
+       m_lastInstance = Instance( true );
+     } else if (token.kind == Token_true || token.kind == Token_false) {
+       ///We have a boolean constant, we need to catch that here
+       LOCKDUCHAIN;
+-      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));
++      ConstantIntegralType::Ptr type(new ConstantIntegralType(IntegralType::TypeBoolean));
++      type->setValue<qint64>( token.kind == Token_true );
++      m_lastType = type.cast<AbstractType>();
+       m_lastInstance = Instance( true );
+-      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.kind == Token_true );
+     } else if( token.kind == Token_this ) {
+       LOCKDUCHAIN;
+ 
+@@ -817,7 +819,7 @@ struct ConstantUnaryExpressionEvaluator {
+   /**
+    * Writes the results into endValue, type, and modifier.
+    * */
+-  ConstantUnaryExpressionEvaluator( quint16 tokenKind, ConstantIntegralType* left ) {
++  ConstantUnaryExpressionEvaluator( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
+     endValue = 0;
+     type = left->dataType();
+     modifier = left->modifiers();
+@@ -839,7 +841,7 @@ struct ConstantUnaryExpressionEvaluator {
+   }
+ 
+   //This function is used to disable some operators on bool and double values
+-  void evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
++  void evaluateSpecialTokens( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
+     switch( tokenKind ) {
+       case '~':
+         endValue = ~left->value<Type>();
+@@ -850,22 +852,23 @@ struct ConstantUnaryExpressionEvaluator {
+     }
+   }
+ 
+-  AbstractType::Ptr createType() {
+-    AbstractType::Ptr ret = AbstractType::Ptr(new ConstantIntegralType(type));
++  AbstractType::Ptr createType() const
++  {
++    ConstantIntegralType::Ptr ret(new ConstantIntegralType(type));
+     ret->setModifiers(modifier);
+-    static_cast<ConstantIntegralType*>(ret.unsafeData())->setValue<Type>( endValue );
+-    return ret;
++    ret->setValue<Type>( endValue );
++    return ret.cast<AbstractType>();
+   }
+ };
+ 
+ template<>
+-void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
++void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
+   Q_UNUSED(tokenKind);
+   Q_UNUSED(left);
+ }
+ 
+ template<>
+-void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, ConstantIntegralType* left ) {
++void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( quint16 tokenKind, const ConstantIntegralType::Ptr& left ) {
+   Q_UNUSED(tokenKind);
+   Q_UNUSED(left);
+ }
+@@ -1003,7 +1006,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+       return;
+     }
+ 
+-    if( dynamic_cast<DelayedType*>(rightType.unsafeData()) || dynamic_cast<DelayedType*>(leftType.unsafeData()) ) {
++    if( rightType.cast<DelayedType>() || leftType.cast<DelayedType>() ) {
+       m_lastInstance = Instance(true);
+       createDelayedType(node);
+       return;
+@@ -1098,7 +1101,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+         ///Allow non-types, because we sometimes don't know whether something is a type or not, and it may get parsed as a type.
+         m_lastInstance = Instance(decls.first());
+ 
+-      if( dynamic_cast<CppTemplateParameterType*>(m_lastType.unsafeData()) )
++      if( m_lastType.cast<CppTemplateParameterType>() )
+         createDelayedType(ast, false);
+     } else {
+       problem(ast, "Could not resolve type");
+@@ -1128,7 +1131,16 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+   {
+     if(node->declarator)
+     {
+-      CppClassType::Ptr constructedType = computeConstructedType();
++      // apply pointer ops to lvalue type
++      visitNodes(this, node->declarator->ptr_ops);
++      CppClassType::Ptr constructedType;
++      if (!m_lastType || !isPointerType(m_lastType)) {
++        // Do not blindly dereference, esp. for 'foo* f = new foo;' expressions.
++        // Note how computeConstructedType only takes the declaration in
++        // m_lastDeclarations into account.
++        // Thus, if the lvalue is a pointer we definitely should not get a ClassType.
++        constructedType = computeConstructedType();
++      }
+ 
+       //Build constructor uses (similar to visitFunctionCall)
+ 
+@@ -1153,11 +1165,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+         { // report operator= use in i.e.: foo = bar;
+           token = node->initializer->start_token;
+           fail = !buildParametersFromExpression(node->initializer->initializer_clause);
+-          LOCKDUCHAIN;
+           declarations.clear();
++          LOCKDUCHAIN;
+           if ( ClassDeclaration* cdec = dynamic_cast<ClassDeclaration*>(constructedType->declaration(m_source)) ) {
++            // constructors are handled automatically in the overload resultion
++            declarations << DeclarationPointer(cdec);
+             ///TODO: global operator= functions, for now only class members are handled
+-            foreach(Declaration* dec, cdec->internalContext()->findDeclarations(Identifier("operator="))) {
++            static const Identifier opEq("operator=");
++            foreach(Declaration* dec, cdec->internalContext()->findDeclarations(opEq)) {
+               declarations << DeclarationPointer(dec);
+             }
+           }
+@@ -1171,8 +1186,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+       if(fail || !constructedType) {
+         DefaultVisitor::visitInitDeclarator(node);
+         return;
+-      } else {
+-        visitNodes(this,node->declarator->ptr_ops);
+       }
+ 
+       DeclarationPointer chosenFunction;
+@@ -1481,7 +1494,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+     visit(node->condition);
+ 
+ 
+-    if( dynamic_cast<DelayedType*>(m_lastType.unsafeData()) ) {
++    if( m_lastType.cast<DelayedType>() ) {
+       //Store the expression so it's evaluated later
+       m_lastInstance = Instance(true);
+       createDelayedType(node);
+@@ -1503,7 +1516,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+ 
+     {
+       LOCKDUCHAIN;
+-      if( ConstantIntegralType* condition = dynamic_cast<ConstantIntegralType*>( conditionType.unsafeData() ) ) {
++      if( const ConstantIntegralType::Ptr& condition = conditionType.cast<ConstantIntegralType>() ) {
+         ///For constant integral types, the condition could be evaluated, so we choose the correct result.
+         if( condition->value<quint64>() == 0 ) {
+           ///The right expression is the correct one, so do nothing
+@@ -1617,11 +1630,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+     break;
+     default:
+     {
+-      KDevelop::IntegralType* integral = dynamic_cast<KDevelop::IntegralType*>(m_lastType.unsafeData());
++      const IntegralType::Ptr& integral = m_lastType.cast<IntegralType>();
+       if( integral ) {
+         //The type of integral types does not change on unary operators
+         //Eventually evaluate the value of constant integral types
+-        ConstantIntegralType* constantIntegral = dynamic_cast<ConstantIntegralType*>(integral);
++        const ConstantIntegralType::Ptr& constantIntegral = integral.cast<ConstantIntegralType>();
+ 
+         if( constantIntegral ) {
+ 
+@@ -1701,7 +1714,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+     if( !m_lastType )
+       return;
+ 
+-    KDevelop::FunctionType* f = dynamic_cast<KDevelop::FunctionType*>( m_lastType.unsafeData() );
++    const FunctionType::Ptr& f = m_lastType.cast<FunctionType>();
+     if( !f ) {
+       LOCKDUCHAIN;
+       problem(node, QString("cannot get return-type of type %1, it is not a function-type").arg(m_lastType->toString()));
+@@ -1719,8 +1732,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+   {
+     CppClassType::Ptr constructedType;
+ 
+-    AbstractType::Ptr oldLastType = m_lastType;
+-
+     if(!m_lastInstance) {
+       LOCKDUCHAIN;
+       if(m_lastDeclarations.isEmpty() && m_lastType && !m_lastInstance) {
+@@ -1923,7 +1934,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+     if( !chosenFunction && constructedType )
+     {
+       //Default-constructor is used
+-      m_lastType = AbstractType::Ptr(constructedType.unsafeData());
++      m_lastType = constructedType.cast<AbstractType>();
+       DeclarationPointer decl(constructedType->declaration(topContext()));
+       m_lastInstance = Instance(decl.data());
+       m_lastDeclarations.clear();
+@@ -1970,8 +1981,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+       // Remove the MissingDeclarationProblem which has been created alongside MissingDeclarationType
+       for(int idx = m_problems.size()-1; idx >= 0; --idx)
+       {
+-        KSharedPtr<KDevelop::Problem>& prob(m_problems[idx]);
+-        MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
++        const ProblemPointer& prob = m_problems[idx];
++        const MissingDeclarationProblem* pMissing = dynamic_cast<const MissingDeclarationProblem*>(prob.constData());
+         if (pMissing && pMissing->type == missing )
+         {
+           m_problems.removeAt(idx);
+@@ -1984,7 +1995,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+ 
+     if( constructedType ) {
+       //Constructor was called
+-      m_lastType = AbstractType::Ptr(constructedType.unsafeData());
++      m_lastType = constructedType.cast<AbstractType>();
+       m_lastInstance = Instance(constructedType->declaration(topContext()));
+     } else if (chosenFunction) {
+       KDevelop::FunctionType::Ptr functionType = chosenFunction->abstractType().cast<KDevelop::FunctionType>();
+@@ -2199,8 +2210,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+     m_lastInstance = Instance(true);
+   }
+ 
+-  void ExpressionVisitor::visitCondition(ConditionAST* /*node*/)
++  void ExpressionVisitor::visitCondition(ConditionAST* node)
+   {
++    DefaultVisitor::visitCondition(node);
+     LOCKDUCHAIN;
+     m_lastType = AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeBoolean) );
+     m_lastInstance = Instance(true);
+@@ -2225,7 +2237,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+ 
+     PointerType::Ptr p( new PointerType() );
+ 
+-    p->setBaseType( AbstractType::Ptr(i.unsafeData()) );
++    p->setBaseType( i.cast<AbstractType>() );
+ 
+     m_lastType = p.cast<AbstractType>();
+     m_lastInstance = Instance(true);
+@@ -2242,7 +2254,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
+     ///post-fix increment/decrement like "i++" or "i--"
+     ///This does neither change the evaluated value, nor the type(except for overloaded operators)
+ 
+-    if( dynamic_cast<KDevelop::IntegralType*>(m_lastType.unsafeData()) ) {
++    if( m_lastType.cast<IntegralType>() ) {
+       ///Leave the type and its value alone
+     } else {
+       ///It is not an integral type, try finding an overloaded operator and use the return-value
+diff --git a/languages/cpp/cppduchain/expressionvisitor.h b/languages/cpp/cppduchain/expressionvisitor.h
+index 58ffad7..48d1811 100644
+--- a/languages/cpp/cppduchain/expressionvisitor.h
++++ b/languages/cpp/cppduchain/expressionvisitor.h
+@@ -96,7 +96,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
+     void reportRealProblems(bool);
+     
+     //Returns all posted real problems that appeared during this run. Only if reportRealProblems(true) has been called before.
+-    QList<KSharedPtr<KDevelop::Problem> > realProblems() const;
++    QList<ProblemPointer> realProblems() const;
+     
+     ///Returns the last queried list of declarations
+     QList<DeclarationPointer> lastDeclarations() const;
+@@ -144,7 +144,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
+      *
+      * @see reportRealProblems()
+      */
+-    void realProblem( ProblemPointer problem );
++    void realProblem( const ProblemPointer& problem );
+ 
+     const DUContext* currentContext() const;
+ 
+@@ -219,7 +219,7 @@ private:
+     const KDevelop::TopDUContext* m_topContext;
+     bool m_reportRealProblems;
+ 
+-    QList<KSharedPtr<KDevelop::Problem> > m_problems;
++    QList<ProblemPointer> m_problems;
+ 
+     /// set to true when member access on a const object should result in a const type
+     /// i.e.: 'const A* a; decltype((a->x)) b;', here b should be const
+diff --git a/languages/cpp/cppduchain/overloadresolution.cpp b/languages/cpp/cppduchain/overloadresolution.cpp
+index 22435ac..d220982 100644
+--- a/languages/cpp/cppduchain/overloadresolution.cpp
++++ b/languages/cpp/cppduchain/overloadresolution.cpp
+@@ -136,11 +136,9 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
+       else
+       {
+         //Classes should be substituted with their constructors
+-        QList<Declaration*> decls;
+-        TypeUtils::getConstructors( klass, m_topContext.data(), decls );
+-
+-        foreach( Declaration* decl, decls )
+-        newDeclarations.insert( decl );
++        foreach( Declaration* decl, TypeUtils::getConstructors( klass, m_topContext.data() ) ) {
++          newDeclarations.insert( decl );
++        }
+       }
+     }
+     else
+@@ -169,10 +167,9 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
+       else
+       {
+         //Classes should be substituted with their constructors
+-        QList<Declaration*> functions;
+-        TypeUtils::getConstructors( klass, m_topContext.data(), functions );
+-        foreach( Declaration* f, functions )
+-        newDeclarations.insert( f, decl.first );
++        foreach( Declaration* f, TypeUtils::getConstructors( klass, m_topContext.data() ) ) {
++          newDeclarations.insert( f, decl.first );
++        }
+       }
+     }
+     else
+diff --git a/languages/cpp/cppduchain/tests/test_duchain.cpp b/languages/cpp/cppduchain/tests/test_duchain.cpp
+index 2f03f08..966b262 100644
+--- a/languages/cpp/cppduchain/tests/test_duchain.cpp
++++ b/languages/cpp/cppduchain/tests/test_duchain.cpp
+@@ -5050,8 +5050,7 @@ void TestDUChain::testTemplatesRebind2() {
+ 
+   LockedTopDUContext top = parse(method, DumpNone);
+ 
+-  QList<Declaration*> constructors;
+-  TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top, constructors );
++  QList<Declaration*> constructors = TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top );
+   QCOMPARE(constructors.size(), 1);
+   OverloadResolver resolution( DUContextPointer(top->localDeclarations()[2]->internalContext()), TopDUContextPointer(top) );
+   QVERIFY(resolution.resolveConstructor( OverloadResolver::ParameterList() ));
+diff --git a/languages/cpp/cppduchain/typeutils.cpp b/languages/cpp/cppduchain/typeutils.cpp
+index 97f085d..4950981 100644
+--- a/languages/cpp/cppduchain/typeutils.cpp
++++ b/languages/cpp/cppduchain/typeutils.cpp
+@@ -186,25 +186,30 @@ using namespace KDevelop;
+       functions << (*it);
+   }
+ 
+-  void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions) {
++  QList<Declaration*> getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext)
++  {
++    QList<Declaration*> functions;
+     Declaration* klassDecl = klass->declaration(topContext);
+     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
+     if( !context || !context->owner() || !context->owner() ) {
+ //       kDebug(9007) << "Tried to get constructors of a class without context";
+-      return;
++      return functions;
+     }
+-    
++
+     Identifier id(context->owner()->identifier());
+     id.clearTemplateIdentifiers();
+ 
+-    QList<Declaration*> declarations = context->findLocalDeclarations(id, CursorInRevision::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
++    const QList<Declaration*>& declarations = context->findLocalDeclarations(id, CursorInRevision::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
+ 
+-    for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
+-      ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
+-      if( functionDeclaration && functionDeclaration->isConstructor() )
+-        functions <<  *it;
++    foreach( Declaration* dec, declarations ) {
++      ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( dec );
++      if( functionDeclaration && functionDeclaration->isConstructor() ) {
++        functions << dec;
++      }
+     }
++    return functions;
+   }
++
+   bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
+     if (!c || !base) {
+       return false;
+diff --git a/languages/cpp/cppduchain/typeutils.h b/languages/cpp/cppduchain/typeutils.h
+index 4917329..7a784f9 100644
+--- a/languages/cpp/cppduchain/typeutils.h
++++ b/languages/cpp/cppduchain/typeutils.h
+@@ -116,7 +116,7 @@ namespace TypeUtils {
+   /**
+    * Returns all constructors
+    * */
+-  KDEVCPPDUCHAIN_EXPORT void getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions);
++  KDEVCPPDUCHAIN_EXPORT QList<Declaration*> getConstructors(const CppClassType::Ptr& klass, const TopDUContext* topContext);
+   /**
+    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
+    **/
+diff --git a/languages/cpp/cppduchain/usebuilder.cpp b/languages/cpp/cppduchain/usebuilder.cpp
+index 0371284..05525a4 100644
+--- a/languages/cpp/cppduchain/usebuilder.cpp
++++ b/languages/cpp/cppduchain/usebuilder.cpp
+@@ -118,6 +118,7 @@ void UseBuilder::visitTypeIDOperator(TypeIDOperatorAST* node)
+ 
+ void UseBuilder::visitQPropertyDeclaration(QPropertyDeclarationAST* node)
+ {
++  buildUsesForName(node->member);
+   buildUsesForName(node->getter);
+   buildUsesForName(node->setter);
+   buildUsesForName(node->resetter);
+diff --git a/languages/cpp/parser/ast.h b/languages/cpp/parser/ast.h
+index 260dbb0..db20d74 100644
+--- a/languages/cpp/parser/ast.h
++++ b/languages/cpp/parser/ast.h
+@@ -334,21 +334,15 @@ public:
+   const ListNode<PtrOperatorAST*> *ptr_ops;
+   NameAST *name;
+ 
++  /// MEMBER, since Qt 5.1
++  NameAST *member;
+   NameAST *getter;
+   NameAST *setter;
+   NameAST *resetter;
+   NameAST *notifier;
+ 
+   NameAST *designableMethod;
+-  bool designableValue;
+-
+   NameAST *scriptableMethod;
+-  bool scriptableValue;
+-
+-  bool stored;
+-  bool user;
+-  bool constant;
+-  bool final;
+ };
+ 
+ class CastExpressionAST : public ExpressionAST
+diff --git a/languages/cpp/parser/default_visitor.cpp b/languages/cpp/parser/default_visitor.cpp
+index 7ba4286..9b43ae0 100644
+--- a/languages/cpp/parser/default_visitor.cpp
++++ b/languages/cpp/parser/default_visitor.cpp
+@@ -505,6 +505,8 @@ void DefaultVisitor::visitQPropertyDeclaration(QPropertyDeclarationAST *node)
+   visitNodes(this, node->ptr_ops);
+   visit(node->name);
+ 
++  if (node->member)
++    visit(node->member);
+   if (node->getter)
+     visit(node->getter);
+   if (node->setter)
+diff --git a/languages/cpp/parser/parser.cpp b/languages/cpp/parser/parser.cpp
+index ce6497d..c59bd78 100644
+--- a/languages/cpp/parser/parser.cpp
++++ b/languages/cpp/parser/parser.cpp
+@@ -5323,19 +5323,13 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+     uint start = session->token_stream->cursor();
+     QPropertyDeclarationAST *ast = CreateNode<QPropertyDeclarationAST>(session->mempool);
+ 
++    ast->member = 0;
+     ast->getter = 0;
+     ast->setter = 0;
+     ast->resetter = 0;
+     ast->notifier = 0;
+     ast->designableMethod = 0;
+-    ast->designableValue = true;
+     ast->scriptableMethod = 0;
+-    ast->scriptableValue = true;
+-    ast->stored = true;
+-    ast->user = false;
+-    ast->constant = false;
+-    ast->final = false;
+-
+ 
+     CHECK(Token___qt_property__);
+     CHECK('(');
+@@ -5350,10 +5344,12 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+     if(!parseName(ast->name))
+       return false;
+ 
++    static KDevelop::IndexedString memberStr("MEMBER");
+     static KDevelop::IndexedString readStr("READ");
+     static KDevelop::IndexedString writeStr("WRITE");
+     static KDevelop::IndexedString resetStr("RESET");
+     static KDevelop::IndexedString notifyStr("NOTIFY");
++    static KDevelop::IndexedString revisionStr("REVISION");
+     static KDevelop::IndexedString designableStr("DESIGNABLE");
+     static KDevelop::IndexedString scriptableStr("SCRIPTABLE");
+     static KDevelop::IndexedString storedStr("STORED");
+@@ -5363,7 +5359,11 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+ 
+     while(session->token_stream->lookAhead() != ')') {
+       const KDevelop::IndexedString propertyField = session->token_stream->symbol(session->token_stream->cursor());
+-      if(propertyField == readStr) {
++      if (propertyField == memberStr) {
++        advance(); // skip MEMBER
++        if (!parseName(ast->member))
++          return false;
++      } else if(propertyField == readStr) {
+         advance(); // skip READ
+         if(!parseName(ast->getter))
+           return false;
+@@ -5379,14 +5379,19 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+         advance(); // skip NOTIFY
+         if(!parseName(ast->notifier))
+           return false;
+-      }else if(propertyField == designableStr){
++      } else if (propertyField == revisionStr) {
++        advance(); // skip REVISION
++        if (session->token_stream->lookAhead() == Token_number_literal) {
++          advance();
++        } else {
++          return false;
++        }
++      } else if(propertyField == designableStr){
+         advance(); // skip DESIGNABLE
+         if(session->token_stream->lookAhead() == Token_true){
+           advance(); // skip 'true'
+-          ast->designableValue = true;
+         }else if(session->token_stream->lookAhead() == Token_false){
+           advance(); // skip 'false'
+-          ast->designableValue = false;
+         }else{
+           if(!parseName(ast->designableMethod))
+             return false;
+@@ -5395,10 +5400,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+         advance(); // skip SCRIPTABLE
+         if(session->token_stream->lookAhead() == Token_true){
+           advance(); // skip 'true'
+-          ast->scriptableValue = true;
+         }else if(session->token_stream->lookAhead() == Token_false){
+           advance(); // skip 'false'
+-          ast->scriptableValue = false;
+         }else{
+           if(!parseName(ast->scriptableMethod))
+             return false;
+@@ -5407,10 +5410,8 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+         advance(); // skip STORED
+         if(session->token_stream->lookAhead() == Token_true){
+           advance(); // skip 'true'
+-          ast->stored = true;
+         }else if(session->token_stream->lookAhead() == Token_false){
+           advance(); // skip 'false'
+-          ast->stored = false;
+         }else{
+           return false;
+         }
+@@ -5418,19 +5419,15 @@ bool Parser::parseQProperty(DeclarationAST *&node)
+         advance(); // skip USER
+         if(session->token_stream->lookAhead() == Token_true){
+           advance(); // skip 'true'
+-          ast->user = true;
+         }else if(session->token_stream->lookAhead() == Token_false){
+           advance(); // skip 'false'
+-          ast->user = false;
+         }else{
+           return false;
+         }
+       }else if(propertyField == constantStr){
+         advance(); // skip CONSTANT
+-        ast->constant = true;
+       }else if(propertyField == finalStr){
+         advance(); // skip FINAL
+-        ast->final = true;
+       }else{
+         return false;
+       }
+diff --git a/languages/cpp/parser/tests/test_parser.cpp b/languages/cpp/parser/tests/test_parser.cpp
+index 5956f19..f4a4dbb 100644
+--- a/languages/cpp/parser/tests/test_parser.cpp
++++ b/languages/cpp/parser/tests/test_parser.cpp
+@@ -496,6 +496,7 @@ void TestParser::testEscapedNewline()
+ {
+   QFETCH(QByteArray, module);
+   TranslationUnitAST* ast = parse(module);
++  Q_UNUSED(ast);
+   QVERIFY(control.problems().isEmpty());
+ }
+ 
+@@ -689,72 +690,54 @@ void TestParser::testParseFile()
+ void TestParser::testQProperty_data()
+ {
+   QTest::addColumn<QByteArray>("code");
++  QTest::addColumn<bool>("hasMember");
+   QTest::addColumn<bool>("hasGetterMethod");
+   QTest::addColumn<bool>("hasSetterMethod");
+   QTest::addColumn<bool>("hasResetterMethod");
+   QTest::addColumn<bool>("hasNotifierMethod");
+   QTest::addColumn<bool>("hasDesignableMethod");
+   QTest::addColumn<bool>("hasScriptableMethod");
+-  QTest::addColumn<bool>("isDesignable");
+-  QTest::addColumn<bool>("isScriptable");
+-  QTest::addColumn<bool>("isStored");
+-  QTest::addColumn<bool>("isUser");
+-  QTest::addColumn<bool>("isConstant");
+-  QTest::addColumn<bool>("isFinal");
+ 
++  QTest::newRow("member") << QByteArray("class Class{\n__qt_property__(bool myProp MEMBER m_prop)\n};")
++                          << true << false << false << false << false << false << false;
+   QTest::newRow("read") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop)\n};")
+-                        << true << false << false << false << false << false
+-                        << true << true << true << false << false << false;
++                        << false << true << false << false << false << false << false;
+   QTest::newRow("write") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop WRITE prop)\n};")
+-                          << true << true << false << false << false << false
+-                          << true << true << true << false << false << false;
++                          << false << true << true << false << false << false << false;
+   QTest::newRow("reset") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop RESET prop)\n};")
+-                          << true << false << true << false << false << false
+-                          << true << true << true << false << false << false;
++                          << false << true << false << true << false << false << false;
+   QTest::newRow("notify") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop NOTIFY prop)\n};")
+-                          << true << false << false << true << false << false
+-                          << true << true << true << false << false << false;
+-  QTest::newRow("desable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
+-                            << true << false << false << false << true << false
+-                            << true << true << true << false << false << false;
+-  QTest::newRow("scpable") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
+-                            << true << false << false << false << false << true
+-                            << true << true << true << false << false << false;
+-  QTest::newRow("desvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
+-                            << true << false << false << false << false << false
+-                            << false << true << true << false << false << false;
+-  QTest::newRow("scpvalue") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
+-                            << true << false << false << false << false << false
+-                            << true << false << true << false << false << false;
++                          << false << true << false << false << true << false << false;
++  QTest::newRow("designable_method") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE prop)\n};")
++                            << false << true << false << false << false << true << false;
++  QTest::newRow("scriptable_method") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE prop)\n};")
++                            << false << true << false << false << false << false << true;
++  QTest::newRow("revision") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop REVISION 1)\n};")
++                            << false << true << false << false << false << false << false;
++  QTest::newRow("designable_bool") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop DESIGNABLE false)\n};")
++                            << false << true << false << false << false << false << false;
++  QTest::newRow("scriptable_bool") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop SCRIPTABLE false)\n};")
++                            << false << true << false << false << false << false << false;
+   QTest::newRow("stored") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop STORED false)\n};")
+-                          << true << false << false << false << false << false
+-                          << true << true << false << false << false << false;
++                          << false << true << false << false << false << false << false;
+   QTest::newRow("user") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop USER true)\n};")
+-                        << true << false << false << false << false << false
+-                        << true << true << true << true << false << false;
++                        << false << true << false << false << false << false << false;
+   QTest::newRow("constant") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop CONSTANT)\n};")
+-                            << true << false << false << false << false << false
+-                            << true << true << true << false << true << false;
++                            << false << true << false << false << false << false << false;
+   QTest::newRow("final") << QByteArray("class Class{\n__qt_property__(bool myProp READ prop FINAL)\n};")
+-                          << true << false << false << false << false << false
+-                          << true << true << true << false << false << true;
++                          << false << true << false << false << false << false << false;
+ }
+ 
+ void TestParser::testQProperty()
+ {
+   QFETCH(QByteArray, code);
++  QFETCH(bool, hasMember);
+   QFETCH(bool, hasGetterMethod);
+   QFETCH(bool, hasSetterMethod);
+   QFETCH(bool, hasResetterMethod);
+   QFETCH(bool, hasNotifierMethod);
+   QFETCH(bool, hasDesignableMethod);
+   QFETCH(bool, hasScriptableMethod);
+-  QFETCH(bool, isDesignable);
+-  QFETCH(bool, isScriptable);
+-  QFETCH(bool, isStored);
+-  QFETCH(bool, isUser);
+-  QFETCH(bool, isConstant);
+-  QFETCH(bool, isFinal);
+ 
+   TranslationUnitAST* ast = parse(code);
+ 
+@@ -764,18 +747,13 @@ void TestParser::testQProperty()
+   QPropertyDeclarationAST* propAst = static_cast<QPropertyDeclarationAST*>
+                                                 (getAST(ast, AST::Kind_QPropertyDeclaration));
+ 
++  QVERIFY((propAst->member != 0) == hasMember);
+   QVERIFY((propAst->getter != 0) == hasGetterMethod);
+   QVERIFY((propAst->setter != 0) == hasSetterMethod);
+   QVERIFY((propAst->resetter != 0) == hasResetterMethod);
+   QVERIFY((propAst->notifier != 0) == hasNotifierMethod);
+   QVERIFY((propAst->designableMethod != 0) == hasDesignableMethod);
+   QVERIFY((propAst->scriptableMethod != 0) == hasScriptableMethod);
+-  QCOMPARE(propAst->designableValue, isDesignable);
+-  QCOMPARE(propAst->scriptableValue, isScriptable);
+-  QCOMPARE(propAst->stored, isStored);
+-  QCOMPARE(propAst->user, isUser);
+-  QCOMPARE(propAst->constant, isConstant);
+-  QCOMPARE(propAst->final, isFinal);
+ }
+ 
+ void TestParser::testDesignatedInitializers()
+diff --git a/languages/cpp/tests/cpptestfiles/initializer_uses.cpp b/languages/cpp/tests/cpptestfiles/initializer_uses.cpp
+new file mode 100644
+index 0000000..533318e
+--- /dev/null
++++ b/languages/cpp/tests/cpptestfiles/initializer_uses.cpp
+@@ -0,0 +1,34 @@
++/* This file is part of KDevelop
++   Copyright 2013 Milian Wolff <mail@milianw.de>
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public
++   License version 2 as published by the Free Software Foundation.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public License
++   along with this library; see the file COPYING.LIB.  If not, write to
++   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++   Boston, MA 02110-1301, USA.
++*/
++
++// "useCount" : 7
++struct Blub
++{
++  // "useCount" : 1
++  Blub(Blub * = 0);
++  // "useCount" : 1
++  Blub& operator=(const Blub&) = delete;
++};
++
++void foo()
++{
++  Blub* f = new Blub;
++  Blub f2 = f;
++  Blub f3;
++  f3 = f2;
++}
+diff --git a/languages/cpp/tests/cpptestfiles/lambda.cpp b/languages/cpp/tests/cpptestfiles/lambda.cpp
+new file mode 100644
+index 0000000..8b6cc40
+--- /dev/null
++++ b/languages/cpp/tests/cpptestfiles/lambda.cpp
+@@ -0,0 +1,30 @@
++/* This file is part of KDevelop
++   Copyright 2013 Milian Wolff <mail@milianw.de>
++
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public
++   License version 2 as published by the Free Software Foundation.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public License
++   along with this library; see the file COPYING.LIB.  If not, write to
++   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++   Boston, MA 02110-1301, USA.
++*/
++
++/**
++ * "useCount": 2
++ */
++int global;
++
++/**
++ * "type" : { "toString"  : "function int (int)" }
++ */
++auto f1 = [global](int arg) -> int {
++  if (arg && global) {
++  }
++};
+diff --git a/projectbuilders/cmakebuilder/cmakebuilder.cpp b/projectbuilders/cmakebuilder/cmakebuilder.cpp
+index 850acec..b28c2d2 100644
+--- a/projectbuilders/cmakebuilder/cmakebuilder.cpp
++++ b/projectbuilders/cmakebuilder/cmakebuilder.cpp
+@@ -31,6 +31,7 @@
+ #include <interfaces/iplugincontroller.h>
+ #include <project/interfaces/ibuildsystemmanager.h>
+ #include <project/builderjob.h>
++#include <projectbuilders/makebuilder/imakebuilder.h>
+ 
+ #include <kpluginfactory.h>
+ #include <kpluginloader.h>
+@@ -78,9 +79,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
+             foreach(const QString& gen, generators) {
+                 m_buildersForGenerator[gen] = b;
+             }
+-            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
+-            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
+-            
++
+             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
+             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
+             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
+@@ -93,33 +92,12 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
+     }
+ }
+ 
+-void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
+-{
+-    if(m_deleteWhenDone.remove(it)) {
+-        delete it->parent();
+-    }
+-}
+-
+ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
+ {
+-    KDevelop::ProjectBaseItem* builditem = dom;
+     KDevelop::IProject* p = dom->project();
+     IProjectBuilder* builder = builderForProject(p);
+     if( builder )
+     {
+-        if(dom->file())
+-        {
+-            KDevelop::ProjectFileItem* file = dom->file();
+-            int lastDot = file->text().lastIndexOf('.');
+-            QString target = file->text().mid(0, lastDot)+".o";
+-             
+-            CMakeFolderItem *fldr = new CMakeFolderItem(p, dom->url().upUrl(), KUrl::relativeUrl(p->folder(), file->url().upUrl()), 0);
+-            KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(p, target);
+-            fldr->appendRow(it);
+-             
+-            builditem=it;
+-            m_deleteWhenDone << it;
+-        }
+         KJob* configure = 0;
+         if( CMake::checkForNeedingConfigure(dom->project()) )
+         {
+@@ -131,15 +109,30 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
+                                i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
+             return 0;
+         }
+-        
++        KJob* build = 0;
++        if(dom->file())
++        {
++            IMakeBuilder* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);
++            if (!makeBuilder) {
++                return 0;
++            }
++            KDevelop::ProjectFileItem* file = dom->file();
++            int lastDot = file->text().lastIndexOf('.');
++            QString target = file->text().mid(0, lastDot)+".o";
++            build = makeBuilder->executeMakeTarget(dom->parent(), target);
++            qDebug() << "create build job for target" << build << dom << target;
++        }
+         kDebug(9032) << "Building with make";
+-        KJob* build = builder->build(builditem);
+-        if( configure ) 
++        if (!build)
++        {
++            build = builder->build(dom);
++        }
++        if( configure )
+         {
+             kDebug() << "creating composite job";
+             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+-            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, builditem );
+-            builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, builditem );
++            builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, dom );
++            builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, dom );
+             builderJob->updateJobName();
+             build = builderJob;
+         }
+diff --git a/projectbuilders/cmakebuilder/cmakebuilder.h b/projectbuilders/cmakebuilder/cmakebuilder.h
+index 89597b3..99ebef9 100644
+--- a/projectbuilders/cmakebuilder/cmakebuilder.h
++++ b/projectbuilders/cmakebuilder/cmakebuilder.h
+@@ -59,9 +59,7 @@ public:
+ 	virtual QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const;
+ 
+ //     bool updateConfig( KDevelop::IProject* project );
+-private Q_SLOTS:
+-    void buildFinished(KDevelop::ProjectBaseItem*);
+-    
++
+ Q_SIGNALS:
+     void built(KDevelop::ProjectBaseItem*);
+     void failed(KDevelop::ProjectBaseItem*);
+@@ -73,7 +71,6 @@ private:
+     void addBuilder(const QString& neededfile, const QStringList& generator, KDevelop::IPlugin* i);
+     KDevelop::IProjectBuilder* builderForProject(KDevelop::IProject* p) const;
+     QMap<QString, KDevelop::IProjectBuilder*> m_builders;
+-    QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
+     QMap<QString, IProjectBuilder*> m_buildersForGenerator;
+ };
+ 
+diff --git a/projectbuilders/makebuilder/kdevmakebuilder.desktop.cmake b/projectbuilders/makebuilder/kdevmakebuilder.desktop.cmake
+index 31f2ead..c82a76a 100644
+--- a/projectbuilders/makebuilder/kdevmakebuilder.desktop.cmake
++++ b/projectbuilders/makebuilder/kdevmakebuilder.desktop.cmake
+@@ -73,7 +73,7 @@ GenericName[zh_CN]=工程构建器
+ GenericName[zh_TW]=專案編譯器
+ Comment=KDevelop Make Builder
+ Comment[bs]=KDevelop Make izgraditelj
+-Comment[ca]=Constructor KDevelop Make
++Comment[ca]=Constructor Make del KDevelop
+ Comment[ca@valencia]=Constructor KDevelop Make
+ Comment[da]=Make-bygger til KDevelop
+ Comment[de]=Make-Builder von KDevelop
+diff --git a/projectbuilders/makebuilder/makejob.cpp b/projectbuilders/makebuilder/makejob.cpp
+index b6560f5..8041a17 100644
+--- a/projectbuilders/makebuilder/makejob.cpp
++++ b/projectbuilders/makebuilder/makejob.cpp
+@@ -51,6 +51,7 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
+     , m_overrideTargets(overrideTargets)
+     , m_variables(variables)
+ {
++    Q_ASSERT(item && item->model() && m_idx.isValid() && this->item() == item);
+     setCapabilities( Killable );
+     setFilteringStrategy( OutputModel::CompilerFilter );
+     setProperties( NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint );
+diff --git a/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop b/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop
+index 6af80f4..6d5d27d 100644
+--- a/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop
++++ b/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop
+@@ -11,29 +11,38 @@ X-KDE-ParentComponents=KDevNinjaBuilder
+ X-KDE-CfgDlgHierarchy=BUILDTOOL
+ 
+ Name=Ninja
++Name[bs]=Ninja
++Name[ca]=Ninja
+ Name[de]=Ninja
+ Name[es]=Ninja
+ Name[fi]=Ninja
+ Name[fr]=Ninja
+ Name[gl]=Ninja
+ Name[hu]=Ninja
++Name[kk]=Ninja
+ Name[nl]=Ninja
+ Name[pt]=Ninja
+ Name[pt_BR]=Ninja
++Name[sk]=Ninja
+ Name[sl]=Ninja
+ Name[sv]=Ninja
++Name[tr]=Ninja
+ Name[uk]=Ninja
+ Name[x-test]=xxNinjaxx
+ Name[zh_TW]=Ninja
+ Comment=Configure Ninja settings
++Comment[bs]=Konfiguriši "Ninja" podešavanja
++Comment[ca]=Configura els arranjaments de Ninja
+ Comment[de]=Ninja-Einstellungen festlegen
+ Comment[es]=Configurar las preferencias de Ninja
+ Comment[fi]=Ninja-asetukset
+ Comment[gl]=Configura os parámetros de Ninja
+ Comment[hu]=Ninja beállítások módosítása
++Comment[kk]=Ninja параметрлерін баптау
+ Comment[nl]=Ninja-instellingen configureren
+ Comment[pt]=Configurar as definições do Ninja
+ Comment[pt_BR]=Configure as opções do Ninja
++Comment[sk]=Konfigurovať nastavenia Ninja
+ Comment[sl]=Nastavite možnosti za Ninja
+ Comment[sv]=Anpassa inställningar för Ninja
+ Comment[uk]=Налаштувати параметри Ninja
+diff --git a/projectbuilders/ninjabuilder/kdevninja.desktop.cmake b/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
+index 08703fa..d475f2e 100644
+--- a/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
++++ b/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
+@@ -1,15 +1,19 @@
+ [Desktop Entry]
+ Type=Service
+ Name=Ninja Project Builder
++Name[bs]=Graditelj Ninja projekta
++Name[ca]=Constructor de projectes Ninja
+ Name[cs]=Překladač projektů Ninja
+ Name[de]=Ninja-Projekterstellung
+ Name[es]=Constructor de proyectos Ninja
+ Name[fi]=Ninja-projektikäännin
+ Name[gl]=Construtor de proxectos Ninja
+ Name[hu]=Ninja projektfordító
++Name[kk]=Ninja жоба құрастырғышы
+ Name[nl]=Ninja-project bouwprogramma
+ Name[pt]=Construtor de Projectos Ninja
+ Name[pt_BR]=Compilador de projetos Ninja
++Name[sk]=Zostavovač projektov Ninja
+ Name[sl]=Izgrajevalnik projektov Ninja
+ Name[sv]=Ninja projektbyggverktyg
+ Name[uk]=Збирач проектів Ninja
+@@ -52,14 +56,18 @@ GenericName[x-test]=xxProject Builderxx
+ GenericName[zh_CN]=工程构建器
+ GenericName[zh_TW]=專案編譯器
+ Comment=KDevelop Ninja Builder
++Comment[bs]=KDevelop Ninja izgraditelj
++Comment[ca]=Constructor Ninja del KDevelop
+ Comment[de]=KDevelop-Ninja-Erstellung
+ Comment[es]=Constructor Ninja para KDevelop
+ Comment[fi]=KDevelop Ninja-käännin
+ Comment[gl]=Construtor Ninja para o KDevelop
+ Comment[hu]=KDevelop Ninja fordító
++Comment[kk]=KDevelop-тың Ninja құрастырғышы
+ Comment[nl]=KDevelop Ninja-bouwprogramma
+ Comment[pt]=Construtor Ninja do KDevelop
+ Comment[pt_BR]=Compilador Ninja do KDevelop
++Comment[sk]=Zostavovač KDevelop Ninja
+ Comment[sl]=Izgrajevalnik Ninja za KDevelop
+ Comment[sv]=KDevelop byggverktyg för Ninja
+ Comment[uk]=Збирач Ninja для KDevelop
+diff --git a/projectbuilders/ninjabuilder/ninjaconfig.ui b/projectbuilders/ninjabuilder/ninjaconfig.ui
+index 520d7be..da9ab07 100644
+--- a/projectbuilders/ninjabuilder/ninjaconfig.ui
++++ b/projectbuilders/ninjabuilder/ninjaconfig.ui
+@@ -74,17 +74,17 @@
+      </property>
+      <item>
+       <property name="text">
+-       <string>kdesu</string>
++       <string notr="true">kdesu</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+-       <string>kdesudo</string>
++       <string notr="true">kdesudo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+-       <string>sudo</string>
++       <string notr="true">sudo</string>
+       </property>
+      </item>
+     </widget>
+diff --git a/projectbuilders/ninjabuilder/ninjajob.cpp b/projectbuilders/ninjabuilder/ninjajob.cpp
+index ee5731c..611f702 100644
+--- a/projectbuilders/ninjabuilder/ninjajob.cpp
++++ b/projectbuilders/ninjabuilder/ninjajob.cpp
+@@ -147,7 +147,7 @@ void NinjaJob::appendLines(const QStringList& lines)
+     for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {
+         --it;
+         bool curr = it->startsWith('[');
+-        if(prev && curr || it->endsWith("] "))
++        if((prev && curr) || it->endsWith("] "))
+             it = ret.erase(it);
+         prev = curr;
+     }
+diff --git a/projectmanagers/cmake/CMakeLists.txt b/projectmanagers/cmake/CMakeLists.txt
+index 0a1cf43..959ca20 100644
+--- a/projectmanagers/cmake/CMakeLists.txt
++++ b/projectmanagers/cmake/CMakeLists.txt
+@@ -19,7 +19,7 @@ set( cmakecommon_SRCS
+   parser/cmakecondition.cpp
+   parser/cmakeprojectvisitor.cpp 
+   parser/variablemap.cpp
+-  parser/cmakedebugvisitor.cpp
++#   parser/cmakedebugvisitor.cpp
+   parser/cmakecachereader.cpp
+   parser/cmakeparserutils.cpp
+   parser/cmakeduchaintypes.cpp
+diff --git a/projectmanagers/cmake/cmakecommitchangesjob.cpp b/projectmanagers/cmake/cmakecommitchangesjob.cpp
+index 41e6e3f..09e2faa 100644
+--- a/projectmanagers/cmake/cmakecommitchangesjob.cpp
++++ b/projectmanagers/cmake/cmakecommitchangesjob.cpp
+@@ -161,7 +161,9 @@ KUrl::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
+     m_directories += resolvePaths(m_url, data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"]);
+     m_directories.removeAll(QString());
+ 
+-    m_definitions = data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"];
++    m_definitions.unite(data.definitions);
++    CMakeParserUtils::addDefinitions(data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_definitions);
++    CMakeParserUtils::addDefinitions(data.vm["CMAKE_CXX_FLAGS"], &m_definitions, true);
+ 
+     foreach(const Target& t, data.targets) {
+         const QMap<QString, QStringList>& targetProps = data.properties[TargetProperty][t.name];
+@@ -269,7 +271,7 @@ void CMakeCommitChangesJob::makeChanges()
+     }
+ 
+     folder->setIncludeDirectories(m_directories);
+-    folder->defineVariables(m_definitions);
++    folder->setDefinitions(m_definitions);
+ 
+     QSet<ProjectTargetItem*> deletableTargets = folder->targetList().toSet();
+     foreach ( const ProcessedTarget& pt, m_targets)
+@@ -305,7 +307,7 @@ void CMakeCommitChangesJob::makeChanges()
+         CompilationDataAttached* incAtt = dynamic_cast<CompilationDataAttached*>(targetItem);
+         if(incAtt) {
+             incAtt->setIncludeDirectories(resolvePaths(m_url, pt.includes));
+-            incAtt->defineVariables(pt.defines);
++            incAtt->addDefinitions(pt.defines);
+         }
+         
+         KUrl::List tfiles;
+diff --git a/projectmanagers/cmake/cmakecommitchangesjob.h b/projectmanagers/cmake/cmakecommitchangesjob.h
+index 5f69e5c..318e365 100644
+--- a/projectmanagers/cmake/cmakecommitchangesjob.h
++++ b/projectmanagers/cmake/cmakecommitchangesjob.h
+@@ -76,7 +76,7 @@ private:
+     CMakeManager* m_manager;
+ 
+     QStringList m_directories;
+-    QStringList m_definitions;
++    CMakeDefinitions m_definitions;
+     bool m_projectDataAdded;
+     KDevelop::ProjectFolderItem* m_parentItem;
+     bool m_waiting;
+diff --git a/projectmanagers/cmake/cmakeimportjob.cpp b/projectmanagers/cmake/cmakeimportjob.cpp
+index d6b04a7..f5c5b7d 100644
+--- a/projectmanagers/cmake/cmakeimportjob.cpp
++++ b/projectmanagers/cmake/cmakeimportjob.cpp
+@@ -176,7 +176,9 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
+             ref = includeScript(script.toLocalFile(), dir, ref);
+             Q_ASSERT(ref);
+             includes << m_data.properties[DirectoryProperty][dir]["INCLUDE_DIRECTORIES"];
+-            rootFolder->defineVariables(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"]);
++            CMakeParserUtils::addDefinitions(m_data.properties[DirectoryProperty][dir]["COMPILE_DEFINITIONS"], &m_data.definitions);
++            CMakeParserUtils::addDefinitions(m_data.vm["CMAKE_CXX_FLAGS"], &m_data.definitions, true);
++            rootFolder->setDefinitions(m_data.definitions);
+             
+             foreach(const Subdirectory& s, m_data.subdirectories) {
+                 KUrl candidate = currentDir;
+diff --git a/projectmanagers/cmake/cmakemodelitems.cpp b/projectmanagers/cmake/cmakemodelitems.cpp
+index d6c46d7..bd4d952 100644
+--- a/projectmanagers/cmake/cmakemodelitems.cpp
++++ b/projectmanagers/cmake/cmakemodelitems.cpp
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include "cmakemodelitems.h"
++#include <cmakeparserutils.h>
+ #include <QString>
+ #include <QThread>
+ #include <kdebug.h>
+@@ -89,10 +90,9 @@ CMakeDefinitions CompilationDataAttached::definitions(CMakeFolderItem* parentFol
+     return result;
+ }
+ 
+-void CompilationDataAttached::defineVariables(const QStringList& vars)
++void CompilationDataAttached::addDefinitions(const QStringList& vars)
+ {
+-    foreach(const QString& v, vars)
+-        m_defines.insert(v.section('=', 0, 0), v.section('=', 1, -1));
++    CMakeParserUtils::addDefinitions(vars, &m_defines);
+ }
+ 
+ 
+diff --git a/projectmanagers/cmake/cmakemodelitems.h b/projectmanagers/cmake/cmakemodelitems.h
+index 5e34e9e..13287e4 100644
+--- a/projectmanagers/cmake/cmakemodelitems.h
++++ b/projectmanagers/cmake/cmakemodelitems.h
+@@ -71,7 +71,7 @@ class KDEVCMAKECOMMON_EXPORT CompilationDataAttached
+ 
+         CMakeDefinitions definitions(CMakeFolderItem* parent) const;
+         void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
+-        void defineVariables(const QStringList& vars);
++        void addDefinitions(const QStringList& vars);
+ 
+     private:
+         CMakeDefinitions m_defines;
+diff --git a/projectmanagers/cmake/cmakeprojectdata.h b/projectmanagers/cmake/cmakeprojectdata.h
+index a810bca..b8a89b3 100644
+--- a/projectmanagers/cmake/cmakeprojectdata.h
++++ b/projectmanagers/cmake/cmakeprojectdata.h
+@@ -15,6 +15,7 @@ struct CMakeProjectData
+     MacroMap mm;
+     CMakeProperties properties;
+     CacheValues cache;
++    CMakeDefinitions definitions;
+     QStringList modulePath;
+     QHash<QString,QString> targetAlias;
+     
+diff --git a/projectmanagers/cmake/kdevcmakedocumentation.desktop.cmake b/projectmanagers/cmake/kdevcmakedocumentation.desktop.cmake
+index 1ec7da7..22bd2d4 100644
+--- a/projectmanagers/cmake/kdevcmakedocumentation.desktop.cmake
++++ b/projectmanagers/cmake/kdevcmakedocumentation.desktop.cmake
+@@ -73,7 +73,7 @@ GenericName[zh_CN]=文档支持
+ GenericName[zh_TW]=文件支援
+ Comment=Allows KDevelop to provide CMake documentation
+ Comment[bs]=Dopišta KDevelopu da obezbjedi CMake dokumentaciju
+-Comment[ca]=Permet a KDevelop proporcionar informació de CMake
++Comment[ca]=Permet a KDevelop proporcionar documentació de CMake
+ Comment[ca@valencia]=Permet a KDevelop proporcionar informació de CMake
+ Comment[cs]=Umožňuje KDevelop poskytovat dokumentaci CMake
+ Comment[da]=Lader KDevelop tilbyde CMake-dokumentation
+diff --git a/projectmanagers/cmake/parser/cmakeast.cpp b/projectmanagers/cmake/parser/cmakeast.cpp
+index f43a59a..53b4d23 100644
+--- a/projectmanagers/cmake/parser/cmakeast.cpp
++++ b/projectmanagers/cmake/parser/cmakeast.cpp
+@@ -1774,6 +1774,7 @@ bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+     QString t = func.arguments[2].value;
+     
+     if(t=="PATH") m_type=Path;
++    else if(t=="REALPATH") m_type=RealPath;
+     else if(t=="ABSOLUTE") m_type=Absolute;
+     else if(t=="NAME") m_type=Name;
+     else if(t=="EXT") m_type=Ext;
+diff --git a/projectmanagers/cmake/parser/cmakeast.h b/projectmanagers/cmake/parser/cmakeast.h
+index ca7287c..e74cfca 100644
+--- a/projectmanagers/cmake/parser/cmakeast.h
++++ b/projectmanagers/cmake/parser/cmakeast.h
+@@ -398,7 +398,7 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
+ 
+ 
+ CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
+-    enum ComponentType { Path, Absolute, Name, Ext, NameWe, Program };
++    enum ComponentType { Path, RealPath, Absolute, Name, Ext, NameWe, Program };
+ CMAKE_ADD_AST_MEMBER( QString, variableName )
+ CMAKE_ADD_AST_MEMBER( QString, fileName )
+ CMAKE_ADD_AST_MEMBER( ComponentType, type )
+diff --git a/projectmanagers/cmake/parser/cmakelistsparser.cpp b/projectmanagers/cmake/parser/cmakelistsparser.cpp
+index 1eba216..0951b3f 100644
+--- a/projectmanagers/cmake/parser/cmakelistsparser.cpp
++++ b/projectmanagers/cmake/parser/cmakelistsparser.cpp
+@@ -72,7 +72,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
+ void CMakeFunctionDesc::addArguments( const QStringList& args, bool addEvenIfEmpty )
+ {
+     if(addEvenIfEmpty && args.isEmpty())
+-        arguments += QString();
++        arguments += CMakeFunctionArgument();
+     else foreach( const QString& arg, args )
+     {
+         CMakeFunctionArgument cmakeArg( arg );
+@@ -128,7 +128,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
+                 function.line = token->line;
+                 function.column = token->column;
+ 
+-                readError = !readCMakeFunction( lexer, function, fileName );
++                readError = !readCMakeFunction( lexer, function);
+                 ret.append(function);
+ 
+                 if(readError)
+@@ -143,7 +143,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
+     return ret;
+ }
+ 
+-bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDesc &func, const QString & fileName)
++bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDesc &func)
+ {
+         // Command name has already been parsed.  Read the left paren.
+     cmListFileLexer_Token* token;
+@@ -171,18 +171,18 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
+                 } else if(parenthesis<0)
+                     return false;
+                 else
+-                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
++                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
+                 break;
+             case cmListFileLexer_Token_ParenLeft:
+                 parenthesis++;
+-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
++                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
+                 break;
+             case cmListFileLexer_Token_Identifier:
+             case cmListFileLexer_Token_ArgumentUnquoted:
+-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, fileName, token->line, token->column );
++                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
+                 break;
+             case cmListFileLexer_Token_ArgumentQuoted:
+-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, fileName, token->line, token->column+1 );
++                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, token->line, token->column+1 );
+                 break;
+             case cmListFileLexer_Token_Newline:
+                 break;
+@@ -226,10 +226,13 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
+     value=unescapeValue(value);
+ }*/
+ 
+-CMakeFunctionArgument::CMakeFunctionArgument(const QString & v, bool q, const QString &, quint32 l, quint32 c)
+-    : value(v), quoted(q)/*, filePath(file)*/, line(l), column(c)
++CMakeFunctionArgument::CMakeFunctionArgument(const QString& v, bool q, quint32 l, quint32 c)
++    : value(unescapeValue(v)), quoted(q), line(l), column(c)
+ {
+-    value=unescapeValue(value);
+ }
+ 
++CMakeFunctionArgument::CMakeFunctionArgument(const QString& v)
++    : value(v), quoted(false), line(0), column(0)
++{
++}
+ 
+diff --git a/projectmanagers/cmake/parser/cmakelistsparser.h b/projectmanagers/cmake/parser/cmakelistsparser.h
+index d91ebee..b3d99c8 100644
+--- a/projectmanagers/cmake/parser/cmakelistsparser.h
++++ b/projectmanagers/cmake/parser/cmakelistsparser.h
+@@ -39,9 +39,8 @@
+ struct CMakeFunctionArgument
+ {
+     CMakeFunctionArgument(): value(), quoted(false), line(0), column(0) {}
+-    
+-    CMakeFunctionArgument(const QString& v, bool q = false,
+-                          const QString& file = QString(), quint32 l = 0, quint32 c=0);
++    CMakeFunctionArgument(const QString& v);
++    CMakeFunctionArgument(const QString& v, bool q, quint32 l = 0, quint32 c=0);
+     inline bool operator == (const CMakeFunctionArgument& r) const
+     {
+         return (this->value == r.value) && (this->quoted == r.quoted);
+@@ -135,9 +134,7 @@ public:
+     static CMakeFileContent readCMakeFile(const QString& fileName);
+     
+ private:
+-    static bool readCMakeFunction( cmListFileLexer*,
+-                                    CMakeFunctionDesc&,
+-                                    const QString& fileName);
++    static bool readCMakeFunction( cmListFileLexer* lexer, CMakeFunctionDesc& func);
+ 
+ };
+ 
+diff --git a/projectmanagers/cmake/parser/cmakeparserutils.cpp b/projectmanagers/cmake/parser/cmakeparserutils.cpp
+index 667f7a5..f90b6da 100644
+--- a/projectmanagers/cmake/parser/cmakeparserutils.cpp
++++ b/projectmanagers/cmake/parser/cmakeparserutils.cpp
+@@ -188,6 +188,7 @@ namespace CMakeParserUtils
+         v.setModulePath(data->modulePath);
+         v.setEnvironmentProfile(env);
+         v.setProperties(data->properties);
++        v.setDefinitions(data->definitions);
+         v.walk(f, 0, true);
+         
+         data->projectName=v.projectName();
+@@ -196,6 +197,7 @@ namespace CMakeParserUtils
+         data->properties=v.properties();
+         data->testSuites=v.testSuites();
+         data->targetAlias=v.targetAlias();
++        data->definitions=v.definitions();
+         
+         //printSubdirectories(data->subdirectories);
+         
+@@ -238,4 +240,66 @@ namespace CMakeParserUtils
+         }
+         return ret;
+     }
++
++    /**
++     * Parse a string which contains definition(s), the thing is that in CMake you can do funky things:
++     *
++     * add_definitions(-DFOO -DBAR)
++     * add_definitions("-DLA=LU -DA=B")
++     * set_property( DIRECTORY PROPERTY COMPILE_DEFINITIONS A AV=1 )
++     * ...
++     *
++     * TODO: this probably fails with defines containing spaces...
++     */
++    static void parseDefinition(const QString& param, const bool expectDashD, const bool remove, CMakeDefinitions* defs)
++    {
++        int pos = 0;
++
++        while (pos != -1 && pos < param.size()) {
++            if (param.at(pos).isSpace()) {
++                ++pos;
++                continue;
++            } else if (expectDashD) {
++                if (param.midRef(pos, 2) != QLatin1String("-D")) {
++                    pos = param.indexOf(' ', pos);
++                    continue;
++                }
++                pos += 2;
++            }
++            const int eq = param.indexOf('=', pos);
++            const int space = param.indexOf(' ', pos);
++            QString key;
++            QString value;
++            if (eq != -1 && (eq < space || space == -1)) {
++                key = param.mid(pos, eq - pos);
++                if (!remove) {
++                    value = param.mid(eq + 1, space - (eq + 1));
++                }
++            } else {
++                key = param.mid(pos, space - pos);
++            }
++            if (remove) {
++                defs->remove(key);
++            } else {
++                defs->insert(key, value);
++            }
++            pos = space;
++        }
++    }
++
++    void addDefinitions(const QStringList& definitions, CMakeDefinitions* to, const bool expectDashD)
++    {
++        Q_ASSERT(to);
++        foreach(const QString& v, definitions) {
++            parseDefinition(v, expectDashD, false, to);
++        }
++    }
++
++    void removeDefinitions(const QStringList& definitions, CMakeDefinitions* from, const bool expectDashD)
++    {
++        Q_ASSERT(from);
++        foreach(const QString& v, definitions) {
++            parseDefinition(v, expectDashD, true, from);
++        }
++    }
+ }
+diff --git a/projectmanagers/cmake/parser/cmakeparserutils.h b/projectmanagers/cmake/parser/cmakeparserutils.h
+index 5049399..60e6e40 100644
+--- a/projectmanagers/cmake/parser/cmakeparserutils.h
++++ b/projectmanagers/cmake/parser/cmakeparserutils.h
+@@ -63,6 +63,9 @@ namespace CMakeParserUtils
+     KDEVCMAKECOMMON_EXPORT CacheValues readCache(const KUrl &path);
+ 
+     KDEVCMAKECOMMON_EXPORT QString binaryPath(const QString& sourcedir, const QString& projectSourceDir, const QString projectBinDir);
++
++    KDEVCMAKECOMMON_EXPORT void addDefinitions(const QStringList& definitions, CMakeDefinitions* to, const bool expectDashD = false);
++    KDEVCMAKECOMMON_EXPORT void removeDefinitions(const QStringList& definitions, CMakeDefinitions* from, const bool expectDashD = false);
+ }
+ 
+ #endif
+diff --git a/projectmanagers/cmake/parser/cmakeprojectvisitor.cpp b/projectmanagers/cmake/parser/cmakeprojectvisitor.cpp
+index e63b18e..0f01757 100644
+--- a/projectmanagers/cmake/parser/cmakeprojectvisitor.cpp
++++ b/projectmanagers/cmake/parser/cmakeprojectvisitor.cpp
+@@ -23,6 +23,7 @@
+ #include "cmakecondition.h"
+ #include "astfactory.h"
+ #include "cmakeduchaintypes.h"
++#include "cmakeparserutils.h"
+ 
+ #include <language/editor/simplerange.h>
+ #include <language/duchain/topducontext.h>
+@@ -48,10 +49,10 @@
+ 
+ using namespace KDevelop;
+ 
+-void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
++static void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
+ 
+ 
+-bool isGenerated(const QString& name)
++static bool isGenerated(const QString& name)
+ {
+     return name.indexOf("#[")>=0;
+ }
+@@ -112,8 +113,12 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
+                 gotDollar=false;
+                 break;
+             case '}':
+-                if(!opened.isEmpty())
+-                    pos.append(IntPair(opened.pop(), i, opened.count()));
++                if(!opened.isEmpty()) {
++                    // note: don't merge this into the function call below,
++                    // the evaluation order is undefined then!
++                    int start = opened.pop();
++                    pos.append(IntPair(start, i, opened.count() + 1));
++                }
+                 break;
+         }
+     }
+@@ -162,7 +167,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
+     return value;
+ }
+ 
+-QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
++static QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
+ {
+ //     kDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
+ //     kDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
+@@ -274,7 +279,7 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
+     return 1;
+ }
+ 
+-QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
++static QHash<QString, Target>::iterator findTargetForExecutable(const QString& exe, QHash<QString, Target>& targets)
+ {
+     QHash<QString, Target>::iterator ret = targets.find(exe);
+     if(ret==targets.constEnd()) {
+@@ -685,22 +690,50 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
+     QString name=pack->name();
+     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
+     QStringList configPath;
+-    QStringList lookupPaths = m_cache->value("CMAKE_PREFIX_PATH").value.split(';', QString::SkipEmptyParts) + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+-    
++    QStringList lookupPaths = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH")
++                            + m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
++
++    // note: should note be done if NO_SYSTEM_ENVIRONMENT_PATH is set, see docs:
++    /* 4. Search the standard system environment variables. This can be skipped
++     * if NO_SYSTEM_ENVIRONMENT_PATH is passed. Path entries ending in "/bin" or
++     * "/sbin" are automatically converted to their parent directories.
++     */
++    foreach(const QString& lookup, envVarDirectories("PATH"))
++    {
++        if (lookup.endsWith("/bin")) {
++            lookupPaths << lookup.left(lookup.length() - 4);
++        } else if (lookup.endsWith("/sbin")) {
++            lookupPaths << lookup.left(lookup.length() - 5);
++        } else {
++            lookupPaths << lookup;
++        }
++    }
++
++    const bool useLib64 = m_props[GlobalProperty][QString()]["FIND_LIBRARY_USE_LIB64_PATHS"].contains("TRUE");
++    QSet<QString> handled;
+     foreach(const QString& lookup, lookupPaths)
+     {
+-        if(QFile::exists(lookup))
+-            foreach(const QString& post, postfix)
+-            {
+-                configPath.prepend(lookup+"/share/"+name.toLower()+post);
+-                configPath.prepend(lookup+"/share/"+name+post);
+-                configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
+-                configPath.prepend(lookup+"/share/cmake/"+name+post);
+-                configPath.prepend(lookup+"/lib/"+name.toLower()+post);
+-                configPath.prepend(lookup+"/lib/"+name+post);
+-                configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
+-                configPath.prepend(lookup+"/lib/cmake/"+name+post);
++        if(!QFile::exists(lookup) || handled.contains(lookup)) {
++            continue;
++        }
++        foreach(const QString& post, postfix)
++        {
++            configPath.prepend(lookup+"/share/"+name.toLower()+post);
++            configPath.prepend(lookup+"/share/"+name+post);
++            configPath.prepend(lookup+"/share/cmake/"+name.toLower()+post);
++            configPath.prepend(lookup+"/share/cmake/"+name+post);
++            configPath.prepend(lookup+"/lib/"+name.toLower()+post);
++            configPath.prepend(lookup+"/lib/"+name+post);
++            configPath.prepend(lookup+"/lib/cmake/"+name.toLower()+post);
++            configPath.prepend(lookup+"/lib/cmake/"+name+post);
++            if (useLib64) {
++                configPath.prepend(lookup+"/lib64/"+name.toLower()+post);
++                configPath.prepend(lookup+"/lib64/"+name+post);
++                configPath.prepend(lookup+"/lib64/cmake/"+name.toLower()+post);
++                configPath.prepend(lookup+"/lib64/cmake/"+name+post);
+             }
++        }
++        handled << lookup;
+     }
+ 
+     QString varName=pack->name()+"_DIR";
+@@ -910,12 +943,12 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
+ 
+     if(!fpath->noDefaultPath())
+     {
+-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
++        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
+         foreach(const QString& path, pp) {
+             locationOptions += path+"/include";
+         }
+         locationOptions += pp;
+-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
++        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
+         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
+         
+         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+@@ -970,14 +1003,15 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
+     if(!flib->noDefaultPath())
+     {
+ 
+-        QStringList opt=m_vars->value("CMAKE_PREFIX_PATH");
++        QStringList opt = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
+         foreach(const QString& s, opt)
+             locationOptions.append(s+"/lib");
+ 
+-        locationOptions += m_vars->value("CMAKE_LIBRARY_PATH");
++        locationOptions += envVarDirectories("CMAKE_LIBRARY_PATH") + m_vars->value("CMAKE_LIBRARY_PATH");
+         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
+         
+         locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
++        locationOptions += m_vars->value("CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES");
+         
+         opt=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+         foreach(const QString& s, opt)
+@@ -1032,12 +1066,12 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
+     QStringList locationOptions = ffile->path()+ffile->hints();
+     if(!ffile->noDefaultPath())
+     {
+-        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
++        QStringList pp = envVarDirectories("CMAKE_PREFIX_PATH") + m_vars->value("CMAKE_PREFIX_PATH");
+         foreach(const QString& path, pp) {
+             locationOptions += path+"/include";
+         }
+         locationOptions += pp;
+-        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
++        locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
+         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
+         
+         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+@@ -1303,7 +1337,8 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
+     return 1;
+ }
+ 
+-void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx, const CMakeFunctionDesc& func)
++static void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx,
++                             const CMakeFunctionDesc& func)
+ {
+     //TODO: Should not return here
+     if(args.size()!=names.size())
+@@ -1676,6 +1711,9 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
+             if(idx>=0)
+                 val=filecomp->fileName().left(idx);
+         }   break;
++        case GetFilenameComponentAst::RealPath: {
++            val = fi.canonicalFilePath();
++        }   break;
+         case GetFilenameComponentAst::Absolute:
+             val=fi.absoluteFilePath();
+             break;
+@@ -1812,7 +1850,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
+     return 1;
+ }
+ 
+-int toCommandEnd(const CMakeAst* fea)
++static int toCommandEnd(const CMakeAst* fea)
+ {
+     QString command = fea->content()[fea->line()].name;
+     QString endCommand = "end"+command;
+@@ -2070,48 +2108,16 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
+     return 1;
+ }
+ 
+-QPair<QString, QString> definition(const QString& param)
+-{
+-    QPair<QString, QString> ret;
+-    if(!param.startsWith("-D"))
+-        return ret;
+-    int eq=param.indexOf('=', 2);
+-    ret.first=param.mid(2, eq-2);
+-    if(eq>0)
+-        ret.second=param.mid(eq+1);
+-    return ret;
+-}
+-
+ int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
+ {
+ //     kDebug(9042) << "Adding defs: " << addDef->definitions();
+-    foreach(const QString& def, addDef->definitions())
+-    {
+-        if(def.isEmpty())
+-            continue;
+-        QPair<QString, QString> definePair=definition(def);
+-        if(definePair.first.isEmpty())
+-            kDebug(9042) << "error: definition not matched" << def;
+-
+-        m_defs[definePair.first]=definePair.second;
+-        kDebug(9042) << "added definition" << definePair.first << "=" << definePair.second << " from " << def;
+-    }
++    CMakeParserUtils::addDefinitions(addDef->definitions(), &m_defs, true);
+     return 1;
+ }
+ 
+ int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
+ {
+-    foreach(const QString& def, remDef->definitions())
+-    {
+-        if(def.isEmpty())
+-            continue;
+-        QPair<QString, QString> definePair=definition(def);
+-        if(definePair.first.isEmpty())
+-            kDebug(9042) << "error: definition not matched" << def;
+-
+-        m_defs.remove(definePair.first);
+-        kDebug(9042) << "removed definition" << definePair.first << " from " << def;
+-    }
++    CMakeParserUtils::removeDefinitions(remDef->definitions(), &m_defs, true);
+     return 1;
+ }
+ 
+@@ -2268,7 +2274,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc
+ 
+ enum RecursivityType { No, Yes, End, Break, Return };
+ 
+-RecursivityType recursivity(const QString& functionName)
++static RecursivityType recursivity(const QString& functionName)
+ {
+     QString upperFunctioName=functionName;
+     if(upperFunctioName=="if" || upperFunctioName=="while" ||
+diff --git a/projectmanagers/cmake/parser/cmakeprojectvisitor.h b/projectmanagers/cmake/parser/cmakeprojectvisitor.h
+index 7d3de19..ded4c28 100644
+--- a/projectmanagers/cmake/parser/cmakeprojectvisitor.h
++++ b/projectmanagers/cmake/parser/cmakeprojectvisitor.h
+@@ -103,12 +103,14 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
+         void setVariableMap( VariableMap* vars );
+         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
+         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
++        void setDefinitions(const CMakeDefinitions& defs) { m_defs=defs; }
+         
+         /** sets the @p profile env variables that will be used to override those in the current system */
+         void setEnvironmentProfile(const QMap<QString, QString>& profile) { m_environmentProfile = profile; }
+ 
+         const VariableMap* variables() const { return m_vars; }
+         const CacheValues* cache() const { return m_cache; }
++        CMakeDefinitions definitions() const { return m_defs; }
+         
+         QString projectName() const { return m_projectName; }
+         QVector<Subdirectory> subdirectories() const { return m_subdirectories; }
+diff --git a/projectmanagers/cmake/tests/cmakeloadprojecttest.cpp b/projectmanagers/cmake/tests/cmakeloadprojecttest.cpp
+index de96572..5a0b1ed 100644
+--- a/projectmanagers/cmake/tests/cmakeloadprojecttest.cpp
++++ b/projectmanagers/cmake/tests/cmakeloadprojecttest.cpp
+@@ -26,6 +26,7 @@
+ #include <language/duchain/duchain.h>
+ #include <language/duchain/topducontext.h>
+ 
++#include "cmake-test-paths.h"
+ 
+ #include "cmListFileLexer.h"
+ #include "cmakelistsparser.h"
+@@ -139,6 +140,7 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
+     CMakeProjectData data;
+     data.vm = initials.first;
+     data.vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
++    data.vm.insert("CMAKE_PREFIX_PATH", QString::fromLatin1(TEST_PREFIX_PATH).split(';', QString::SkipEmptyParts));
+     
+     KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
+     DUChain::self()->addDocumentChain(buildstrapContext);
+@@ -159,6 +161,12 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
+     v.setMacroMap(&data.mm);
+     v.setCacheValues(&data.cache);
+     v.setModulePath(modulesPath);
++    v.setProperties(data.properties);
++    QMap<QString, QString> env;
++    env["CMAKE_PREFIX_PATH"] = QString::fromLatin1(TEST_ENV_PREFIX_PATH);
++    env["CMAKE_INCLUDE_PATH"] = QString::fromLatin1(TEST_ENV_INCLUDE_PATH);
++    env["CMAKE_LIBRARY_PATH"] = QString::fromLatin1(TEST_ENV_LIBRARY_PATH);
++    v.setEnvironmentProfile( env );
+     v.walk(code, 0);
+     
+     data.projectName=v.projectName();
+diff --git a/projectmanagers/cmake/tests/cmakemanagertest.cpp b/projectmanagers/cmake/tests/cmakemanagertest.cpp
+index 0d814b8..153219c 100644
+--- a/projectmanagers/cmake/tests/cmakemanagertest.cpp
++++ b/projectmanagers/cmake/tests/cmakemanagertest.cpp
+@@ -186,6 +186,10 @@ void CMakeManagerTest::testTargetIncludeDirectories()
+ 
+ void CMakeManagerTest::testQt5App()
+ {
++    if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
++        QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
++    }
++
+     IProject* project = loadProject("qt5_app");
+ 
+     KUrl mainCpp(project->folder(), "main.cpp");
+@@ -205,9 +209,9 @@ void CMakeManagerTest::testQt5App()
+     QVERIFY(foundCore);
+ }
+ 
+-void CMakeManagerTest::testTargetDefines()
++void CMakeManagerTest::testDefines()
+ {
+-    IProject* project = loadProject("target_defines");
++    IProject* project = loadProject("defines");
+ 
+     KUrl mainCpp(project->folder(), "main.cpp");
+     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+@@ -221,11 +225,32 @@ void CMakeManagerTest::testTargetDefines()
+         QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
+ 
+         if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+-            QCOMPARE(defines.size(), 1);
+-            QVERIFY(defines.contains(QString("VALUE")));
+-            QCOMPARE(defines.value("VALUE"), QString("1"));
++            QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
++            QCOMPARE(defines.size(), 14);
++            QCOMPARE(defines.size(), 11);
++            QCOMPARE(defines.value("B", QString("not found")), QString());
++            QCOMPARE(defines.value("BV", QString("not found")), QString("1"));
++            QCOMPARE(defines.value("BV2", QString("not found")), QString("2"));
+             foundInTarget = true;
++        } else {
++            QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
++            QCOMPARE(defines.size(), 11);
++            QCOMPARE(defines.size(), 8);
+         }
++        QCOMPARE(defines.value("BAR", QString("not found")), QString("foo"));
++        QCOMPARE(defines.value("FOO", QString("not found")), QString("bar"));
++        QCOMPARE(defines.value("BLA", QString("not found")), QString("blub"));
++        QCOMPARE(defines.value("ASDF", QString("not found")), QString("asdf"));
++        QCOMPARE(defines.value("XYZ", QString("not found")), QString());
++        QCOMPARE(defines.value("A", QString("not found")), QString());
++        QCOMPARE(defines.value("AV", QString("not found")), QString("1"));
++        QCOMPARE(defines.value("AV2", QString("not found")), QString("2"));
++        QEXPECT_FAIL("", "", Continue);
++        QCOMPARE(defines.value("C", QString("not found")), QString());
++        QEXPECT_FAIL("", "", Continue);
++        QCOMPARE(defines.value("CV", QString("not found")), QString("1"));
++        QEXPECT_FAIL("", "", Continue);
++        QCOMPARE(defines.value("CV2", QString("not found")), QString("2"));
+     }
+     QVERIFY(foundInTarget);
+ }
+diff --git a/projectmanagers/cmake/tests/cmakemanagertest.h b/projectmanagers/cmake/tests/cmakemanagertest.h
+index a4b8439..b80676e 100644
+--- a/projectmanagers/cmake/tests/cmakemanagertest.h
++++ b/projectmanagers/cmake/tests/cmakemanagertest.h
+@@ -43,7 +43,7 @@ private slots:
+     void testRelativePaths();
+     void testTargetIncludeDirectories();
+     void testTargetIncludePaths();
+-    void testTargetDefines();
++    void testDefines();
+     void testCustomTargetSources();
+     void testConditionsInSubdirectoryBasedOnRootVariables();
+     void testQt5App();
+diff --git a/projectmanagers/cmake/tests/cmakeprojectvisitortest.cpp b/projectmanagers/cmake/tests/cmakeprojectvisitortest.cpp
+index bd9a238..37498e8 100644
+--- a/projectmanagers/cmake/tests/cmakeprojectvisitortest.cpp
++++ b/projectmanagers/cmake/tests/cmakeprojectvisitortest.cpp
+@@ -518,6 +518,13 @@ void CMakeProjectVisitorTest::testRun_data()
+                             "set_target_properties(mylib PROPERTIES fu hello)\n"
+                             "get_target_property(result My::Lib fu)\n"
+                             << cacheValues << results;
++    results.clear();
++    results << StringPair("result", "hell\\o");
++    QTest::newRow("escaping") <<
++                            "set(resultA \"hell\\\\o\")\n"
++                            "set(resultB \"${resultA}\")\n"
++                            "set(result \"${resultB}\")\n"
++                            << cacheValues << results;
+ }
+ 
+ void CMakeProjectVisitorTest::testRun()
+@@ -568,6 +575,8 @@ void CMakeProjectVisitorTest::testFinder_data()
+     QTest::newRow("Phonon") << "Phonon" << QString();
+     QTest::newRow("Automoc4") << "Automoc4" << QString();
+     QTest::newRow("Boost") << "Boost" << QString("1.39");
++    QTest::newRow("TestLib") << "TestLib" << QString();
++    QTest::newRow("TestLib64") << "TestLib64" << QString();
+ //     QTest::newRow("Eigen2") << "Eigen2" << QString();
+ //     QTest::newRow("Exiv2") << "Exiv2" << QString();
+ //     QTest::newRow("QtGStreamer") << "QtGStreamer" << QString(); //commented because it might not be installed
+@@ -601,7 +610,7 @@ void CMakeProjectVisitorTest::testFinder()
+     data.vm.insert("CMAKE_SOURCE_DIR", QStringList("./"));
+     data.vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
+     data.vm.insert("CMAKE_MODULE_PATH", modulePath);
+-    data.cache.insert("CMAKE_PREFIX_PATH", CacheEntry(TEST_PREFIX_PATH));
++    data.vm.insert("CMAKE_PREFIX_PATH", QString::fromLatin1(TEST_PREFIX_PATH).split(';', QString::SkipEmptyParts));
+     
+     foreach(const QString& script, buildstrap)
+     {
+@@ -614,6 +623,15 @@ void CMakeProjectVisitorTest::testFinder()
+     v.setVariableMap(&data.vm);
+     v.setMacroMap(&data.mm);
+     v.setCacheValues( &data.cache );
++    QMap<QString, QString> env;
++    env["PATH"] = QString::fromLatin1(CMAKE_TESTS_PROJECTS_DIR "/bin:") + QString::fromLatin1(qgetenv("PATH"));
++    env["CMAKE_PREFIX_PATH"] = QString::fromLatin1(TEST_ENV_PREFIX_PATH);
++    env["CMAKE_INCLUDE_PATH"] = QString::fromLatin1(TEST_ENV_INCLUDE_PATH);
++    env["CMAKE_LIBRARY_PATH"] = QString::fromLatin1(TEST_ENV_LIBRARY_PATH);
++    v.setEnvironmentProfile( env );
++    CMakeProperties props;
++    props[GlobalProperty][QString()]["FIND_LIBRARY_USE_LIB64_PATHS"] = QStringList() << "TRUE";
++    v.setProperties( props );
+     v.walk(code, 0);
+     
+     QString foundvar=QString("%1_FOUND").arg(module);
+diff --git a/projectmanagers/cmake/tests/manual/defines/CMakeLists.txt b/projectmanagers/cmake/tests/manual/defines/CMakeLists.txt
+new file mode 100644
+index 0000000..0784560
+--- /dev/null
++++ b/projectmanagers/cmake/tests/manual/defines/CMakeLists.txt
+@@ -0,0 +1,13 @@
++project(defines)
++
++add_definitions(-std=c++0x -DBAR=foo)
++add_definitions("-DFOO=bar -DBLA=blub")
++SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DASDF=asdf -DXYZ")
++add_executable(target main.cpp)
++
++set_property( DIRECTORY PROPERTY COMPILE_DEFINITIONS A AV=1 )
++set_property( DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS AV2=2 )
++set_property( TARGET target PROPERTY COMPILE_DEFINITIONS B BV=1 )
++set_property( TARGET target APPEND PROPERTY COMPILE_DEFINITIONS BV2=2 )
++set_property( SOURCE main.cpp PROPERTY COMPILE_DEFINITIONS C CV=1 )
++set_property( SOURCE main.cpp APPEND PROPERTY COMPILE_DEFINITIONS CV2=2 )
+diff --git a/projectmanagers/cmake/tests/manual/defines/defines.kdev4 b/projectmanagers/cmake/tests/manual/defines/defines.kdev4
+new file mode 100644
+index 0000000..a63fb57
+--- /dev/null
++++ b/projectmanagers/cmake/tests/manual/defines/defines.kdev4
+@@ -0,0 +1,3 @@
++[Project]
++Manager=KDevCMakeManager
++Name=defines
+diff --git a/projectmanagers/cmake/tests/manual/defines/main.cpp b/projectmanagers/cmake/tests/manual/defines/main.cpp
+new file mode 100644
+index 0000000..f573ecc
+--- /dev/null
++++ b/projectmanagers/cmake/tests/manual/defines/main.cpp
+@@ -0,0 +1,4 @@
++int main(int, char**)
++{
++  return VALUE;
++}
+diff --git a/projectmanagers/cmake/tests/manual/lib/testlib/TestLibConfig.cmake b/projectmanagers/cmake/tests/manual/lib/testlib/TestLibConfig.cmake
+new file mode 100644
+index 0000000..e69de29
+diff --git a/projectmanagers/cmake/tests/manual/lib64/testlib64/TestLib64Config.cmake b/projectmanagers/cmake/tests/manual/lib64/testlib64/TestLib64Config.cmake
+new file mode 100644
+index 0000000..e69de29
+diff --git a/projectmanagers/cmake/tests/manual/target_defines/CMakeLists.txt b/projectmanagers/cmake/tests/manual/target_defines/CMakeLists.txt
+deleted file mode 100644
+index 1c0aaf2..0000000
+--- a/projectmanagers/cmake/tests/manual/target_defines/CMakeLists.txt
++++ /dev/null
+@@ -1,4 +0,0 @@
+-project(target_includes)
+-
+-add_executable(target main.cpp)
+-set_property(TARGET target APPEND PROPERTY COMPILE_DEFINITIONS "VALUE=1")
+diff --git a/projectmanagers/cmake/tests/manual/target_defines/main.cpp b/projectmanagers/cmake/tests/manual/target_defines/main.cpp
+deleted file mode 100644
+index f573ecc..0000000
+--- a/projectmanagers/cmake/tests/manual/target_defines/main.cpp
++++ /dev/null
+@@ -1,4 +0,0 @@
+-int main(int, char**)
+-{
+-  return VALUE;
+-}
+diff --git a/projectmanagers/cmake/tests/manual/target_defines/target_defines.kdev4 b/projectmanagers/cmake/tests/manual/target_defines/target_defines.kdev4
+deleted file mode 100644
+index de43863..0000000
+--- a/projectmanagers/cmake/tests/manual/target_defines/target_defines.kdev4
++++ /dev/null
+@@ -1,3 +0,0 @@
+-[Project]
+-Manager=KDevCMakeManager
+-Name=target_defines
+diff --git a/projectmanagers/cmake/tests/paths.h.cmake b/projectmanagers/cmake/tests/paths.h.cmake
+index 555bdab..6332ab3 100644
+--- a/projectmanagers/cmake/tests/paths.h.cmake
++++ b/projectmanagers/cmake/tests/paths.h.cmake
+@@ -1,4 +1,7 @@
+ #define CMAKE_TESTS_PROJECTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/manual"
+ #define CMAKE_INSTALLED_MODULES "${DATA_INSTALL_DIR}/cmake/modules"
+ #define TEST_PREFIX_PATH "${CMAKE_PREFIX_PATH};${CMAKE_INSTALL_PREFIX}"
++#define TEST_ENV_PREFIX_PATH "$ENV{CMAKE_PREFIX_PATH}"
++#define TEST_ENV_LIBRARY_PATH "$ENV{CMAKE_LIBRARY_PATH}"
++#define TEST_ENV_INCLUDE_PATH "$ENV{CMAKE_INCLUDE_PATH}"
+ 
+diff --git a/projectmanagers/custom-buildsystem/tests/custombuildsystemplugintest.cpp b/projectmanagers/custom-buildsystem/tests/custombuildsystemplugintest.cpp
+index 7273762..191d909 100644
+--- a/projectmanagers/custom-buildsystem/tests/custombuildsystemplugintest.cpp
++++ b/projectmanagers/custom-buildsystem/tests/custombuildsystemplugintest.cpp
+@@ -45,18 +45,6 @@ using KDevelop::TestCore;
+ using KDevelop::AutoTestShell;
+ using KDevelop::KDevSignalSpy;
+ 
+-static void deleteDir( QDir dir )
+-{
+-    foreach( const QString& f, dir.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) ) {
+-        if( QFileInfo( f ).isDir() ) {
+-            deleteDir( QDir( dir.absoluteFilePath( f ) ) );
+-            dir.rmdir( f );
+-        } else {
+-            dir.remove( f );
+-        }
+-    }
+-}
+-
+ void CustomBuildSystemPluginTest::cleanupTestCase()
+ {
+     TestCore::shutdown();
+diff --git a/providers/ghprovider/CMakeLists.txt b/providers/ghprovider/CMakeLists.txt
+index 70c36c6..91abddd 100644
+--- a/providers/ghprovider/CMakeLists.txt
++++ b/providers/ghprovider/CMakeLists.txt
+@@ -43,6 +43,7 @@ target_link_libraries(kdevghprovider
+ )
+ 
+ install(TARGETS kdevghprovider DESTINATION ${PLUGIN_INSTALL_DIR})
+-install(FILES kdevghprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR})
++configure_file(kdevghprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevghprovider.desktop)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevghprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+ 
+ add_subdirectory(cmake)
+diff --git a/providers/ghprovider/kdevghprovider.desktop b/providers/ghprovider/kdevghprovider.desktop
+deleted file mode 100644
+index f4081ce..0000000
+--- a/providers/ghprovider/kdevghprovider.desktop
++++ /dev/null
+@@ -1,64 +0,0 @@
+-[Desktop Entry]
+-Type=Service
+-Icon=kdevgh
+-Exec=blubb
+-Comment=This plugin helps to obtain projects from Github
+-Comment[de]=Dieses Modul hilft dabei Github-Projekte zu beziehen
+-Comment[es]=Este complemento ayuda a obtener proyectos desde Github
+-Comment[fi]=Tämä liitännäinen auttaa Github-projektien hakemisessa
+-Comment[fr]=Ce module externe permet d'obtenir des projets depuis Github
+-Comment[gl]=Este complemento permite obter proxectos de Github
+-Comment[hu]=Ez a bővítmény segít a projektek megszerzésében a Githubról
+-Comment[it]=Questa estensione consente di ottenere progetti da Github
+-Comment[nl]=Deze plug-in helpt om projecten uit Github te verkrijgen
+-Comment[pt]=Este 'plugin' ajuda a obter projectos do GitHub
+-Comment[pt_BR]=Este plugin ajuda a obter projetos a partir do Github
+-Comment[sl]=Ta vstavek pomaga pri pridobivanju projektov iz Github-a
+-Comment[sv]=Insticksprogrammet hjälper till att erhålla projekt Github
+-Comment[uk]=За допомогою цього додатка можна отримувати проекти з Github
+-Comment[x-test]=xxThis plugin helps to obtain projects from Githubxx
+-Comment[zh_TW]=此外掛程式能協助您從 Github 取得專案
+-Name=Github Provider
+-Name[cs]=Poskytovatel Github
+-Name[de]=Github-Provider
+-Name[es]=Proveedor de Github
+-Name[fi]=Github-tarjoaja
+-Name[fr]=Fournisseur Github
+-Name[gl]=Fornecedor de Github
+-Name[hu]=Github szolgáltató
+-Name[it]=Fornitore Github
+-Name[nl]=Github-leverancier
+-Name[pt]=Fornecedor do GitHub
+-Name[pt_BR]=Fornecedor do Github
+-Name[sl]=Ponudnik za Github
+-Name[sv]=Github-leverantör
+-Name[uk]=Надавач даних Github
+-Name[x-test]=xxGithub Providerxx
+-Name[zh_TW]=Github 提供者
+-GenericName=Github Provider
+-GenericName[cs]=Poskytovatel Github
+-GenericName[de]=Github-Provider
+-GenericName[es]=Proveedor de Github
+-GenericName[fi]=Github-tarjoaja
+-GenericName[fr]=Fournisseur Github
+-GenericName[gl]=Fornecedor de Github
+-GenericName[hu]=Github szolgáltató
+-GenericName[it]=Fornitore Github
+-GenericName[nl]=Github-leverancier
+-GenericName[pt]=Fornecedor do GitHub
+-GenericName[pt_BR]=Fornecedor do Github
+-GenericName[sl]=Ponudnik za Github
+-GenericName[sv]=Github-leverantör
+-GenericName[uk]=Надавач даних Github
+-GenericName[x-test]=xxGithub Providerxx
+-GenericName[zh_TW]=Github 提供者
+-ServiceTypes=KDevelop/Plugin
+-X-KDE-Library=kdevghprovider
+-X-KDevelop-Version=16
+-X-KDevelop-Category=Global
+-X-KDE-PluginInfo-Name=kdevghprovider
+-X-KDE-PluginInfo-Author=Miquel Sabaté
+-X-KDE-PluginInfo-License=GPL
+-X-KDE-PluginInfo-Category=Utilities
+-X-KDevelop-Mode=GUI
+-X-KDevelop-Interfaces=org.kdevelop.IProjectProvider
+diff --git a/providers/ghprovider/kdevghprovider.desktop.cmake b/providers/ghprovider/kdevghprovider.desktop.cmake
+new file mode 100644
+index 0000000..496d0db
+--- /dev/null
++++ b/providers/ghprovider/kdevghprovider.desktop.cmake
+@@ -0,0 +1,76 @@
++[Desktop Entry]
++Type=Service
++Icon=kdevgh
++Exec=blubb
++Comment=This plugin helps to obtain projects from Github
++Comment[bs]=Ovaj dodatak omogućava dobijanje projekata iz Github
++Comment[ca]=Aquest connector ajuda a obtenir els projectes des de Github
++Comment[de]=Dieses Modul hilft dabei Github-Projekte zu beziehen
++Comment[es]=Este complemento ayuda a obtener proyectos desde Github
++Comment[fi]=Tämä liitännäinen auttaa Github-projektien hakemisessa
++Comment[fr]=Ce module externe permet d'obtenir des projets depuis Github
++Comment[gl]=Este complemento permite obter proxectos de Github
++Comment[hu]=Ez a bővítmény segít a projektek megszerzésében a Githubról
++Comment[it]=Questa estensione consente di ottenere progetti da Github
++Comment[kk]=Github жобаларын жүктеп алуға көмек плагині
++Comment[nl]=Deze plug-in helpt om projecten uit Github te verkrijgen
++Comment[pt]=Este 'plugin' ajuda a obter projectos do GitHub
++Comment[pt_BR]=Este plugin ajuda a obter projetos a partir do Github
++Comment[sk]=Tento modul pomáha získavať projekty z Github
++Comment[sl]=Ta vstavek pomaga pri pridobivanju projektov iz Github-a
++Comment[sv]=Insticksprogrammet hjälper till att erhålla projekt Github
++Comment[uk]=За допомогою цього додатка можна отримувати проекти з Github
++Comment[x-test]=xxThis plugin helps to obtain projects from Githubxx
++Comment[zh_TW]=此外掛程式能協助您從 Github 取得專案
++Name=Github Provider
++Name[bs]=Github pružalac
++Name[ca]=Proveïdor de Github
++Name[cs]=Poskytovatel Github
++Name[de]=Github-Provider
++Name[es]=Proveedor de Github
++Name[fi]=Github-tarjoaja
++Name[fr]=Fournisseur Github
++Name[gl]=Fornecedor de Github
++Name[hu]=Github szolgáltató
++Name[it]=Fornitore Github
++Name[kk]=Github таратушысы
++Name[nl]=Github-leverancier
++Name[pt]=Fornecedor do GitHub
++Name[pt_BR]=Fornecedor do Github
++Name[sk]=Poskytovateľ Github
++Name[sl]=Ponudnik za Github
++Name[sv]=Github-leverantör
++Name[uk]=Надавач даних Github
++Name[x-test]=xxGithub Providerxx
++Name[zh_TW]=Github 提供者
++GenericName=Github Provider
++GenericName[bs]=Github pružalac
++GenericName[ca]=Proveïdor de Github
++GenericName[cs]=Poskytovatel Github
++GenericName[de]=Github-Provider
++GenericName[es]=Proveedor de Github
++GenericName[fi]=Github-tarjoaja
++GenericName[fr]=Fournisseur Github
++GenericName[gl]=Fornecedor de Github
++GenericName[hu]=Github szolgáltató
++GenericName[it]=Fornitore Github
++GenericName[kk]=Github таратушысы
++GenericName[nl]=Github-leverancier
++GenericName[pt]=Fornecedor do GitHub
++GenericName[pt_BR]=Fornecedor do Github
++GenericName[sk]=Poskytovateľ Github
++GenericName[sl]=Ponudnik za Github
++GenericName[sv]=Github-leverantör
++GenericName[uk]=Надавач даних Github
++GenericName[x-test]=xxGithub Providerxx
++GenericName[zh_TW]=Github 提供者
++ServiceTypes=KDevelop/Plugin
++X-KDE-Library=kdevghprovider
++X-KDevelop-Version=16
++X-KDevelop-Category=Global
++X-KDE-PluginInfo-Name=kdevghprovider
++X-KDE-PluginInfo-Author=Miquel Sabaté
++X-KDE-PluginInfo-License=GPL
++X-KDE-PluginInfo-Category=Utilities
++X-KDevelop-Mode=GUI
++X-KDevelop-Interfaces=org.kdevelop.IProjectProvider
