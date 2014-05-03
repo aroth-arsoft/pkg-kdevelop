@@ -11,9 +11,9 @@ Build-Depends: cdbs,
                cmake,
                debhelper (>= 7.4.15),
                kde-workspace-dev (>= 4:4.5.2),
-               kdevplatform-dev (>= 1.5.80~),
+               kdevplatform-dev (>= 1.6.0),
                libqtwebkit-dev,
-               okteta-dev (>= 4:4.10),
+               okteta-dev,
                pkg-kde-tools (>= 0.9.0),
                libqjson-dev,
                shared-mime-info
@@ -28,10 +28,12 @@ Depends: kdevelop-data (>= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends},
          kate-data
-Recommends: g++, gcc, gdb (>= 7.0), make
+Recommends: g++, gcc, gdb (>= 7.0), make,
+ libqtwebkit-qmlwebkitplugin,
+ kdevelop-l10n, kdevelop-php-docs-l10n, kdevelop-php-l10n
 Replaces: kdevelop-custom-buildsystem
 Conflicts: kdevelop-custom-buildsystem
-Suggests: cmake, kapptemplate, kdevelop-l10n
+Suggests: cmake, kapptemplate
 Description: integrated development environment for KDE
  KDevelop is an easy to use integrated development environment for KDE.
  It supports a wide range of programming languages and features project

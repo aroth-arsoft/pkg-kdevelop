@@ -2,9 +2,18 @@
 
 include /usr/share/pkg-kde-tools/qt-kde-team/1/debian-qt-kde.mk
 
+ifeq ($(DEB_HOST_ARCH_ENDIAN),big)
+DEB_CMAKE_EXTRA_FLAGS += -DLIBOKTETA1KASTEN2CORE_LIBRARY=false
+endif
+
 binary-install/kdevelop::
 	install -D -p -m0644 debian/kdevelop.xpm \
 		debian/kdevelop/usr/share/pixmaps/kdevelop.xpm
+
+binary-install/kdevelop-data::
+ifeq ($(DEB_HOST_ARCH_ENDIAN),little)
+	dh_install --autodest -pkdevelop-data usr/share/kde4/apps/kdevokteta/*
+endif
 
 # Work around a conflict with kapptemplate
 binary-install/kdevelop-data::

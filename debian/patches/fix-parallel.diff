@@ -1,0 +1,68 @@
+Author: Pino Toscano <pino@debian.org>
+Description: Fix parallel building of tests
+ Set the proper dependency on the kdevcpplanguagesupport target on few tests;
+ since they compile the sources of kdevcpplanguagesupport which include sources
+ (like ui_*.h files) generated during the build of kdevcpplanguagesupport.
+Last-Update: 2012-05-21
+Forwarded: no
+
+--- a/languages/cpp/CMakeLists.txt
++++ b/languages/cpp/CMakeLists.txt
+@@ -11,7 +11,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_ARE
+ 
+ add_subdirectory(parser)
+ add_subdirectory(cppduchain)
+-add_subdirectory(tests)
+ ########### next target ###############
+ 
+ set(kdevcpplanguagesupport_PART_SRCS
+@@ -90,6 +89,7 @@ target_link_libraries(kdevcpplanguagesup
+ 
+ install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
+ 
++add_subdirectory(tests)
+ 
+ ########### install files ###############
+ 
+--- a/languages/cpp/tests/CMakeLists.txt
++++ b/languages/cpp/tests/CMakeLists.txt
+@@ -83,6 +83,7 @@ target_link_libraries(cppspecialcompleti
+     ${KDEVPLATFORM_PROJECT_LIBRARIES}
+     ${KDEVPLATFORM_TESTS_LIBRARIES}
+ )
++add_dependencies(cppspecialcompletion kdevcpplanguagesupport)
+ 
+ ########### next target ###############
+ 
+@@ -103,7 +104,6 @@ target_link_libraries(cppassistantstest
+     kdev4cppduchain
+     kdev4cpprpp
+     kdev4cppparser
+-    kdevcpplanguagesupport
+     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+     ${KDEVPLATFORM_PROJECT_LIBRARIES}
+     ${KDE4_THREADWEAVER_LIBRARIES}
+@@ -112,6 +112,7 @@ target_link_libraries(cppassistantstest
+     ${KDE4_KDECORE_LIBS}
+     ${KDE4_KTEXTEDITOR_LIBS}
+ )
++add_dependencies(cppassistantstest kdevcpplanguagesupport)
+ 
+ add_definitions(-DTEST_COMPLETION)
+ 
+@@ -143,6 +144,7 @@ target_link_libraries(cppcodecompletiont
+     ${KDE4_KDECORE_LIBS}
+     ${KDE4_KTEXTEDITOR_LIBS}
+ )
++add_dependencies(cppcodecompletiontest kdevcpplanguagesupport)
+ 
+ kde4_add_unit_test(cppcodegentest ${cppcodegentest_SRCS})
+ target_link_libraries(cppcodegentest
+@@ -155,6 +157,7 @@ target_link_libraries(cppcodegentest
+     ${KDEVPLATFORM_PROJECT_LIBRARIES}
+     ${KDEVPLATFORM_TESTS_LIBRARIES}
+ )
++add_dependencies(cppcodegentest kdevcpplanguagesupport)
+ 
+ kde4_add_executable( cpp-parser cpp-parser.cpp )
+ target_link_libraries(cpp-parser

@@ -1,3 +1,33 @@
+kdevelop (4:4.6.0-0ubuntu3.1git98abd24) trusty; urgency=medium
+
+  * integrate upstream changes from 4.6 branch up to 98abd24
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Sat, 03 May 2014 09:49:06 +0200
+
+kdevelop (4:4.6.0-0ubuntu3) trusty; urgency=low
+
+  * Promote kdevelop-l10n from Suggests to Recommends to ensure people
+    get localization.
+    + Add kdevelop-php-docs-l10n, kdevelop-php-l10n as Recommends
+
+ -- Harald Sitter <apachelogger@kubuntu.org>  Mon, 20 Jan 2014 11:33:44 +0100
+
+kdevelop (4:4.6.0-0ubuntu2) trusty; urgency=low
+
+  * Recommend libqtwebkit-qmlwebkitplugin, required for 'learn kdevelop'
+    feature on the overview LP: #1264663
+    (Not depending because this is a purely optional dependency, much
+     like khelpcenter)
+
+ -- Harald Sitter <apachelogger@kubuntu.org>  Thu, 02 Jan 2014 14:08:06 +0100
+
+kdevelop (4:4.6.0-0ubuntu1) trusty; urgency=low
+
+  * New upstream release (LP: #1259220)
+  * Update install files 
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Mon, 09 Dec 2013 18:54:59 +0100
+
 kdevelop (4:4.5.80-0ubuntu0.3+git108027d1f0b93bfe4b006bb70aa55d88fa0edf0b~aroth~ppa4) UNRELEASED; urgency=low
 
   * integrate 108027d1f0b93bfe4b006bb70aa55d88fa0edf0b
@@ -29,34 +59,41 @@ kdevelop (4:4.5.60-0.1) raring; urgency=low
 
  -- Andreas Roth <aroth@arsoft-online.com>  Tue, 20 Aug 2013 07:01:26 +0200
 
-kdevelop (4:4.5.1-0ubuntu5) raring; urgency=low
+kdevelop (4:4.5.2-0ubuntu1) trusty; urgency=low
+
+  * New upstream release
+  * Bump required version of kdevplatform-dev to 1.5.2
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Mon, 04 Nov 2013 16:02:55 +0100
+
+kdevelop (4:4.5.1-0ubuntu5) saucy; urgency=low
 
   * Rebuild against new okteta 4.11
 
  -- Philip Muškovac <yofel@kubuntu.org>  Sat, 13 Jul 2013 15:30:42 +0200
 
-kdevelop (4:4.5.1-0ubuntu4) raring; urgency=low
+kdevelop (4:4.5.1-0ubuntu4) saucy; urgency=low
 
   * Fix typo in kdevelop depends: kata-data -> kate-data.
     Thanks Ladislav Bonita. (LP: #1191916)
 
  -- Philip Muškovac <yofel@kubuntu.org>  Mon, 17 Jun 2013 23:49:29 +0200
 
-kdevelop (4:4.5.1-0ubuntu3) raring; urgency=low
+kdevelop (4:4.5.1-0ubuntu3) saucy; urgency=low
 
   * Add depends on kate-data, fixes https://bugs.kde.org/318188
     "Adding snippet repository fails with clean install"
 
  -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 13 Jun 2013 15:05:27 +0100
 
-kdevelop (4:4.5.1-0ubuntu2) raring; urgency=low
+kdevelop (4:4.5.1-0ubuntu2) saucy; urgency=low
 
   * Don't build okteta plugin on powerpc or install in
     kdevelop-data.install and edit debian/rules to install on !powerpc
 
  -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 11 Jun 2013 13:59:19 +0100
 
-kdevelop (4:4.5.1-0ubuntu1) raring; urgency=low
+kdevelop (4:4.5.1-0ubuntu1) saucy; urgency=low
 
   * New upstream release
   * Merge with Debian git packaging, remaining changes
@@ -83,13 +120,13 @@ kdevelop (4:4.5.1-0r0) UNRELEASED; urgency=low
 
  -- Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>  Fri, 25 May 2012 23:56:49 +0200
 
-kdevelop (4:4.5.0-0ubuntu2) raring; urgency=low
+kdevelop (4:4.5.0-0ubuntu2) saucy; urgency=low
 
   * replaces/conflucts kdevelop-custom-buildsystem, now build into KDevelop
 
  -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 10 May 2013 15:32:19 +0000
 
-kdevelop (4:4.5.0-0ubuntu1) raring; urgency=low
+kdevelop (4:4.5.0-0ubuntu1) saucy; urgency=low
 
   * New upstream release LP: #1175273
   * Add kubuntu_no_test.diff to disable broken test
