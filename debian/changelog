@@ -1,3 +1,9 @@
+kdevelop (4:4.7.0-0ubuntu0.1) trusty; urgency=medium
+
+  * New upstream release
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Tue, 16 Sep 2014 07:38:15 +0200
+
 kdevelop (4:4.6.0-0ubuntu3.1git98abd24) trusty; urgency=medium
 
   * integrate upstream changes from 4.6 branch up to 98abd24

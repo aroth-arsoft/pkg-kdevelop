@@ -1,0 +1,10 @@
+*.debhelper.log
+/files
+stamp-*
+*.substvars
+*.post*.debhelper
+/kdevelop/
+/kdevelop-*/
+/man/
+/tmp/
+
