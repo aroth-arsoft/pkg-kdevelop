@@ -7,33 +7,38 @@ Uploaders: Fathi Boudra <fabo@debian.org>,
            Jeremy Lainé <jeremy.laine@m4x.org>,
            George Kiagiadakis <kiagiadakis.george@gmail.com>,
            Andreas Cord-Landwehr <cola@uni-paderborn.de>
-Build-Depends: cdbs,
-               cmake,
-               debhelper (>= 7.4.15),
-               kde-workspace-dev (>= 4:4.5.2),
-               kdevplatform-dev (>= 1.7.0~),
+Build-Depends: cmake,
+               debhelper,
+               kdevplatform-dev (>= 1.7.0),
+               libqjson-dev,
                libqtwebkit-dev,
                okteta-dev,
-               pkg-kde-tools (>= 0.9.0),
-               libqjson-dev,
+               pkg-kde-tools,
                shared-mime-info
-Standards-Version: 3.9.5
+Standards-Version: 3.9.4
+XS-Testsuite: autopkgtest
 Homepage: http://www.kdevelop.org/
 Vcs-Browser: http://git.debian.org/?p=pkg-kde/kde-std/kdevelop.git
 Vcs-Git: git://git.debian.org/pkg-kde/kde-std/kdevelop.git
 
 Package: kdevelop
 Architecture: any
-Depends: kdevelop-data (>= ${source:Version}),
+Depends: kate-data,
+         kdevelop-data (>= ${source:Version}),
          ${misc:Depends},
-         ${shlibs:Depends},
-         kate-data
-Recommends: g++, gcc, gdb (>= 7.0), make,
- libqtwebkit-qmlwebkitplugin,
- kdevelop-l10n, kdevelop-php-docs-l10n, kdevelop-php-l10n
+         ${shlibs:Depends}
+Recommends: cmake,
+            g++,
+            gcc,
+            gdb (>= 7.0),
+            kdevelop-l10n,
+            kdevelop-php-docs-l10n,
+            kdevelop-php-l10n,
+            libqtwebkit-qmlwebkitplugin,
+            make
 Replaces: kdevelop-custom-buildsystem
 Conflicts: kdevelop-custom-buildsystem
-Suggests: cmake, kapptemplate
+Suggests: kapptemplate
 Description: integrated development environment for KDE
  KDevelop is an easy to use integrated development environment for KDE.
  It supports a wide range of programming languages and features project
@@ -77,7 +82,7 @@ Package: kdevelop-dbg
 Section: debug
 Architecture: any
 Priority: extra
-Depends: kdelibs5-dbg, kdevelop (= ${binary:Version})
+Depends: kdelibs5-dbg, kdevelop (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for KDevelop
  KDevelop is an easy to use integrated development environment for KDE.
  It supports a wide range of programming languages and features project
@@ -137,6 +142,7 @@ Breaks: kdevelop-l10n-ca,
         kdevelop-l10n-uk,
         kdevelop-l10n-zhcn,
         kdevelop-l10n-zhtw
+Depends: ${misc:Depends}
 Recommends: kdevplatform-l10n
 Description: localization files for the KDevelop IDE
  KDevelop is an easy to use integrated development environment for KDE.

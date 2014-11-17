@@ -1,8 +1,30 @@
+kdevelop (4:4.7.0-0ubuntu2) vivid; urgency=medium
+
+  * Remove kde-workspace-dev build-depend, it's removed from archive
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 07 Nov 2014 16:15:29 +0100
+
+kdevelop (4:4.7.0-0ubuntu1) utopic; urgency=medium
+
+  * New upstream release (LP: #1362107)
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Sat, 30 Aug 2014 03:03:17 -0700
+
 kdevelop (4:4.7.0-0ubuntu0.1) trusty; urgency=medium
 
   * New upstream release
 
  -- Andreas Roth <aroth@arsoft-online.com>  Tue, 16 Sep 2014 07:38:15 +0200
+
+kdevelop (4:4.6.0-0ubuntu4) utopic; urgency=medium
+
+  * Add cmake to recommends as it is needed for cmake projects and kdevelop
+    will fail with an excitingly pointless error message if it is not found.
+    Kdevelop can technically also be used without cmake, so cmake
+    certainly does not qualify as Dependency.
+    LP: #807386
+
+ -- Harald Sitter <apachelogger@kubuntu.org>  Mon, 02 Jun 2014 10:05:32 +0200
 
 kdevelop (4:4.6.0-0ubuntu3.1git98abd24) trusty; urgency=medium
 

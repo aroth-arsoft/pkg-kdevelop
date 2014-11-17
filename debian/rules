@@ -1,22 +1,16 @@
 #!/usr/bin/make -f
 
-include /usr/share/pkg-kde-tools/qt-kde-team/1/debian-qt-kde.mk
+include /usr/share/pkg-kde-tools/qt-kde-team/2/debian-qt-kde.mk
 
-ifeq ($(DEB_HOST_ARCH_ENDIAN),big)
-DEB_CMAKE_EXTRA_FLAGS += -DLIBOKTETA1KASTEN2CORE_LIBRARY=false
-endif
-
-binary-install/kdevelop::
+override_dh_install:
 	install -D -p -m0644 debian/kdevelop.xpm \
 		debian/kdevelop/usr/share/pixmaps/kdevelop.xpm
+	$(overridden_command)
 
-binary-install/kdevelop-data::
-ifeq ($(DEB_HOST_ARCH_ENDIAN),little)
-	dh_install --autodest -pkdevelop-data usr/share/kde4/apps/kdevokteta/*
-endif
+override_dh_strip:
+	$(overridden_command) --dbg-package=kdevelop-dbg
 
-# Work around a conflict with kapptemplate
-binary-install/kdevelop-data::
-	find debian/$(cdbs_curpkg) -type f -name qmake_qt4guiapp.tar.bz2 | xargs rm -f
-
-DEB_DBG_PACKAGE_kdevelop := kdevelop-dbg
+override_dh_builddeb:
+	dh_builddeb -- -Zxz
+	
+.PHONY: override_dh_auto_test

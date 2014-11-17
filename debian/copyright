@@ -707,7 +707,7 @@ License: GPL-2+ or any later version approved by KDE e.V.
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -776,7 +776,7 @@ License: GPL
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
@@ -787,7 +787,7 @@ Files: projectmanagers/cmake/parser/cmListFileLexer.h
 Copyright: 2002 Kitware Inc. Insight Consortium.
 License: CMake-License
  Copyright 2002 Kitware, Inc., Insight Consortium.  All rights reserved.
-  
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
  * Redistributions of source code must retain the above copyright notice, this

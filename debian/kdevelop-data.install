@@ -1,4 +1,3 @@
-
 usr/share/doc/*
 usr/share/icons/*
 usr/share/kde4/apps/kdevappwizard/*
@@ -28,6 +27,8 @@ usr/share/kde4/apps/kdevfiletemplates/templates/qobject.tar.bz2
 usr/share/kde4/apps/kdevfiletemplates/templates/qt_shared.tar.bz2
 usr/share/kde4/apps/kdevfiletemplates/templates/qt_widget.tar.bz2
 usr/share/kde4/apps/kdevgdb/*
+usr/share/kde4/apps/kdevmanpage/manpagedocumentation.css
+usr/share/kde4/apps/kdevokteta/kdevokteta.rc
 usr/share/kde4/apps/plasma/plasmoids/kdevelopsessions/contents/ui/kdevelopsessions.qml
 usr/share/kde4/apps/plasma/plasmoids/kdevelopsessions/metadata.desktop
 usr/share/kde4/apps/plasma/services/org.kde.plasma.dataengine.kdevelopsessions.operations
