@@ -1,0 +1,3551 @@
+diff --git a/app/kdevelop.notifyrc b/app/kdevelop.notifyrc
+index 1f040e7..5dc5782 100644
+--- a/app/kdevelop.notifyrc
++++ b/app/kdevelop.notifyrc
+@@ -471,7 +471,7 @@ Comment=A Breakpoint has been hit by the debugger
+ Comment[bs]=Ispravljač grešaka je dosao do prijelomne tačke
+ Comment[ca]=El depurador ha assolit un punt d'interrupció
+ Comment[ca@valencia]=El depurador ha assolit un punt d'interrupció
+-Comment[cs]=Bod přerušení byl dosažen debuggerem
++Comment[cs]=Bod přerušení byl dosažen ladicím nástrojem
+ Comment[da]=Fejlsøgeren nåede et stoppunkt
+ Comment[de]=Der Debugger hat einen Haltepunkt erreicht
+ Comment[el]=Ο διορθωτής έχει σημειώσει προσωρινή παύση
+@@ -544,7 +544,7 @@ Comment=A Watchpoint has been hit by the debugger
+ Comment[bs]=Ispravljač grešaka je došao do pregledne tačke
+ Comment[ca]=El depurador ha assolit un punt d'observació
+ Comment[ca@valencia]=El depurador ha assolit un punt d'observació
+-Comment[cs]=Bod sledování byl dosažen debuggerem
++Comment[cs]=Bod sledování byl dosažen ladicím nástrojem
+ Comment[da]=Fejlsøgeren nåede et overvågningspunkt
+ Comment[de]=Der Debugger hat einen Beobachtungspunkt erreicht
+ Comment[el]=Ο διορθωτής έχει σημειώσει θέση επιθεώρησης
+diff --git a/app/kdevelop_ps.desktop b/app/kdevelop_ps.desktop
+index 1a4c16c..394c965 100644
+--- a/app/kdevelop_ps.desktop
++++ b/app/kdevelop_ps.desktop
+@@ -33,6 +33,7 @@ Name[ru]=KDevelop 4 (с выбором сеанса)
+ Name[sk]=KDevelop 4 (zvoliť sedenie)
+ Name[sl]=KDevelop 4 (izbor seje)
+ Name[sv]=KDevelop 4 (välj session)
++Name[tr]=KDevelop 4 (Oturum Seçin)
+ Name[uk]=KDevelop 4 (Вибір сеансу)
+ Name[x-test]=xxKDevelop 4 (Pick Session)xx
+ Name[zh_CN]=KDevelop 4 (选择会话)
+@@ -66,6 +67,7 @@ GenericName[ru]=Интегрированная среда разработки (
+ GenericName[sk]=Integrované vývojové prostredie (zvoľte sedenie na spustenie)
+ GenericName[sl]=Integrirano razvojno okolje (izberite sejo za začetek)
+ GenericName[sv]=Integrerad utvecklingsmiljö (välj session att starta)
++GenericName[tr]=Tümleşik Geliştirme Ortamı (Başlamak için Oturum Seçin)
+ GenericName[uk]=Комплексне середовище розробки (виберіть сеанс, з якого слід розпочати роботу)
+ GenericName[x-test]=xxIntegrated Development Environment (Pick Session to start with)xx
+ GenericName[zh_CN]=集成开发环境(选择要启动的会话)
+diff --git a/app/plasma/applet/package/metadata.desktop b/app/plasma/applet/package/metadata.desktop
+index 8c0a09a..1a052c7 100644
+--- a/app/plasma/applet/package/metadata.desktop
++++ b/app/plasma/applet/package/metadata.desktop
+@@ -28,6 +28,7 @@ Name[ru]=Сеансы KDevelop
+ Name[sk]=Sedenia KDevelop
+ Name[sl]=Seje za KDevelop
+ Name[sv]=KDevelop-sessioner
++Name[tr]=KDevelop Oturumları
+ Name[uk]=Сеанси KDevelop
+ Name[x-test]=xxKDevelop Sessionsxx
+ Name[zh_CN]=KDevelop 会话
+@@ -59,6 +60,7 @@ Comment[ru]=Просмотр списка и запуск сеансов KDevelo
+ Comment[sk]=Vypísať a spustiť sedenia KDevelop
+ Comment[sl]=Seznam in zagon sej za KDevelop
+ Comment[sv]=Lista och starta KDevelop-sessioner
++Comment[tr]=KDevelop oturumlarını listele ve başlat
+ Comment[uk]=Показ списку і запуск сеансів KDevelop
+ Comment[x-test]=xxList and launch KDevelop sessionsxx
+ Comment[zh_CN]=列出并启动 KDevelop 会话
+diff --git a/app/plasma/dataengine/plasma-dataengine-kdevelopsessions.desktop b/app/plasma/dataengine/plasma-dataengine-kdevelopsessions.desktop
+index a0fca30..5f111ab 100644
+--- a/app/plasma/dataengine/plasma-dataengine-kdevelopsessions.desktop
++++ b/app/plasma/dataengine/plasma-dataengine-kdevelopsessions.desktop
+@@ -28,6 +28,7 @@ Name[ru]=Сеансы KDevelop
+ Name[sk]=Sedenia KDevelop
+ Name[sl]=Seje za KDevelop
+ Name[sv]=KDevelop-sessioner
++Name[tr]=KDevelop Oturumları
+ Name[uk]=Сеанси KDevelop
+ Name[x-test]=xxKDevelop Sessionsxx
+ Name[zh_CN]=KDevelop 会话
+@@ -59,6 +60,7 @@ Comment[ru]=Просмотр списка и запуск сеансов KDevelo
+ Comment[sk]=Vypísať a spustiť sedenia KDevelop
+ Comment[sl]=Seznam in zagon sej za KDevelop
+ Comment[sv]=Lista och starta KDevelop-sessioner
++Comment[tr]=KDevelop oturumlarını listele ve başlat
+ Comment[uk]=Показ списку і запуск сеансів KDevelop
+ Comment[x-test]=xxList and launch KDevelop sessionsxx
+ Comment[zh_CN]=列出并启动 KDevelop 会话
+diff --git a/app/plasma/runner/kdevelopsessions.desktop b/app/plasma/runner/kdevelopsessions.desktop
+index 362d885..64a3db6 100644
+--- a/app/plasma/runner/kdevelopsessions.desktop
++++ b/app/plasma/runner/kdevelopsessions.desktop
+@@ -28,6 +28,7 @@ Name[ru]=Сеансы KDevelop
+ Name[sk]=Sedenia KDevelop
+ Name[sl]=Seje za KDevelop
+ Name[sv]=KDevelop-sessioner
++Name[tr]=KDevelop Oturumları
+ Name[uk]=Сеанси KDevelop
+ Name[x-test]=xxKDevelop Sessionsxx
+ Name[zh_CN]=KDevelop 会话
+@@ -59,6 +60,7 @@ Comment[ru]=Выбирает сеансы KDevelop
+ Comment[sk]=Porovnáva sedenia KDevelop
+ Comment[sl]=Se ujema s sejami za KDevelop
+ Comment[sv]=Matchar KDevelop-sessioner
++Comment[tr]=KDevelop Oturumlarını Eşleştirir
+ Comment[uk]=Пошук відповідних сеансів KDevelop
+ Comment[x-test]=xxMatches KDevelop Sessionsxx
+ Comment[zh_CN]=匹配 KDevelop 会话
+diff --git a/app_templates/cpp/CMake/cmake_plaincpp/cmake_plaincpp.kdevtemplate b/app_templates/cpp/CMake/cmake_plaincpp/cmake_plaincpp.kdevtemplate
+index 5f4d5b4..75ed161 100644
+--- a/app_templates/cpp/CMake/cmake_plaincpp/cmake_plaincpp.kdevtemplate
++++ b/app_templates/cpp/CMake/cmake_plaincpp/cmake_plaincpp.kdevtemplate
+@@ -28,6 +28,7 @@ Name[ru]=C++ (CMake)
+ Name[sk]=CMake C++
+ Name[sl]=CMake C++
+ Name[sv]=CMake C++
++Name[tr]=CMake C++
+ Name[uk]=CMake C++
+ Name[x-test]=xxCMake C++xx
+ Name[zh_CN]=CMake C++
+@@ -61,6 +62,7 @@ Comment[ru]=Простое приложение на С++ с CMake
+ Comment[sk]=Jednoduchá C++ aplikácia založená na CMake
+ Comment[sl]=Preprost program v C++, temelječ na CMake
+ Comment[sv]=Enkelt CMake-baserat C++ program
++Comment[tr]=Basit CMake tabanlı C++ uygulaması
+ Comment[ug]=ئاددىي CMake ئاساسىدىكى C++ پروگراممىسى
+ Comment[uk]=Проста заснована на CMake програма C++
+ Comment[x-test]=xxSimple CMake-based C++ applicationxx
+diff --git a/app_templates/cpp/CMake/cmake_qt4core/cmake_qt4core.kdevtemplate b/app_templates/cpp/CMake/cmake_qt4core/cmake_qt4core.kdevtemplate
+index a68e315..23972cd 100644
+--- a/app_templates/cpp/CMake/cmake_qt4core/cmake_qt4core.kdevtemplate
++++ b/app_templates/cpp/CMake/cmake_qt4core/cmake_qt4core.kdevtemplate
+@@ -61,6 +61,7 @@ Comment[ru]=Основа приложения для Qt4 и CMake. Создаё
+ Comment[sk]=Ústredná aplikácia Qt4 CMake. Generuje aplikáciu založenú na CMake/Qt4 (cross-platformovo kompatibilné)
+ Comment[sl]=Jedrni program Qt4 CMake. Ustvari program temelječ na CMake/Qt4 (združljiv z več okolji)
+ Comment[sv]=Qt4 CMake-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)
++Comment[tr]=Qt4 CMake Çekirdek uygulaması. CMake/Qt4 tabanlı uygulama oluştur (çapraz platform uyumlu)
+ Comment[uk]=Основна програма Qt4 з системою збирання CMake. Створити програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
+ Comment[x-test]=xxQt4 CMake Core application. Generate a CMake/Qt4 based application (crossplatform compatible)xx
+ Comment[zh_CN]=生成基于 CMake/Qt4 的应用程序(跨平台兼容)
+diff --git a/app_templates/cpp/CMake/cmake_qt4core_qtest/cmake_qt4core_qtest.kdevtemplate b/app_templates/cpp/CMake/cmake_qt4core_qtest/cmake_qt4core_qtest.kdevtemplate
+index d13636a..0504d08 100644
+--- a/app_templates/cpp/CMake/cmake_qt4core_qtest/cmake_qt4core_qtest.kdevtemplate
++++ b/app_templates/cpp/CMake/cmake_qt4core_qtest/cmake_qt4core_qtest.kdevtemplate
+@@ -58,6 +58,7 @@ Comment[ru]=Основа приложения c QTest для Qt4 и CMake. Со
+ Comment[sk]=Ústredná aplikácia Qt4 CMake QTest. Generuje aplikáciu založenú na CMake/Qt4 (cross-platformové)
+ Comment[sl]=Jedrni program Qt4 CMake QTest. Ustvari program temelječ na CMake/Qt4 (združljiv z več okolji)
+ Comment[sv]=Qt4 CMake QTest-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)
++Comment[tr]=Qt4 CMake QTest Çekirdek uygulaması. CMake/Qt4 tabanlı uygulama oluştur (çapraz platform uyumlu)
+ Comment[uk]=Створити програму QTest, засновану на CMake/Qt4 (сумісну з декількома платформами)
+ Comment[x-test]=xxQt4 CMake QTest Core application. Generate a CMake/Qt4 based application (cross-platform)xx
+ Comment[zh_CN]=生成基于 CMake/Qt4 的应用程序(跨平台)
+diff --git a/app_templates/cpp/CMake/cmake_qt4gui/cmake_qt4gui.kdevtemplate b/app_templates/cpp/CMake/cmake_qt4gui/cmake_qt4gui.kdevtemplate
+index 7601ef2..476a242 100644
+--- a/app_templates/cpp/CMake/cmake_qt4gui/cmake_qt4gui.kdevtemplate
++++ b/app_templates/cpp/CMake/cmake_qt4gui/cmake_qt4gui.kdevtemplate
+@@ -52,7 +52,7 @@ Comment[it]=Applicazione GUI CMake in Qt4. Genera un'applicazione con GUI basata
+ Comment[kk]=Qt4 CMake GUI бағдарламасы. CMake/Qt4 негіздеген графикалық интерфейсті бағдарламаны жасап береді (кроссплатформалық үлесімді)
+ Comment[nb]=Qt4 Cmake Gui-program. Lag et program med grafisk brukerflate basert på CMake/Qt4 (kryssplattform-kompatibelt)
+ Comment[nds]=Qt4-CMake-Böversietprogramm. En op CMake un Qt4 opbuut Böversiet-Programm opstellen (över Bedriefümgeven weg kompatibel)
+-Comment[nl]=Gui-toepassing van Qt4 CMake. Genereert een ope CMake/Qt4 gebaseerd GUI-programma (crossplatform compatibel)
++Comment[nl]=Gui-toepassing van Qt4 CMake. Genereert een op CMake/Qt4 gebaseerd GUI-programma (crossplatform compatibel)
+ Comment[pl]=Program Qt4 CMake Gui. Generuj programy oparte o CMake/Qt4 (kompatybilne na wielu platformach)
+ Comment[pt]=Aplicação gráfica do Qt4 com CMake. Gera uma aplicação gráfica baseada no CMake/Qt4 (compatível com várias plataformas)
+ Comment[pt_BR]=Aplicativo gráfico com CMake para Qt4. Gera um aplicativo de interface em CMake/Qt4 (compatível com várias plataformas)
+@@ -60,6 +60,7 @@ Comment[ru]=Графическое приложение для Qt4 и CMake. С
+ Comment[sk]=Ústredná aplikácia Qt4 CMake Gui. Generuje GUI aplikáciu založenú na CMake/Qt4 (cross-platformovo kompatibilné)
+ Comment[sl]=Program z uporabniškim vmesnikom Qt4 CMake. Ustvari program temelječ na CMake/Qt4 (združljiv z več okolji)
+ Comment[sv]=Qt4 CMake-program med grafiskt användargränssnitt. Skapa ett CMake/Qt4-baserat program med grafiskt användargränssnitt (som fungerar på flera plattformar)
++Comment[tr]=Qt4 CMake Gui uygulaması. CMake/Qt4 tabanlı GUI uygulaması oluştur (çapraz platform uyumlu)
+ Comment[uk]=Програма Qt4 з графічним інтерфейсом і системою збирання CMake. Створити графічну програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
+ Comment[x-test]=xxQt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)xx
+ Comment[zh_CN]=生成基于 CMake/Qt4 的图形应用程序(跨平台兼容)
+diff --git a/debuggers/CMakeLists.txt b/debuggers/CMakeLists.txt
+index 8fe222c..592c1fc 100644
+--- a/debuggers/CMakeLists.txt
++++ b/debuggers/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-if(NOT WIN32 AND NOT APPLE)
++if(NOT WIN32)
+   add_subdirectory(gdb)
+-endif(NOT WIN32 AND NOT APPLE )
++endif(NOT WIN32)
+ 
+diff --git a/debuggers/gdb/CMakeLists.txt b/debuggers/gdb/CMakeLists.txt
+index 3d1125c..c09cc8d 100644
+--- a/debuggers/gdb/CMakeLists.txt
++++ b/debuggers/gdb/CMakeLists.txt
+@@ -1,11 +1,25 @@
+ project(gdb)
+ 
++function(add_debuggable_executable target)
++    cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
++    add_executable(${target} ${add_debuggable_executable_SRCS})
++    # force debug symbols for our debuggees, disable optimizations
++    if (WIN32)
++        set(_flags "/0d")
++    else()
++        set(_flags "-O0")
++    endif()
++    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
++endfunction()
++
++if(NOT APPLE)
+ macro_optional_find_package( KDE4Workspace 4.2.0 )
+ 
+ macro_log_feature( KDE4WORKSPACE_FOUND
+ "KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
+ "" "Required for building the process selection dialog for attaching GDB to a running process."
+ )
++endif(NOT APPLE)
+ 
+ if(KDE4WORKSPACE_FOUND)
+     include_directories(
+@@ -80,7 +94,7 @@ set(kdevgdb_PART_UI
+ 
+ kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
+ kde4_add_plugin(kdevgdb ${kdevgdb_PART_SRCS})
+-target_link_libraries(kdevgdb sublime
++target_link_libraries(kdevgdb ${KDEVPLATFORM_SUBLIME_LIBRARIES}
+     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+     ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
+diff --git a/debuggers/gdb/debugsession.cpp b/debuggers/gdb/debugsession.cpp
+index e37c5b7..edc0d34 100644
+--- a/debuggers/gdb/debugsession.cpp
++++ b/debuggers/gdb/debugsession.cpp
+@@ -1036,7 +1036,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
+         dir = QFileInfo(executable).absolutePath();
+     }
+     
+-    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir)));
++    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, '"' + dir + '"'));
+ 
+     // Set the run arguments
+     if (!arguments.isEmpty())
+diff --git a/debuggers/gdb/gdb.cpp b/debuggers/gdb/gdb.cpp
+index 68e1768..4642087 100644
+--- a/debuggers/gdb/gdb.cpp
++++ b/debuggers/gdb/gdb.cpp
+@@ -44,7 +44,7 @@
+ using namespace GDBDebugger;
+ 
+ GDB::GDB(QObject* parent)
+-: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false)
++: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false), childPid_(0)
+ {
+ }
+ 
+@@ -157,8 +157,11 @@ void GDB::interrupt()
+ {
+     //TODO:win32 Porting needed
+     int pid = process_->pid();
+-    if (pid != 0)
++    if (childPid_) {
++        ::kill(childPid_, SIGINT);
++    } else if (pid != 0) {
+         ::kill(pid, SIGINT);
++    }
+ }
+ 
+ GDBCommand* GDB::currentCommand() const
+@@ -250,7 +253,24 @@ void GDB::processLine(const QByteArray& line)
+                GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
+ 
+                emit internalCommandOutput(QString::fromUtf8(line) + '\n');
+-               
++
++               if (result.reason == "thread-group-started") {
++                   receivedReply_ = true;
++                   //     (gdb) -exec-run
++                   //     =thread-group-started,id="i1",pid="16768"
++                   if (line.contains("pid=\"")) {
++                       QList<QByteArray> splitLine = line.split(',');
++                       if (splitLine.size() > 2) {
++                           QByteArray pidStr = splitLine[2];
++                           pidStr.chop(1);
++                           childPid_ = pidStr.mid(5).toULong();
++                           if (childPid_ == 0) {
++                               kDebug() << "line=" << line << "pidStr=" << pidStr << pidStr.mid(5) << "pid=" << childPid_;
++                           }
++                       }
++                   }
++               }
++
+                // FIXME: the code below should be reviewed to consider result record
+                // subtype when doing all decisions.
+                
+diff --git a/debuggers/gdb/gdb.h b/debuggers/gdb/gdb.h
+index 6f99a60..31688cd 100644
+--- a/debuggers/gdb/gdb.h
++++ b/debuggers/gdb/gdb.h
+@@ -144,6 +144,7 @@ private:
+     
+     bool receivedReply_;
+     bool isRunning_;
++    unsigned long childPid_;
+ };
+ }
+ 
+diff --git a/debuggers/gdb/mi/gdbmi.cpp b/debuggers/gdb/mi/gdbmi.cpp
+index 404aa27..c1d820e 100644
+--- a/debuggers/gdb/mi/gdbmi.cpp
++++ b/debuggers/gdb/mi/gdbmi.cpp
+@@ -85,15 +85,15 @@ TupleValue::~TupleValue()
+ 
+ bool TupleValue::hasField(const QString& variable) const
+ {
+-    return results_by_name.count(variable);
++    return results_by_name.contains(variable);
+ }
+ 
+ const Value& TupleValue::operator[](const QString& variable) const
+-{ 
+-    if (results_by_name.count(variable))
+-        return *results_by_name[variable]->value;
+-    else 
++{
++    Result* result = results_by_name.value(variable);
++    if (!result)
+         throw type_error();
++    return *result->value;
+ }
+ 
+ ListValue::~ListValue()
+diff --git a/debuggers/gdb/printers/tests/CMakeLists.txt b/debuggers/gdb/printers/tests/CMakeLists.txt
+index 8765b56..d489bd3 100644
+--- a/debuggers/gdb/printers/tests/CMakeLists.txt
++++ b/debuggers/gdb/printers/tests/CMakeLists.txt
+@@ -1,15 +1,3 @@
+-function(add_debuggable_executable target)
+-    cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
+-    add_executable(${target} ${add_debuggable_executable_SRCS})
+-    # force debug symbols for our debuggees, disable optimizations
+-    if (WIN32)
+-        set(_flags "/0d")
+-    else()
+-        set(_flags "-O0")
+-    endif()
+-    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
+-endfunction()
+-
+ configure_file(qtprintersconfig.h.in qtprintersconfig.h)
+ 
+ add_debuggable_executable(qstring SRCS qstring.cpp)
+diff --git a/debuggers/gdb/stty.cpp b/debuggers/gdb/stty.cpp
+index 736fff4..606977b 100644
+--- a/debuggers/gdb/stty.cpp
++++ b/debuggers/gdb/stty.cpp
+@@ -160,14 +160,19 @@ int STTY::findTTY()
+ 
+ #ifdef __sgi__
+     ptyfd = open("/dev/ptmx",O_RDWR);
+-    if (ptyfd < 0) {
++#elif defined(Q_OS_MAC)
++    ptyfd = posix_openpt(O_RDWR);
++#endif
++#if defined(__sgi__) || defined(Q_OS_MAC)
++    if (ptyfd == -1) {
+         perror("Can't open a pseudo teletype");
+         return(-1);
++    } else if (ptyfd >= 0) {
++        strncpy(tty_slave, ptsname(ptyfd), 50);
++        grantpt(ptyfd);
++        unlockpt(ptyfd);
++        needGrantPty = false;
+     }
+-    strncpy(tty_slave, ptsname(ptyfd), 50);
+-    grantpt(ptyfd);
+-    unlockpt(ptyfd);
+-    needGrantPty = false;
+ #endif
+ 
+     // first we try UNIX PTY's
+diff --git a/debuggers/gdb/unittests/CMakeLists.txt b/debuggers/gdb/unittests/CMakeLists.txt
+index 17ec6ae..8a24f7e 100644
+--- a/debuggers/gdb/unittests/CMakeLists.txt
++++ b/debuggers/gdb/unittests/CMakeLists.txt
+@@ -1,26 +1,18 @@
+-# force debug symbols for our debugees
+-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+-  set(CMAKE_BUILD_TYPE debugfull)
+-else()
+-  set(CMAKE_BUILD_TYPE Debug)
+-endif()
++add_debuggable_executable(debugee SRCS debugee.cpp)
++add_debuggable_executable(debugeeslow SRCS debugeeslow.cpp)
++add_debuggable_executable(debugeecrash SRCS debugeecrash.cpp)
++add_debuggable_executable(debugeerecursion SRCS debugeerecursion.cpp)
++add_debuggable_executable(debugeespace SRCS "debugee space.cpp")
++add_debuggable_executable(debugeemultilocbreakpoint SRCS debugeemultilocbreakpoint.cpp)
++add_debuggable_executable(debugeemultiplebreakpoint SRCS debugeemultiplebreakpoint.cpp)
+ 
+-add_executable(debugee debugee.cpp)
+-add_executable(debugeeslow debugeeslow.cpp)
+-add_executable(debugeecrash debugeecrash.cpp)
+-add_executable(debugeerecursion debugeerecursion.cpp)
+-
+-add_executable(debugeethreads debugeethreads.cpp)
++add_debuggable_executable(debugeethreads SRCS debugeethreads.cpp)
+ target_link_libraries(debugeethreads ${QT_QTCORE_LIBRARY})
+ 
+-add_executable(debugeeqt debugeeqt.cpp)
++add_debuggable_executable(debugeeqt SRCS debugeeqt.cpp)
+ target_link_libraries(debugeeqt ${QT_QTCORE_LIBRARY})
+ 
+-add_executable("debugeespace" "debugee space.cpp")
+-
+-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
+-add_executable("debugeeexception" "debugeeexception.cpp")
+-
+-add_executable(debugeemultilocbreakpoint debugeemultilocbreakpoint.cpp)
++add_debuggable_executable(debugeeexception SRCS debugeeexception.cpp)
++set_target_properties(debugeeexception PROPERTIES COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
+ 
+-add_executable(debugeemultiplebreakpoint debugeemultiplebreakpoint.cpp)
+\ No newline at end of file
++add_subdirectory("path with space")
+diff --git a/debuggers/gdb/unittests/gdbtest.cpp b/debuggers/gdb/unittests/gdbtest.cpp
+index 172c48b..951737b 100644
+--- a/debuggers/gdb/unittests/gdbtest.cpp
++++ b/debuggers/gdb/unittests/gdbtest.cpp
+@@ -106,12 +106,15 @@ void GdbTest::init()
+ class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
+ {
+ public:
+-    TestLaunchConfiguration(KUrl executable = findExecutable("debugee") ) {
++    TestLaunchConfiguration(const KUrl& executable = findExecutable("debugee"),
++                            const KUrl& workingDirectory = KUrl())
++    {
+         c = new KConfig();
+         c->deleteGroup("launch");
+         cfg = c->group("launch");
+         cfg.writeEntry("isExecutable", true);
+         cfg.writeEntry("Executable", executable);
++        cfg.writeEntry("Working Directory", workingDirectory);
+     }
+     ~TestLaunchConfiguration() {
+         delete c;
+@@ -1829,6 +1832,23 @@ void GdbTest::testDebugInExternalTerminal()
+     }
+ }
+ 
++// see: https://bugs.kde.org/show_bug.cgi?id=339231
++void GdbTest::testPathWithSpace()
++{
++    TestDebugSession* session = new TestDebugSession;
++
++    auto debugee = findExecutable("path with space/spacedebugee");
++    TestLaunchConfiguration c(debugee, debugee.upUrl());
++    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
++    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
++    session->startProgram(&c, m_iface);
++
++    WAIT_FOR_STATE(session, DebugSession::PausedState);
++    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
++    session->run();
++    WAIT_FOR_STATE(session, DebugSession::EndedState);
++}
++
+ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
+                             const char *file, int line, bool expectFail)
+ {
+diff --git a/debuggers/gdb/unittests/gdbtest.h b/debuggers/gdb/unittests/gdbtest.h
+index 6117bd8..b9a961d 100644
+--- a/debuggers/gdb/unittests/gdbtest.h
++++ b/debuggers/gdb/unittests/gdbtest.h
+@@ -91,6 +91,7 @@ private Q_SLOTS:
+     void testRegularExpressionBreakpoint();
+     void testChangeBreakpointWhileRunning();
+     void testDebugInExternalTerminal();
++    void testPathWithSpace();
+ 
+ private:
+     void waitForState(GDBDebugger::DebugSession *session,
+diff --git a/debuggers/gdb/unittests/path with space/CMakeLists.txt b/debuggers/gdb/unittests/path with space/CMakeLists.txt
+new file mode 100644
+index 0000000..8c2e5b8
+--- /dev/null
++++ b/debuggers/gdb/unittests/path with space/CMakeLists.txt	
+@@ -0,0 +1,2 @@
++add_debuggable_executable(spacedebugee SRCS "spacedebugee.cpp")
++target_link_libraries(spacedebugee ${QT_QTCORE_LIBRARY})
+diff --git a/debuggers/gdb/unittests/path with space/spacedebugee.cpp b/debuggers/gdb/unittests/path with space/spacedebugee.cpp
+new file mode 100644
+index 0000000..840e243
+--- /dev/null
++++ b/debuggers/gdb/unittests/path with space/spacedebugee.cpp	
+@@ -0,0 +1,31 @@
++/*
++   This library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public
++   License version 2 as published by the Free Software Foundation.
++
++   This library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public License
++   along with this library; see the file COPYING.LIB.  If not, write to
++   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++   Boston, MA 02110-1301, USA.
++*/
++#include <QString>
++#include <QCoreApplication>
++#include <QDir>
++#include <QDebug>
++
++int main(int argc, char *argv[])
++{
++    QCoreApplication a(argc, argv);
++
++    if (QCoreApplication::applicationDirPath() != QDir::currentPath()) {
++        qWarning() << "Unexpected app dir path: " << QCoreApplication::applicationDirPath() << QDir::currentPath();
++        return 1;
++    }
++
++    return 0;
++}
+diff --git a/file_templates/classes/c_gobject/c_gobject.desktop b/file_templates/classes/c_gobject/c_gobject.desktop
+index 0afb3b4..210f2e5 100644
+--- a/file_templates/classes/c_gobject/c_gobject.desktop
++++ b/file_templates/classes/c_gobject/c_gobject.desktop
+@@ -92,6 +92,7 @@ Language[se]=C
+ Language[sk]=C
+ Language[sl]=C
+ Language[sv]=C
++Language[tr]=C
+ Language[uk]=C
+ Language[x-test]=xxCxx
+ Language[zh_CN]=C
+@@ -162,6 +163,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/c_gobject_private/c_gobject_private.desktop b/file_templates/classes/c_gobject_private/c_gobject_private.desktop
+index 30ae76b..877ec1d 100644
+--- a/file_templates/classes/c_gobject_private/c_gobject_private.desktop
++++ b/file_templates/classes/c_gobject_private/c_gobject_private.desktop
+@@ -90,6 +90,7 @@ Language[se]=C
+ Language[sk]=C
+ Language[sl]=C
+ Language[sv]=C
++Language[tr]=C
+ Language[uk]=C
+ Language[x-test]=xxCxx
+ Language[zh_CN]=C
+@@ -160,6 +161,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/c_gobject_properties/c_gobject_properties.desktop b/file_templates/classes/c_gobject_properties/c_gobject_properties.desktop
+index 821da16..f2fbfe9 100644
+--- a/file_templates/classes/c_gobject_properties/c_gobject_properties.desktop
++++ b/file_templates/classes/c_gobject_properties/c_gobject_properties.desktop
+@@ -90,6 +90,7 @@ Language[se]=C
+ Language[sk]=C
+ Language[sl]=C
+ Language[sv]=C
++Language[tr]=C
+ Language[uk]=C
+ Language[x-test]=xxCxx
+ Language[zh_CN]=C
+@@ -160,6 +161,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/cpp_basic/cpp_basic.desktop b/file_templates/classes/cpp_basic/cpp_basic.desktop
+index acace64..4e907bd 100644
+--- a/file_templates/classes/cpp_basic/cpp_basic.desktop
++++ b/file_templates/classes/cpp_basic/cpp_basic.desktop
+@@ -164,6 +164,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/private_pointer/private_pointer.desktop b/file_templates/classes/private_pointer/private_pointer.desktop
+index 2e68f73..76d63ea 100644
+--- a/file_templates/classes/private_pointer/private_pointer.desktop
++++ b/file_templates/classes/private_pointer/private_pointer.desktop
+@@ -54,6 +54,7 @@ Comment[ru]=Класс C++ с закрытым D-указателем
+ Comment[sk]=C++ trieda so súkromným D-pointerom
+ Comment[sl]=Razred C++ z zasebnim kazalcem D
+ Comment[sv]=C++ klass med en privat D-pekare
++Comment[tr]=özel D-işaretçisi olan C++ Sınıfı
+ Comment[uk]=Клас C++ з закритим (private) D-вказівником
+ Comment[x-test]=xxC++ Class with a private D-pointerxx
+ Comment[zh_CN]=带有一个私有 D-指针的 C++ 类
+@@ -158,6 +159,7 @@ Name[ru]=Закрытый заголовок
+ Name[sk]=Súkromná hlavička
+ Name[sl]=Zasebna glava
+ Name[sv]=Privat deklaration
++Name[tr]=Özel Başlık
+ Name[uk]=Закритий (private) заголовок
+ Name[x-test]=xxPrivate Headerxx
+ Name[zh_CN]=私有头文件
+@@ -193,6 +195,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/python_basic/python_basic.desktop b/file_templates/classes/python_basic/python_basic.desktop
+index 7412b08..3f4702a 100644
+--- a/file_templates/classes/python_basic/python_basic.desktop
++++ b/file_templates/classes/python_basic/python_basic.desktop
+@@ -57,6 +57,7 @@ Comment[ru]=Простой класс Python
+ Comment[sk]=Základná Python trieda
+ Comment[sl]=Osnovni razred Python
+ Comment[sv]=Enkel Python-klass
++Comment[tr]=Temel Python Sınıfı
+ Comment[uk]=Базовий клас Python
+ Comment[x-test]=xxBasic Python Classxx
+ Comment[zh_CN]=基本 Python 类
+@@ -92,6 +93,7 @@ Language[se]=Python
+ Language[sk]=Python
+ Language[sl]=Python
+ Language[sv]=Python
++Language[tr]=Python
+ Language[uk]=Python
+ Language[x-test]=xxPythonxx
+ Language[zh_CN]=Python
+@@ -127,6 +129,7 @@ Name[ru]=Определение
+ Name[sk]=Definícia
+ Name[sl]=Določilo
+ Name[sv]=Definition
++Name[tr]=Tanımlama
+ Name[uk]=Визначення
+ Name[x-test]=xxDefinitionxx
+ Name[zh_CN]=定义
+diff --git a/file_templates/classes/qobject/qobject.desktop b/file_templates/classes/qobject/qobject.desktop
+index 6e92967..8bdaea3 100644
+--- a/file_templates/classes/qobject/qobject.desktop
++++ b/file_templates/classes/qobject/qobject.desktop
+@@ -13,7 +13,7 @@ Name[fi]=QObject-aliluokka
+ Name[fr]=Sous-classe QObject
+ Name[gl]=Subclase de QObject
+ Name[hu]=QObject alosztály
+-Name[it]=Sottoclasse GObject
++Name[it]=Sottoclasse QObject
+ Name[kk]=QObject субкласы
+ Name[nb]=QObject subklasse
+ Name[nds]=QObject-Ünnerklass
+@@ -25,6 +25,7 @@ Name[ru]=Подкласс QObject
+ Name[sk]=Podtrieda QObject
+ Name[sl]=Pod-razred OObject
+ Name[sv]=QObject-delklass
++Name[tr]=QObject alt sınıfı
+ Name[uk]=Підклас QObject
+ Name[x-test]=xxQObject subclassxx
+ Name[zh_CN]=QObject 子类
+@@ -43,7 +44,7 @@ Comment[fi]=QObject-aliluokka ominaisuuksilla
+ Comment[fr]=Sous-classe QObject avec des propriétés
+ Comment[gl]=Subclase de QObject con propiedades
+ Comment[hu]=QObject alosztály tulajdonságokkal
+-Comment[it]=Sottoclasse GObject con delle proprietà
++Comment[it]=Sottoclasse QObject con delle proprietà
+ Comment[kk]=Қасиеттері бар QObject субкласы
+ Comment[nb]=QObject subklasse med egenskaper
+ Comment[nds]=QObject-Ünnerklass mit Egenschappen
+@@ -55,6 +56,7 @@ Comment[ru]=Подкласс QObject со свойствами
+ Comment[sk]=Podtrieda QObject s vlastnosťami
+ Comment[sl]=Pod-razred OObject z lastnostmi
+ Comment[sv]=QObject-delklass med egenskaper
++Comment[tr]=QObject özellikleri ile alt sınıfı
+ Comment[uk]=Підклас QObject з властивостями
+ Comment[x-test]=xxQObject subclass with propertiesxx
+ Comment[zh_CN]=带有属性的 QObject 子类
+@@ -161,6 +163,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/qt_shared/qt_shared.desktop b/file_templates/classes/qt_shared/qt_shared.desktop
+index 5331d61..91f12d1 100644
+--- a/file_templates/classes/qt_shared/qt_shared.desktop
++++ b/file_templates/classes/qt_shared/qt_shared.desktop
+@@ -24,6 +24,7 @@ Name[ru]=Неявно разделяемый класс
+ Name[sk]=Implicitne zdieľaná trieda
+ Name[sl]=Implicitno deljen razred
+ Name[sv]=Implicit delad klass
++Name[tr]=Dolaylı olarak paylaşılan sınıf
+ Name[uk]=Клас з неявним спільним використанням
+ Name[x-test]=xxImplicitly shared classxx
+ Name[zh_CN]=隐式共享类
+@@ -158,6 +159,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/classes/qt_widget/qt_widget.desktop b/file_templates/classes/qt_widget/qt_widget.desktop
+index ca74280..0b60dff 100644
+--- a/file_templates/classes/qt_widget/qt_widget.desktop
++++ b/file_templates/classes/qt_widget/qt_widget.desktop
+@@ -159,6 +159,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+@@ -195,6 +196,7 @@ Name[ru]=Пользовательский интерфейс
+ Name[sk]=Užívateľské rozhranie
+ Name[sl]=Uporabniški vmesnik
+ Name[sv]=Användargränssnitt
++Name[tr]=Kullanıcı Arayüzü
+ Name[uk]=Інтерфейс користувача
+ Name[x-test]=xxUser Interfacexx
+ Name[zh_CN]=用户界面
+diff --git a/file_templates/other/cmake_module/cmake_module.desktop b/file_templates/other/cmake_module/cmake_module.desktop
+index 6c7b51d..ad7a96d 100644
+--- a/file_templates/other/cmake_module/cmake_module.desktop
++++ b/file_templates/other/cmake_module/cmake_module.desktop
+@@ -24,6 +24,7 @@ Name[ru]=Расширение CMake с pkg-config
+ Name[sk]=CMake modul s pkg-config
+ Name[sl]=Modul CMake z pkg-config
+ Name[sv]=CMake-modul med pkg-config
++Name[tr]=pkg-config içeren CMake Modülü
+ Name[uk]=Модуль CMake з pkg-config
+ Name[x-test]=xxCMake Module with pkg-configxx
+ Name[zh_CN]=带有 pkg-config 的 CMake 模块
+@@ -87,6 +88,7 @@ Language[se]=CMake
+ Language[sk]=CMake
+ Language[sl]=CMake
+ Language[sv]=CMake
++Language[tr]=CMake
+ Language[uk]=CMake
+ Language[x-test]=xxCMakexx
+ Language[zh_CN]=CMake
+@@ -123,6 +125,7 @@ Name[ru]=Расширение
+ Name[sk]=Modul
+ Name[sl]=Modul
+ Name[sv]=Modul
++Name[tr]=Modül
+ Name[uk]=Модуль
+ Name[x-test]=xxModulexx
+ Name[zh_CN]=模块
+diff --git a/file_templates/testing/cpp_qtestlib/cpp_qtestlib.desktop b/file_templates/testing/cpp_qtestlib/cpp_qtestlib.desktop
+index 4298d5b..057da7c 100644
+--- a/file_templates/testing/cpp_qtestlib/cpp_qtestlib.desktop
++++ b/file_templates/testing/cpp_qtestlib/cpp_qtestlib.desktop
+@@ -25,6 +25,7 @@ Name[ru]=Комплект тестов
+ Name[sk]=Sada testov
+ Name[sl]=Preizkusni paket
+ Name[sv]=Testsvit
++Name[tr]=Test Paketi
+ Name[uk]=Комплекс для перевірки
+ Name[x-test]=xxTest Suitexx
+ Name[zh_CN]=测试套件
+@@ -54,6 +55,7 @@ Comment[ru]=Комплект модульных тестов на базе би
+ Comment[sk]=Sada unit testov pomocou knižnice QTest bez grafického rozhrania
+ Comment[sl]=Paket za preizkušanje enot z uporabo knjižnice QTest brez grafičnega vmesnika
+ Comment[sv]=En enhetstestsvit som använder QTest-biblioteket utan grafiskt gränssnitt
++Comment[tr]=Grafiksel bir kullanıcı arayüzü olmadan QTest kitaplığını kullanan bir birim test paketi
+ Comment[uk]=Комплекс для перевірки модулів за допомогою бібліотеки QTest без графічного інтерфейсу користувача
+ Comment[x-test]=xxA unit test suite using the QTest library without a graphical user interfacexx
+ Comment[zh_CN]=一个使用 QTest 库且不含图形界面的单元测试套件
+@@ -160,6 +162,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop b/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop
+index cea33cb..4b26938 100644
+--- a/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop
++++ b/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop
+@@ -25,6 +25,7 @@ Name[ru]=QTestLib с KDE
+ Name[sk]=QTestLib s KDE
+ Name[sl]=QTestLib z KDE
+ Name[sv]=QTest-bibliotek med KDE
++Name[tr]=KDE ile QTestLib
+ Name[uk]=QTestLib з KDE
+ Name[x-test]=xxQTestLib with KDExx
+ Name[zh_CN]=包含 KDE 扩展的 QTestLib
+@@ -160,6 +161,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop b/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop
+index ef7693c..fe711a2 100644
+--- a/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop
++++ b/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop
+@@ -24,6 +24,7 @@ Name[ru]=Тест для KDevPlatform
+ Name[sk]=Test pre KDevPlatform
+ Name[sl]=Preizkus za KDevPlatform
+ Name[sv]=En test för KDevPlatform
++Name[tr]=KDevPlatform için bir test
+ Name[uk]=Перевірка для KDevPlatform
+ Name[x-test]=xxA test for KDevPlatformxx
+ Name[zh_CN]=一个 KDevPlatform 的测试
+@@ -159,6 +160,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/testing/php_phpunit/php_phpunit.desktop b/file_templates/testing/php_phpunit/php_phpunit.desktop
+index e2a252b..87c451b 100644
+--- a/file_templates/testing/php_phpunit/php_phpunit.desktop
++++ b/file_templates/testing/php_phpunit/php_phpunit.desktop
+@@ -25,6 +25,7 @@ Name[ru]=PHPUnit
+ Name[sk]=PHPUnit
+ Name[sl]=PHPUnit
+ Name[sv]=PHPUnit
++Name[tr]=PHPUnit
+ Name[uk]=PHPUnit
+ Name[x-test]=xxPHPUnitxx
+ Name[zh_CN]=PHPUnit
+@@ -54,6 +55,7 @@ Comment[ru]=Модульный тест на базе платформы PHPUnit
+ Comment[sk]=Unit test pomocou frameworku PHPUnit
+ Comment[sl]=Preizkus enote z uporabo ogrodja PHPUnit
+ Comment[sv]=En enhetstest som använder ramverket PHPUnit
++Comment[tr]=PHPUnit çatısını kullanan bir birim testi
+ Comment[uk]=Перевірка модулів за допомогою комплексу PHPUnit
+ Comment[x-test]=xxA unit test using the PHPUnit frameworkxx
+ Comment[zh_CN]=一个使用 PHPUnit 框架的单元测试
+@@ -122,6 +124,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/file_templates/testing/python_pyunit/python_pyunit.desktop b/file_templates/testing/python_pyunit/python_pyunit.desktop
+index 8044bcc..aea164e 100644
+--- a/file_templates/testing/python_pyunit/python_pyunit.desktop
++++ b/file_templates/testing/python_pyunit/python_pyunit.desktop
+@@ -56,6 +56,7 @@ Comment[ru]=Модульный тест на базе платформы PyUnit
+ Comment[sk]=Unit test pomocou frameworku PyUnit
+ Comment[sl]=Preizkus enote z uporabo ogrodja PyUnit
+ Comment[sv]=En enhetstest som använder ramverket PyUnit
++Comment[tr]=PyUnit çatısını kullanan bir birim testi
+ Comment[uk]=Перевірка модулів за допомогою комплексу PyUnit
+ Comment[x-test]=xxA unit test using the PyUnit frameworkxx
+ Comment[zh_CN]=一个使用 PyUnit 框架的单元测试
+@@ -91,6 +92,7 @@ Language[se]=Python
+ Language[sk]=Python
+ Language[sl]=Python
+ Language[sv]=Python
++Language[tr]=Python
+ Language[uk]=Python
+ Language[x-test]=xxPythonxx
+ Language[zh_CN]=Python
+@@ -126,6 +128,7 @@ Name[ru]=Реализация
+ Name[sk]=Implementácia
+ Name[sl]=Izvedba
+ Name[sv]=Implementering
++Name[tr]=Gerçekleme
+ Name[uk]=Реалізація
+ Name[x-test]=xxImplementationxx
+ Name[zh_CN]=实现
+diff --git a/kdeintegration/executeplasmoid/kdevexecuteplasmoid.desktop.cmake b/kdeintegration/executeplasmoid/kdevexecuteplasmoid.desktop.cmake
+index 788aca1..e391ac4 100644
+--- a/kdeintegration/executeplasmoid/kdevexecuteplasmoid.desktop.cmake
++++ b/kdeintegration/executeplasmoid/kdevexecuteplasmoid.desktop.cmake
+@@ -57,6 +57,7 @@ Name[ru]=Запуск плазмоида
+ Name[sk]=Spúšťač plazmoidov
+ Name[sl]=Zaganjalnik Plasmoidov
+ Name[sv]= Plasmoid-startprogram
++Name[tr]=Plazmoid Başlatıcı
+ Name[uk]=Засіб запуску плазмоїдів
+ Name[x-test]=xxPlasmoid Launcherxx
+ Name[zh_CN]=Plasmoid 启动器
+@@ -86,6 +87,7 @@ GenericName[ru]=Поддержка запуска плазмоида
+ GenericName[sk]=Podpora spúšťača plazmoidov
+ GenericName[sl]=Podpora zaganjalniku Plasmoidov
+ GenericName[sv]=Stöd för Plasmoid-startprogram
++GenericName[tr]=Plazmoid Başlatıcı Desteği
+ GenericName[uk]=Підтримка засобу запуску плазмоїдів
+ GenericName[x-test]=xxPlasmoid Launcher Supportxx
+ GenericName[zh_CN]=Plasmoid 启动器支持
+diff --git a/languages/cpp/codegen/adaptsignatureassistant.cpp b/languages/cpp/codegen/adaptsignatureassistant.cpp
+index 087c0ed..5b13410 100644
+--- a/languages/cpp/codegen/adaptsignatureassistant.cpp
++++ b/languages/cpp/codegen/adaptsignatureassistant.cpp
+@@ -94,7 +94,7 @@ void AdaptSignatureAssistant::reset()
+   m_otherSideId = {};
+   m_otherSideTopContext = {};
+   m_otherSideContext = {};
+-  m_oldSignature = {};
++  m_oldSignature = Signature();
+   m_document = {};
+   m_view.clear();
+ }
+diff --git a/languages/cpp/includepathcomputer.cpp b/languages/cpp/includepathcomputer.cpp
+index 61c3646..323577a 100644
+--- a/languages/cpp/includepathcomputer.cpp
++++ b/languages/cpp/includepathcomputer.cpp
+@@ -111,7 +111,7 @@ void IncludePathComputer::computeForeground()
+       m_effectiveBuildDirectory.clear();
+     }
+ 
+-      for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
++      for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined))){
+         addInclude(dir);
+       }
+       m_defines = idm->defines(file);
+@@ -121,6 +121,10 @@ void IncludePathComputer::computeForeground()
+     foreach (const Path& dir, dirs) {
+       addInclude(dir);
+     }
++
++    for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::CompilerSpecific))){
++      addInclude(dir);
++    }
+   }
+ 
+   if (noProject) {
+diff --git a/languages/cpp/kdevcppsupport.desktop.cmake b/languages/cpp/kdevcppsupport.desktop.cmake
+index f3aae87..59eaf5a 100644
+--- a/languages/cpp/kdevcppsupport.desktop.cmake
++++ b/languages/cpp/kdevcppsupport.desktop.cmake
+@@ -126,5 +126,6 @@ X-KDevelop-Language=C++
+ X-KDevelop-Args=CPP
+ X-KDevelop-Interfaces=ILanguageSupport
+ X-KDevelop-SupportedMimeTypes=text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src
++X-KDevelop-IRequired=org.kdevelop.IDefinesAndIncludesManager
+ X-KDevelop-Mode=NoGUI
+ X-KDevelop-LoadMode=AlwaysOn
+diff --git a/languages/cpp/parser/lexer.cpp b/languages/cpp/parser/lexer.cpp
+index ace64b7..2b6a843 100644
+--- a/languages/cpp/parser/lexer.cpp
++++ b/languages/cpp/parser/lexer.cpp
+@@ -313,9 +313,7 @@ void Lexer::tokenize(ParseSession* _session)
+     size_t previousIndex = index;
+ 
+     {
+-    Token token;
+-    token.position = cursor.offsetIn( session->contents() );
+-    token.size = 0;
++    Token token{cursor.offsetIn(session->contents()), 0, Token_EOF};
+     stream->append(token);
+     }
+     Token* current_token = &(session->token_stream->last());
+diff --git a/languages/plugins/custom-definesandincludes/CMakeLists.txt b/languages/plugins/custom-definesandincludes/CMakeLists.txt
+index 4dc013c..c7ceffe 100644
+--- a/languages/plugins/custom-definesandincludes/CMakeLists.txt
++++ b/languages/plugins/custom-definesandincludes/CMakeLists.txt
+@@ -2,18 +2,10 @@ add_subdirectory(kcm_widget)
+ add_subdirectory(tests)
+ add_subdirectory(compilerprovider)
+ 
+-include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
+-
+-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+-
+ set( kdevdefinesandincludesmanager_SRCS
+         definesandincludesmanager.cpp
+         debugarea.cpp
+     )
+-kde4_add_library(kdev4includesdefinessettings SHARED settingsmanager.cpp compilerprovider/icompiler.cpp)
+-target_link_libraries( kdev4includesdefinessettings LINK_PRIVATE
+-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+-        ${KDEVPLATFORM_UTIL_LIBRARIES} )
+ 
+ kde4_add_plugin( kdevdefinesandincludesmanager
+         ${kdevdefinesandincludesmanager_SRCS})
+@@ -21,11 +13,10 @@ target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
+         ${KDEVPLATFORM_PROJECT_LIBRARIES}
+         ${KDEVPLATFORM_UTIL_LIBRARIES}
+         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+-        kdev4includesdefinessettings )
++        kdevcompilerprovider )
+ 
+ install( TARGETS kdevdefinesandincludesmanager
+          DESTINATION ${PLUGIN_INSTALL_DIR} )
+-install( TARGETS kdev4includesdefinessettings ${INSTALL_TARGETS_DEFAULT_ARGS} )
+ 
+ configure_file(kdevdefinesandincludesmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop)
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/CMakeLists.txt b/languages/plugins/custom-definesandincludes/compilerprovider/CMakeLists.txt
+index 06c6729..76cd466 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/CMakeLists.txt
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/CMakeLists.txt
+@@ -4,24 +4,20 @@ set( compilerprovider_SRCS
+         gcclikecompiler.cpp
+         msvccompiler.cpp
+         compilerfactories.cpp
++        settingsmanager.cpp
+         ../debugarea.cpp
+     )
+ 
+-kde4_add_plugin( kdevcompilerprovider
++kde4_add_library( kdevcompilerprovider SHARED
+         ${compilerprovider_SRCS})
+ 
+ target_link_libraries( kdevcompilerprovider LINK_PRIVATE
+         ${KDEVPLATFORM_PROJECT_LIBRARIES}
+         ${KDEVPLATFORM_UTIL_LIBRARIES}
+-        ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+-        kdev4includesdefinessettings )
++        ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
+ 
+ install( TARGETS kdevcompilerprovider
+-         DESTINATION ${PLUGIN_INSTALL_DIR} )
+-
+-configure_file(kdevcompilerprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop)
+-
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
++         DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
+ 
+ option(BUILD_kdev_msvcdefinehelper "Build the msvcdefinehelper tool for retrieving msvc standard macro definitions" OFF)
+ 
+@@ -32,4 +28,4 @@ if(BUILD_kdev_msvcdefinehelper)
+                                          LIBRARY DESTINATION lib)
+ endif(BUILD_kdev_msvcdefinehelper)
+ 
+-add_subdirectory(tests)
+\ No newline at end of file
++add_subdirectory(tests)
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp
+index 6c53e57..fdb2a10 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp
+@@ -26,6 +26,7 @@
+ #include "../debugarea.h"
+ 
+ #include "compilerfactories.h"
++#include "settingsmanager.h"
+ 
+ #include <interfaces/icore.h>
+ #include <interfaces/iproject.h>
+@@ -37,7 +38,6 @@
+ #include <KStandardDirs>
+ 
+ using namespace KDevelop;
+-using KDevelop::Path;
+ 
+ namespace
+ {
+@@ -60,6 +60,45 @@ public:
+ };
+ }
+ 
++CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
++    : QObject( parent )
++    , m_settings(settings)
++{
++    m_factories.append(CompilerFactoryPointer(new GccFactory()));
++    m_factories.append(CompilerFactoryPointer(new ClangFactory()));
++#ifdef _WIN32
++    m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
++#endif
++
++    if (!KStandardDirs::findExe( "gcc" ).isEmpty()) {
++        registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
++    }
++    if (!KStandardDirs::findExe( "clang" ).isEmpty()) {
++        registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
++    }
++#ifdef _WIN32
++    if (!KStandardDirs::findExe("cl.exe").isEmpty()) {
++        registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
++    }
++#endif
++
++    registerCompiler(CompilerPointer(new NoCompiler()));
++    retrieveUserDefinedCompilers();
++
++    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
++    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
++
++    //Add a provider for files without project
++    addPoject( nullptr, checkCompilerExists({}));
++    for (auto project : ICore::self()->projectController()->projects()) {
++        projectOpened( project );
++    }
++}
++
++CompilerProvider::~CompilerProvider() noexcept
++{
++}
++
+ CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
+ {
+     auto project = item ? item->project() : nullptr;
+@@ -98,11 +137,6 @@ void CompilerProvider::removePoject( IProject* project )
+     m_projects.remove( project );
+ }
+ 
+-CompilerProvider::~CompilerProvider() noexcept
+-{
+-    IDefinesAndIncludesManager::manager()->unregisterProvider( this );
+-}
+-
+ CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& compiler ) const
+ {
+     //This may happen for opened for the first time projects
+@@ -137,15 +171,14 @@ void CompilerProvider::setCompiler( IProject* project, const CompilerPointer& co
+ void CompilerProvider::projectOpened( KDevelop::IProject* project )
+ {
+     definesAndIncludesDebug() << "Adding project: " << project->name();
+-    auto settings = static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() );
+     auto projectConfig =  project->projectConfiguration().data();
+ 
+-    auto compiler = settings->currentCompiler( projectConfig, CompilerPointer(new NoCompiler()) );
++    auto compiler = m_settings->currentCompiler( projectConfig, CompilerPointer(new NoCompiler()) );
+     auto name = compiler ? compiler->name() : QString();
+     compiler = checkCompilerExists( compiler );
+ 
+     if ( compiler && ( compiler->name() != name ) ) {
+-        settings->writeCurrentCompiler(projectConfig, compiler);
++        m_settings->writeCurrentCompiler(projectConfig, compiler);
+     }
+     definesAndIncludesDebug() << " compiler is: " << compiler->name();
+ 
+@@ -158,48 +191,6 @@ void CompilerProvider::projectClosed( KDevelop::IProject* project )
+     definesAndIncludesDebug() << "Removed project: " << project->name();
+ }
+ 
+-K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
+-K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
+-            "kdevcompilerprovider", ki18n( "Compiler Provider" ), "0.1", ki18n( "" ),
+-            KAboutData::License_GPL ) ) )
+-
+-CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
+-    : IPlugin( CompilerProviderFactory::componentData(), parent )
+-{
+-    KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
+-
+-    m_factories.append(CompilerFactoryPointer(new GccFactory()));
+-    m_factories.append(CompilerFactoryPointer(new ClangFactory()));
+-#ifdef _WIN32
+-    m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
+-#endif
+-
+-    if (!KStandardDirs::findExe( "gcc" ).isEmpty()) {
+-        registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
+-    }
+-    if (!KStandardDirs::findExe( "clang" ).isEmpty()) {
+-        registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
+-    }
+-#ifdef _WIN32
+-    if (!KStandardDirs::findExe("cl.exe").isEmpty()) {
+-        registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
+-    }
+-#endif
+-
+-    registerCompiler(CompilerPointer(new NoCompiler()));
+-
+-    ///NOTE: this is required to stop endless recursion
+-    QMetaObject::invokeMethod(this, "retrieveUserDefinedCompilers", Qt::QueuedConnection);
+-
+-    IDefinesAndIncludesManager::manager()->registerProvider( this );
+-
+-    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
+-    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
+-
+-    //Add a provider for files without project
+-    addPoject( nullptr, checkCompilerExists({}));
+-}
+-
+ QVector< CompilerPointer > CompilerProvider::compilers() const
+ {
+     return m_compilers;
+@@ -254,8 +245,7 @@ QVector< CompilerFactoryPointer > CompilerProvider::compilerFactories() const
+ 
+ void CompilerProvider::retrieveUserDefinedCompilers()
+ {
+-    auto settings = static_cast<DefinesAndIncludesManager*>(IDefinesAndIncludesManager::manager());
+-    auto compilers = settings->userDefinedCompilers();
++    auto compilers = m_settings->userDefinedCompilers();
+     for (auto c : compilers) {
+         registerCompiler(c);
+     }
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.h b/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.h
+index 941f668..1320232 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.h
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.h
+@@ -24,54 +24,50 @@
+ #ifndef COMPILERSPROVIDER_H
+ #define COMPILERSPROVIDER_H
+ 
+-#include "icompilerprovider.h"
++#include <language/interfaces/idefinesandincludesmanager.h>
++#include "icompilerfactory.h"
+ 
+-#include "../definesandincludesmanager.h"
++#include "compilerproviderexport.h"
+ 
+-#include <QVariantList>
+ #include <QVector>
+ 
+-#include <interfaces/iplugin.h>
++class SettingsManager;
+ 
+-#include <util/path.h>
+-
+-#include <QScopedPointer>
+-
+-class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider, public KDevelop::IDefinesAndIncludesManager::Provider
++class KDEVCOMPILERPROVIDER_EXPORT CompilerProvider : public QObject, public KDevelop::IDefinesAndIncludesManager::Provider
+ {
+     Q_OBJECT
+-    Q_INTERFACES( ICompilerProvider )
+-
+-public :
+-    explicit CompilerProvider( QObject* parent, const QVariantList& args = QVariantList() );
+ 
++public:
++    explicit CompilerProvider( SettingsManager* settings, QObject* parent = nullptr );
+     ~CompilerProvider() noexcept;
+ 
+-    virtual QHash<QString, QString> defines( KDevelop::ProjectBaseItem* item ) const override;
+-
+-    virtual Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
+-
+-    virtual KDevelop::IDefinesAndIncludesManager::Type type() const override;
+-
+-    virtual void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler ) override;
++    KDevelop::Defines defines( KDevelop::ProjectBaseItem* item ) const override;
++    KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
++    KDevelop::IDefinesAndIncludesManager::Type type() const override;
+ 
+-    virtual QVector<CompilerPointer> compilers() const override;
++    /// @return current compiler for the @P project
++    CompilerPointer currentCompiler( KDevelop::IProject* project ) const;
++    /// Select the @p compiler that provides standard includes/defines for the @p project
++    void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler );
+ 
+-    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const override;
++    /// @return list of all available compilers
++    QVector<CompilerPointer> compilers() const;
++    /**
++     * Adds compiler to the list of available compilers
++     * @return true on success (if there is no compiler with the same name registered).
++     */
++    bool registerCompiler(const CompilerPointer& compiler);
++    /// Removes compiler from the list of available compilers
++    void unregisterCompiler( const CompilerPointer& compiler );
+ 
+-    virtual bool registerCompiler(const CompilerPointer& compiler) override;
+-
+-    virtual void unregisterCompiler( const CompilerPointer& compiler ) override;
+-
+-    virtual QVector<CompilerFactoryPointer> compilerFactories() const override;
++    /// @return All available factories
++    QVector<CompilerFactoryPointer> compilerFactories() const;
+ 
+ private:
+     CompilerPointer compilerForItem( KDevelop::ProjectBaseItem* item ) const;
+-
+     CompilerPointer checkCompilerExists( const CompilerPointer& compiler ) const;
+ 
+     void addPoject( KDevelop::IProject* project, const CompilerPointer& compiler );
+-
+     void removePoject( KDevelop::IProject* project );
+ 
+ private Q_SLOTS:
+@@ -84,6 +80,8 @@ private:
+     QHash<KDevelop::IProject*, CompilerPointer> m_projects;
+     QVector<CompilerPointer> m_compilers;
+     QVector<CompilerFactoryPointer> m_factories;
++
++    SettingsManager* m_settings;
+ };
+ 
+ #endif // COMPILERSPROVIDER_H
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/compilerproviderexport.h b/languages/plugins/custom-definesandincludes/compilerprovider/compilerproviderexport.h
+new file mode 100644
+index 0000000..e92ce6d
+--- /dev/null
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/compilerproviderexport.h
+@@ -0,0 +1,35 @@
++/*
++    This file is part of KDevelop
++
++    Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
++
++    This library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Library General Public
++    License as published by the Free Software Foundation; either
++    version 2 of the License, or (at your option) any later version.
++
++    This library is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++    Library General Public License for more details.
++
++    You should have received a copy of the GNU Library General Public License
++    along with this library; see the file COPYING.LIB.  If not, write to
++    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++    Boston, MA 02110-1301, USA.
++*/
++
++#ifndef KDEV_COMPILERPROVIDEREXPORT_H
++#define KDEV_COMPILERPROVIDEREXPORT_H
++
++#include <kdemacros.h>
++
++#ifndef KDEVCOMPILERPROVIDER_EXPORT
++# ifdef MAKE_KDEV4COMPILERPROVIDER_LIB
++#  define KDEVCOMPILERPROVIDER_EXPORT KDE_EXPORT
++# else
++#  define KDEVCOMPILERPROVIDER_EXPORT KDE_IMPORT
++# endif
++#endif
++
++#endif
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.cpp
+index 7320311..9fb668f 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.cpp
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.cpp
+@@ -35,7 +35,9 @@
+ #define NULL_DEVICE "/dev/null"
+ #endif
+ 
+-QHash<QString, QString> GccLikeCompiler::defines() const
++using namespace KDevelop;
++
++Defines GccLikeCompiler::defines() const
+ {
+     if (!m_definesIncludes.definedMacros.isEmpty() ) {
+         return m_definesIncludes.definedMacros;
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.h b/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.h
+index 5e1d57f..079b78d 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.h
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/gcclikecompiler.h
+@@ -31,9 +31,9 @@ class GccLikeCompiler : public ICompiler
+ public:
+     GccLikeCompiler( const QString& name, const QString& path, bool editable, const QString& factoryName );
+ 
+-    virtual QHash<QString, QString> defines() const override;
++    virtual KDevelop::Defines defines() const override;
+ 
+-    virtual Path::List includes() const override;
++    virtual KDevelop::Path::List includes() const override;
+ };
+ 
+ #endif // GCCLIKECOMPILER_H
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.cpp
+index 781f8e9..0bf6a44 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.cpp
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.cpp
+@@ -23,6 +23,8 @@
+ 
+ #include "icompiler.h"
+ 
++using namespace KDevelop;
++
+ ICompiler::ICompiler(const QString& name, const QString& path, const QString& factoryName, bool editable):
+     m_editable(editable),
+     m_name(name),
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.h b/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.h
+index 80e6ad9..9c899d5 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.h
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/icompiler.h
+@@ -28,12 +28,12 @@
+ #include <QString>
+ #include <QSharedPointer>
+ 
+-#include <util/path.h>
++#include "compilerproviderexport.h"
+ 
+-using KDevelop::Path;
++#include <language/interfaces/idefinesandincludesmanager.h>
+ 
+ /// An interface that represents a compiler. Compiler provides standard include directories and standard defined macros.
+-class ICompiler
++class KDEVCOMPILERPROVIDER_EXPORT ICompiler
+ {
+ public:
+     /**
+@@ -45,10 +45,10 @@ public:
+     ICompiler( const QString& name, const QString& path, const QString& factoryName, bool editable );
+ 
+     /// @return list of defined macros for the compiler
+-    virtual QHash<QString, QString> defines() const = 0;
++    virtual KDevelop::Defines defines() const = 0;
+ 
+     /// @return list of include directories for the compiler
+-    virtual Path::List includes() const = 0;
++    virtual KDevelop::Path::List includes() const = 0;
+ 
+     void setPath( const QString &path );
+ 
+@@ -70,8 +70,8 @@ public:
+ 
+ protected:
+     struct DefinesIncludes {
+-        QHash<QString, QString> definedMacros;
+-        Path::List includePaths;
++        KDevelop::Defines definedMacros;
++        KDevelop::Path::List includePaths;
+     };
+     // list of defines/includes for the compiler. Use it for caching purposes
+     mutable DefinesIncludes m_definesIncludes;
+@@ -84,6 +84,6 @@ protected:
+ 
+ typedef QSharedPointer<ICompiler> CompilerPointer;
+ 
+-Q_DECLARE_METATYPE(CompilerPointer)
++Q_DECLARE_METATYPE(CompilerPointer);
+ 
+ #endif // ICOMPILER_H
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/icompilerfactory.h b/languages/plugins/custom-definesandincludes/compilerprovider/icompilerfactory.h
+index 3849bcb..593b447 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/icompilerfactory.h
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/icompilerfactory.h
+@@ -27,7 +27,7 @@
+ #include "icompiler.h"
+ 
+ /// Interface that represents a factory for creating compilers
+-class ICompilerFactory
++class KDEVCOMPILERPROVIDER_EXPORT ICompilerFactory
+ {
+ public:
+     virtual QString name() const = 0;
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/icompilerprovider.h b/languages/plugins/custom-definesandincludes/compilerprovider/icompilerprovider.h
+deleted file mode 100644
+index da959dc..0000000
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/icompilerprovider.h
++++ /dev/null
+@@ -1,66 +0,0 @@
+-/*
+- * This file is part of KDevelop
+- *
+- * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License as
+- * published by the Free Software Foundation; either version 2 of
+- * the License or (at your option) version 3 or any later version
+- * accepted by the membership of KDE e.V. (or its successor approved
+- * by the membership of KDE e.V.), which shall act as a proxy
+- * defined in Section 14 of version 3 of the license.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- *
+- */
+-
+-#ifndef ICOMPILERPROVIDER_H
+-#define ICOMPILERPROVIDER_H
+-
+-#include <QObject>
+-#include <QString>
+-#include <QVector>
+-
+-#include "icompiler.h"
+-#include "icompilerfactory.h"
+-
+-namespace KDevelop
+-{
+-class IProject;
+-}
+-
+-class ICompilerProvider
+-{
+-public:
+-    /// Select the @p compiler that provides standard includes/defines for the @p project
+-    virtual void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler ) = 0;
+-
+-    /// @return current compiler for the @P project
+-    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const = 0;
+-
+-    /// @return list of all available compilers
+-    virtual QVector<CompilerPointer> compilers() const = 0;
+-
+-    /// @return All available factories
+-    virtual QVector<CompilerFactoryPointer> compilerFactories() const = 0;
+-
+-    /// Adds compiler to the list of available compilers
+-    /// @return true on success (if there is no compiler with the same name registered).
+-    virtual bool registerCompiler(const CompilerPointer& compiler) = 0;
+-
+-    /// Removes compiler from the list of available compilers
+-    virtual void unregisterCompiler(const CompilerPointer& compiler) = 0;
+-
+-    virtual ~ICompilerProvider() = default;
+-};
+-
+-Q_DECLARE_INTERFACE( ICompilerProvider, "org.kdevelop.ICompilerProvider" )
+-
+-#endif // ICOMPILERPROVIDER_H
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/kdevcompilerprovider.desktop.cmake b/languages/plugins/custom-definesandincludes/compilerprovider/kdevcompilerprovider.desktop.cmake
+deleted file mode 100644
+index 8d19603..0000000
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/kdevcompilerprovider.desktop.cmake
++++ /dev/null
+@@ -1,44 +0,0 @@
+-[Desktop Entry]
+-Type=Service
+-Name=Compiler Provider
+-Name[ca]=Proveïdor del compilador
+-Name[cs]=Poskytovatel překladače
+-Name[de]=Compiler-Provider
+-Name[en_GB]=Compiler Provider
+-Name[es]=Proveedor del compilador
+-Name[et]=Kompilaatori pakkuja
+-Name[fi]=Käännintarjoaja
+-Name[nl]=Leverancier van compiler
+-Name[pl]=Dostawca kompilatora
+-Name[pt]=Fornecedor de Compiladores
+-Name[pt_BR]=Fornecedor do Compilador
+-Name[sk]=Poskytovateľ prekladača
+-Name[sl]=Ponudnik za izgrajevanje
+-Name[sv]=Kompilatorleverantör
+-Name[uk]=Надавач даних компілятора
+-Name[x-test]=xxCompiler Providerxx
+-GenericName=Compiler Provider
+-GenericName[ca]=Proveïdor del compilador
+-GenericName[cs]=Poskytovatel překladače
+-GenericName[de]=Compiler-Provider
+-GenericName[en_GB]=Compiler Provider
+-GenericName[es]=Proveedor del compilador
+-GenericName[et]=Kompilaatori pakkuja
+-GenericName[fi]=Käännintarjoaja
+-GenericName[nl]=Leverancier van compiler
+-GenericName[pl]=Dostawca kompilatora
+-GenericName[pt]=Fornecedor de Compiladores
+-GenericName[pt_BR]=Fornecedor do Compilador
+-GenericName[sk]=Poskytovateľ prekladača
+-GenericName[sl]=Ponudnik za izgrajevanje
+-GenericName[sv]=Kompilatorleverantör
+-GenericName[uk]=Надавач даних компілятора
+-GenericName[x-test]=xxCompiler Providerxx
+-ServiceTypes=KDevelop/Plugin
+-X-KDE-Library=kdevcompilerprovider
+-X-KDE-PluginInfo-Name=KDevCompilerProvider
+-X-KDevelop-Category=Global
+-X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
+-X-KDevelop-IRequired=org.kdevelop.IDefinesAndIncludesManager
+-X-KDevelop-Interfaces=org.kdevelop.ICompilerProvider
+-X-KDevelop-Mode=NoGUI
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.cpp
+index 1c62586..2179e13 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.cpp
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.cpp
+@@ -32,9 +32,11 @@
+ 
+ #include "../debugarea.h"
+ 
+-QHash<QString, QString> MsvcCompiler::defines() const
++using namespace KDevelop;
++
++Defines MsvcCompiler::defines() const
+ {
+-    QHash<QString, QString> ret;
++    Defines ret;
+     //Get standard macros from kdevmsvcdefinehelpers
+     KProcess proc;
+     proc.setOutputChannelMode( KProcess::MergedChannels );
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.h b/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.h
+index 06eba72..a59a6b7 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.h
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/msvccompiler.h
+@@ -31,9 +31,9 @@ class MsvcCompiler : public ICompiler
+ public:
+     MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName);
+ 
+-    virtual QHash<QString, QString> defines() const override;
++    virtual KDevelop::Defines defines() const override;
+ 
+-    virtual Path::List includes() const override;
++    virtual KDevelop::Path::List includes() const override;
+ };
+ 
+ #endif // MSVCCOMPILER_H
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/settingsmanager.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/settingsmanager.cpp
+new file mode 100644
+index 0000000..bcdebe5
+--- /dev/null
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/settingsmanager.cpp
+@@ -0,0 +1,302 @@
++/*
++ * This file is part of KDevelop
++ *
++ * Copyright 2010 Andreas Pakulat <apaku@gmx.de>
++ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ *
++ */
++
++#include "settingsmanager.h"
++
++#include <KConfig>
++#include <KConfigGroup>
++
++#include <interfaces/iproject.h>
++#include <interfaces/icore.h>
++#include <interfaces/iplugincontroller.h>
++
++#include "compilerprovider.h"
++
++using namespace KDevelop;
++
++namespace ConfigConstants
++{
++const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
++const QString definesKey = QLatin1String( "Defines" );
++const QString includesKey = QLatin1String( "Includes" );
++const QString projectPathPrefix = QLatin1String( "ProjectPath" );
++const QString projectPathKey = QLatin1String( "Path" );
++
++const QString customBuildSystemGroup = QLatin1String( "CustomBuildSystem" );
++const QString definesAndIncludesGroup = QLatin1String( "Defines And Includes" );
++
++const QString compilersGroup = QLatin1String( "Compilers" );
++const QString compilerNameKey = QLatin1String( "Name" );
++const QString compilerPathKey = QLatin1String( "Path" );
++const QString compilerTypeKey = QLatin1String( "Type" );
++}
++
++namespace
++{
++void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
++{
++    int pathIndex = 0;
++    for ( const auto& path : paths ) {
++        KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
++        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
++        {
++            QByteArray tmp;
++            QDataStream s( &tmp, QIODevice::WriteOnly );
++            s.setVersion( QDataStream::Qt_4_5 );
++            s << path.includes;
++            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
++        }
++        {
++            QByteArray tmp;
++            QDataStream s( &tmp, QIODevice::WriteOnly );
++            s.setVersion( QDataStream::Qt_4_5 );
++            // backwards compatible writing
++            QHash<QString, QVariant> defines;
++            defines.reserve(path.defines.size());
++            for (auto it = path.defines.begin(); it != path.defines.end(); ++it) {
++                defines[it.key()] = it.value();
++            }
++            s << defines;
++            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
++        }
++    }
++}
++
++/// @param remove if true all read entries will be removed from the config file
++QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
++{
++    QList<ConfigEntry> paths;
++    for( const QString &grpName : grp.groupList() ) {
++        if ( grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
++            KConfigGroup pathgrp = grp.group( grpName );
++
++            ConfigEntry path;
++            path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
++
++            {
++                QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
++                QDataStream s( tmp );
++                s.setVersion( QDataStream::Qt_4_5 );
++                // backwards compatible reading
++                QHash<QString, QVariant> defines;
++                s >> defines;
++                path.setDefines(defines);
++            }
++
++            {
++                QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
++                QDataStream s( tmp );
++                s.setVersion( QDataStream::Qt_4_5 );
++                s >> path.includes;
++            }
++            if ( remove ) {
++                pathgrp.deleteGroup();
++            }
++            paths << path;
++        }
++    }
++
++    return paths;
++}
++
++/**
++ * Reads and converts paths from old (Custom Build System's) format to the current one.
++ * @return all converted paths (if any)
++ */
++QList<ConfigEntry> convertedPaths( KConfig* cfg )
++{
++    KConfigGroup group = cfg->group( ConfigConstants::customBuildSystemGroup );
++    if ( !group.isValid() )
++        return {};
++
++    QList<ConfigEntry> paths;
++    foreach( const QString &grpName, group.groupList() ) {
++        KConfigGroup subgroup = group.group( grpName );
++        if ( !subgroup.isValid() )
++            continue;
++
++        paths += doReadSettings( subgroup, true );
++    }
++
++    return paths;
++}
++
++}
++
++void ConfigEntry::setDefines(const QHash<QString, QVariant>& newDefines)
++{
++    defines.clear();
++    defines.reserve(newDefines.size());
++    for (auto it = newDefines.begin(); it != newDefines.end(); ++it) {
++        defines[it.key()] = it.value().toString();
++    }
++}
++
++SettingsManager* SettingsManager::s_globalInstance = nullptr;
++
++SettingsManager::SettingsManager(bool globalInstance)
++  : m_provider(this)
++{
++    if (globalInstance) {
++        Q_ASSERT(!s_globalInstance);
++        s_globalInstance = this;
++    }
++}
++
++SettingsManager::~SettingsManager()
++{
++    if (s_globalInstance == this) {
++        s_globalInstance = nullptr;
++    }
++}
++
++SettingsManager* SettingsManager::globalInstance()
++{
++    Q_ASSERT(s_globalInstance);
++    return s_globalInstance;
++}
++
++CompilerProvider* SettingsManager::provider()
++{
++    return &m_provider;
++}
++
++const CompilerProvider* SettingsManager::provider() const
++{
++    return &m_provider;
++}
++
++void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
++{
++    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
++    if ( !grp.isValid() )
++        return;
++
++    grp.deleteGroup();
++
++    doWriteSettings( grp, paths );
++}
++
++QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
++{
++    auto converted = convertedPaths( cfg );
++    if ( !converted.isEmpty() ) {
++        const_cast<SettingsManager*>(this)->writePaths( cfg, converted );
++        return converted;
++    }
++
++    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
++    if ( !grp.isValid() ) {
++        return {};
++    }
++
++    return doReadSettings( grp );
++}
++
++CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPointer& defaultCompiler ) const
++{
++    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
++    auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
++    if (name.isEmpty()) {
++        return {};
++    }
++
++    for (auto c : m_provider.compilers()) {
++        if (c->name() == name) {
++            return c;
++        }
++    }
++
++    auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
++    auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
++
++    auto cf = m_provider.compilerFactories();
++    for (auto f : cf) {
++        if (f->name() == type) {
++            return f->createCompiler(name, path, true);
++        }
++    }
++
++    return defaultCompiler;
++}
++
++bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
++{
++    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
++    return grp.readEntry( "reparse", true );
++}
++
++void SettingsManager::writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler)
++{
++    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup).group("Compiler");
++    grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
++    grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
++    grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
++}
++
++void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >& compilers)
++{
++    QVector< CompilerPointer > editableCompilers;
++    for (const auto& compiler : compilers) {
++        if (!compiler->editable()) {
++            continue;
++        }
++        editableCompilers.append(compiler);
++    }
++
++    KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
++    config.deleteGroup();
++    config.writeEntry("number", editableCompilers.count());
++    int i = 0;
++    for (const auto& compiler : editableCompilers) {
++        KConfigGroup grp = config.group(QString::number(i));
++        ++i;
++
++        grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
++        grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
++        grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
++    }
++    config.sync();
++}
++
++QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
++{
++    QVector< CompilerPointer > compilers;
++
++    KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
++    int count = config.readEntry("number", 0);
++    for (int i = 0; i < count; i++) {
++        KConfigGroup grp = config.group(QString::number(i));
++
++        auto name = grp.readEntry(ConfigConstants::compilerNameKey, QString());
++        auto path = grp.readEntry(ConfigConstants::compilerPathKey, QString());
++        auto type = grp.readEntry(ConfigConstants::compilerTypeKey, QString());
++
++        auto cf = m_provider.compilerFactories();
++        for (auto f : cf) {
++            if (f->name() == type) {
++                compilers.append(f->createCompiler(name, path));
++            }
++        }
++    }
++    return compilers;
++}
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/settingsmanager.h b/languages/plugins/custom-definesandincludes/compilerprovider/settingsmanager.h
+new file mode 100644
+index 0000000..5f84c9a
+--- /dev/null
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/settingsmanager.h
+@@ -0,0 +1,81 @@
++/*
++ * This file is part of KDevelop
++ *
++ * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ *
++ */
++
++#ifndef SETTINGSMANAGER_H
++#define SETTINGSMANAGER_H
++
++#include <language/interfaces/idefinesandincludesmanager.h>
++
++#include "compilerprovider.h"
++#include "icompiler.h"
++
++class KConfig;
++
++namespace KDevelop {
++class IProject;
++}
++
++struct KDEVCOMPILERPROVIDER_EXPORT ConfigEntry
++{
++    QString path;
++    QStringList includes;
++    KDevelop::Defines defines;
++
++    ConfigEntry( const QString& path = QString() ) : path( path ) {}
++
++    // FIXME: get rid of this but stay backwards compatible
++    void setDefines(const QHash<QString, QVariant>& defines);
++};
++
++class KDEVCOMPILERPROVIDER_EXPORT SettingsManager
++{
++public:
++    SettingsManager(bool globalInstance = false);
++    ~SettingsManager();
++
++    QList<ConfigEntry> readPaths(KConfig* cfg) const;
++    void writePaths(KConfig* cfg, const QList<ConfigEntry>& paths);
++
++    /**
++     * @param defaultCompiler the compiler that will be returned, if the @c CompilerProvider
++     * doesn't have a factory to create the needed type of compiler.
++     *
++     * @return stored compiler or nullptr if the project is opened for the first time.
++     */
++    CompilerPointer currentCompiler(KConfig* cfg, const CompilerPointer& defaultCompiler = {}) const;
++    void writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler);
++
++    QVector<CompilerPointer> userDefinedCompilers() const;
++    void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);
++
++    bool needToReparseCurrentProject( KConfig* cfg ) const;
++
++    CompilerProvider* provider();
++    const CompilerProvider* provider() const;
++
++    static SettingsManager* globalInstance();
++
++private:
++    CompilerProvider m_provider;
++    static SettingsManager* s_globalInstance;
++};
++
++#endif // SETTINGSMANAGER_H
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/tests/CMakeLists.txt b/languages/plugins/custom-definesandincludes/compilerprovider/tests/CMakeLists.txt
+index 780e341..d6ce358 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/tests/CMakeLists.txt
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/tests/CMakeLists.txt
+@@ -1,9 +1,9 @@
+ kde4_add_unit_test(test_compilerprovider
+     test_compilerprovider.cpp
+-    ../icompiler.cpp
+ )
+ 
+ target_link_libraries(test_compilerprovider
+      ${KDEVPLATFORM_TESTS_LIBRARIES}
+      ${QT_QTTEST_LIBRARY}
+-)
+\ No newline at end of file
++     kdevcompilerprovider
++)
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.cpp
+index 06fc8a1..73316a0 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.cpp
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.cpp
+@@ -27,93 +27,109 @@
+ 
+ #include <qtest_kde.h>
+ 
+-#include <interfaces/iplugincontroller.h>
+ #include <tests/autotestshell.h>
+ #include <tests/testcore.h>
+ 
+-#include <language/interfaces/idefinesandincludesmanager.h>
+-#include "../icompilerprovider.h"
++#include "../compilerprovider.h"
++#include "../settingsmanager.h"
+ 
+-using KDevelop::ICore;
+-using KDevelop::TestCore;
+-using KDevelop::AutoTestShell;
+-using KDevelop::IDefinesAndIncludesManager;
++using namespace KDevelop;
+ 
+-ICompilerProvider* compilerProvider()
++void TestCompilerProvider::initTestCase()
+ {
+-    auto cp = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+-    if (!cp || !cp->extension<ICompilerProvider>()) {
+-        return {};
+-    }
+-
+-    return cp->extension<ICompilerProvider>();
++    AutoTestShell::init();
++    TestCore::initialize(Core::NoUi);
+ }
+ 
+-
+ void TestCompilerProvider::cleanupTestCase()
+ {
+-    if (compilerProvider()) {
+-        for (auto c : compilerProvider()->compilers()) {
+-            compilerProvider()->unregisterCompiler(c);
+-        }
+-    }
+-
+     TestCore::shutdown();
+ }
+ 
+-void TestCompilerProvider::initTestCase()
+-{
+-    AutoTestShell::init();
+-    TestCore::initialize(KDevelop::Core::NoUi);
+-}
+-
+ void TestCompilerProvider::testRegisterCompiler()
+ {
+-    if (!compilerProvider()) {
+-        return;
+-    }
+-
+-    auto cp = compilerProvider();
+-    auto cf = compilerProvider()->compilerFactories();
++    SettingsManager settings;
++    auto provider = settings.provider();
++    auto cf = provider->compilerFactories();
+     for (int i = 0 ; i < cf.size(); ++i) {
+         auto compiler = cf[i]->createCompiler(QString::number(i), QString::number(i));
+-        QVERIFY(cp->registerCompiler(compiler));
+-        QVERIFY(!cp->registerCompiler(compiler));
+-        QVERIFY(cp->compilers().contains(compiler));
++        QVERIFY(provider->registerCompiler(compiler));
++        QVERIFY(!provider->registerCompiler(compiler));
++        QVERIFY(provider->compilers().contains(compiler));
+     }
+-    QVERIFY(!cp->registerCompiler({}));
++    QVERIFY(!provider->registerCompiler({}));
+ }
+ 
+ void TestCompilerProvider::testSetCompiler()
+ {
+-    if (!compilerProvider()) {
+-        return;
+-    }
+-
+-    compilerProvider()->setCompiler(nullptr, {});
+-    QVERIFY(compilerProvider()->currentCompiler(nullptr));
+-
+-    for (auto c : compilerProvider()->compilers()) {
+-        compilerProvider()->setCompiler(nullptr, c);
+-        QCOMPARE(compilerProvider()->currentCompiler(nullptr), c);
++    SettingsManager settings;
++    auto provider = settings.provider();
++    provider->setCompiler(nullptr, {});
++    QVERIFY(provider->currentCompiler(nullptr));
++
++    for (auto c : provider->compilers()) {
++        provider->setCompiler(nullptr, c);
++        QCOMPARE(provider->currentCompiler(nullptr), c);
+     }
+ }
+ 
+ void TestCompilerProvider::testCompilerIncludesAndDefines()
+ {
+-    if (!compilerProvider()) {
+-        return;
+-    }
+-
+-    for (auto c : compilerProvider()->compilers()) {
++    SettingsManager settings;
++    auto provider = settings.provider();
++    for (auto c : provider->compilers()) {
+         if (!c->editable() && !c->path().isEmpty()) {
+-            compilerProvider()->setCompiler(nullptr, c);
++            provider->setCompiler(nullptr, c);
+             QVERIFY(!c->defines().isEmpty());
+             QVERIFY(!c->includes().isEmpty());
+-            QCOMPARE(dynamic_cast<IDefinesAndIncludesManager::Provider*>(compilerProvider())->defines(nullptr), c->defines());
+-            QCOMPARE(dynamic_cast<IDefinesAndIncludesManager::Provider*>(compilerProvider())->includes(nullptr), c->includes());
++            QCOMPARE(provider->defines(nullptr), c->defines());
++            QCOMPARE(provider->includes(nullptr), c->includes());
+         }
+     }
+ }
+ 
++void TestCompilerProvider::testStorageBackwardsCompatible()
++{
++    SettingsManager settings;
++    QTemporaryFile file;
++    QVERIFY(file.open());
++    QTextStream stream(&file);
++    stream << "[Buildset]\n" <<
++      "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x1a\\x00S\\x00i\\x00m\\x00p\\x00l\\x00e\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n" <<
++      "[CustomBuildSystem]\n" << "CurrentConfiguration=BuildConfig0\n" <<
++      "[CustomDefinesAndIncludes][ProjectPath0]\n" <<
++      "Defines=\\x00\\x00\\x00\\x02\\x00\\x00\\x00\\x0c\\x00_\\x00D\\x00E\\x00B\\x00U\\x00G\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x10\\x00V\\x00A\\x00R\\x00I\\x00A\\x00B\\x00L\\x00E\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\n\\x00V\\x00A\\x00L\\x00U\\x00E\n" <<
++      "Includes=\\x00\\x00\\x00\\x01\\x00\\x00\\x00$\\x00/\\x00u\\x00s\\x00r\\x00/\\x00i\\x00n\\x00c\\x00l\\x00u\\x00d\\x00e\\x00/\\x00m\\x00y\\x00d\\x00i\\x00r\n" <<
++      "Path=/\n";
++    file.close();
++    KConfig config(file.fileName());
++    auto entries = settings.readPaths(&config);
++    QCOMPARE(entries.size(), 1);
++    auto entry = entries.first();
++    Defines defines;
++    defines["VARIABLE"] = "VALUE";
++    defines["_DEBUG"] = QString();
++    QCOMPARE(entry.defines, defines);
++    QStringList includes = QStringList() << "/usr/include/mydir";
++    QCOMPARE(entry.includes, includes);
++    QCOMPARE(entry.path, QString("/"));
++
++    ConfigEntry otherEntry;
++    otherEntry.defines["TEST"] = "lalal";
++    otherEntry.includes = QStringList() << "/foo";
++    otherEntry.path = "test";
++    entries << otherEntry;
++    settings.writePaths(&config, entries);
++
++    auto readWriteEntries = settings.readPaths(&config);
++    QCOMPARE(readWriteEntries.size(), 2);
++    QCOMPARE(readWriteEntries.at(0).path, entry.path);
++    QCOMPARE(readWriteEntries.at(0).defines, entry.defines);
++    QCOMPARE(readWriteEntries.at(0).includes, entry.includes);
++
++    QCOMPARE(readWriteEntries.at(1).path, otherEntry.path);
++    QCOMPARE(readWriteEntries.at(1).defines, otherEntry.defines);
++    QCOMPARE(readWriteEntries.at(1).includes, otherEntry.includes);
++}
++
+ QTEST_KDEMAIN(TestCompilerProvider, NoGUI)
+diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.h b/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.h
+index 80c341e..dbd9a9c 100644
+--- a/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.h
++++ b/languages/plugins/custom-definesandincludes/compilerprovider/tests/test_compilerprovider.h
+@@ -35,6 +35,7 @@ private slots:
+     void testRegisterCompiler();
+     void testSetCompiler();
+     void testCompilerIncludesAndDefines();
++    void testStorageBackwardsCompatible();
+ };
+ 
+ #endif
+diff --git a/languages/plugins/custom-definesandincludes/definesandincludesexport.h b/languages/plugins/custom-definesandincludes/definesandincludesexport.h
+deleted file mode 100644
+index b62b35e..0000000
+--- a/languages/plugins/custom-definesandincludes/definesandincludesexport.h
++++ /dev/null
+@@ -1,35 +0,0 @@
+-/*
+-    This file is part of KDevelop
+-
+-    Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+-
+-    This library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Library General Public
+-    License as published by the Free Software Foundation; either
+-    version 2 of the License, or (at your option) any later version.
+-
+-    This library is distributed in the hope that it will be useful,
+-    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-    Library General Public License for more details.
+-
+-    You should have received a copy of the GNU Library General Public License
+-    along with this library; see the file COPYING.LIB.  If not, write to
+-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+-    Boston, MA 02110-1301, USA.
+-*/
+-
+-#ifndef DEFINESANDINCLUDESEXPORT_H
+-#define DEFINESANDINCLUDESEXPORT_H
+-
+-#include <kdemacros.h>
+-
+-#ifndef KDEVDEFINESANDINCLUDESMANAGER_EXPORT
+-# ifdef MAKE_KDEV4DEFINESANDINCLUDESMANAGER_LIB
+-#  define KDEVDEFINESANDINCLUDESMANAGER_EXPORT KDE_EXPORT
+-# else
+-#  define KDEVDEFINESANDINCLUDESMANAGER_EXPORT KDE_IMPORT
+-# endif
+-#endif
+-
+-#endif
+diff --git a/languages/plugins/custom-definesandincludes/definesandincludesmanager.cpp b/languages/plugins/custom-definesandincludes/definesandincludesmanager.cpp
+index 4c4f9ac..276d0b0 100644
+--- a/languages/plugins/custom-definesandincludes/definesandincludesmanager.cpp
++++ b/languages/plugins/custom-definesandincludes/definesandincludesmanager.cpp
+@@ -21,7 +21,7 @@
+ 
+ #include "definesandincludesmanager.h"
+ 
+-#include "settingsmanager.h"
++#include "compilerprovider/compilerprovider.h"
+ 
+ #include <interfaces/iproject.h>
+ #include <project/interfaces/ibuildsystemmanager.h>
+@@ -33,7 +33,7 @@
+ #include <QThread>
+ #include <QCoreApplication>
+ 
+-using KDevelop::ConfigEntry;
++using namespace KDevelop;
+ 
+ namespace
+ {
+@@ -66,20 +66,8 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
+     return ret;
+ }
+ 
+-KDevelop::IDefinesAndIncludesManager::Provider* compilerProvider(QVector<KDevelop::IDefinesAndIncludesManager::Provider*> providers)
+-{
+-    for (auto provider : providers) {
+-        if (provider->type() & KDevelop::IDefinesAndIncludesManager::CompilerSpecific) {
+-            return provider;
+-        }
+-    }
+-    return {};
+-}
+ }
+ 
+-namespace KDevelop
+-{
+-
+ K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
+ K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
+ "kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
+@@ -87,17 +75,21 @@ KAboutData::License_GPL)))
+ 
+ DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
+     : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
++    , m_settings(true)
+ {
+     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
++    registerProvider(m_settings.provider());
+ }
+ 
++// NOTE: Part of a fix for build failures on <GCC-4.7
++DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
++
+ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
+ {
+     Q_ASSERT(QThread::currentThread() == qApp->thread());
+ 
+     if (!item) {
+-        auto cp = compilerProvider(m_providers);
+-        return cp ? cp->defines(nullptr) : QHash<QString, QString>();
++        return m_settings.provider()->defines(nullptr);
+     }
+ 
+     QHash<QString, QString> defines;
+@@ -125,9 +117,9 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
+     if (type & UserDefined) {
+         auto cfg = item->project()->projectConfiguration().data();
+ 
+-        const auto result = findConfigForItem(readPaths(cfg), item).defines;
++        const auto result = findConfigForItem(m_settings.readPaths(cfg), item).defines;
+         for (auto it = result.constBegin(); it != result.constEnd(); it++) {
+-            defines[it.key()] = it.value().toString();
++            defines[it.key()] = it.value();
+         }
+     }
+ 
+@@ -139,8 +131,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
+     Q_ASSERT(QThread::currentThread() == qApp->thread());
+ 
+     if (!item) {
+-        auto cp = compilerProvider(m_providers);
+-        return cp ? cp->includes(nullptr) : Path::List();
++        return m_settings.provider()->includes(nullptr);
+     }
+ 
+     Path::List includes;
+@@ -148,7 +139,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
+     if (type & UserDefined) {
+         auto cfg = item->project()->projectConfiguration().data();
+ 
+-        includes += KDevelop::toPathList(findConfigForItem(readPaths(cfg), item).includes);
++        includes += KDevelop::toPathList(findConfigForItem(m_settings.readPaths(cfg), item).includes);
+     }
+ 
+     if ( type & ProjectSpecific ) {
+@@ -188,7 +179,4 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
+     m_providers.push_back(provider);
+ }
+ 
+-// NOTE: Part of a fix for build failures on <GCC-4.7
+-DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+-
+-}
++#include "definesandincludesmanager.moc"
+diff --git a/languages/plugins/custom-definesandincludes/definesandincludesmanager.h b/languages/plugins/custom-definesandincludes/definesandincludesmanager.h
+index 4ea1252..8833c7b 100644
+--- a/languages/plugins/custom-definesandincludes/definesandincludesmanager.h
++++ b/languages/plugins/custom-definesandincludes/definesandincludesmanager.h
+@@ -29,32 +29,32 @@
+ 
+ #include <language/interfaces/idefinesandincludesmanager.h>
+ 
+-#include "settingsmanager.h"
++#include "compilerprovider/settingsmanager.h"
++
++class CompilerProvider;
+ 
+-namespace KDevelop
+-{
+ /// @brief: Class for retrieving custom defines and includes.
+-class DefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
++class DefinesAndIncludesManager : public KDevelop::IPlugin, public KDevelop::IDefinesAndIncludesManager
+ {
+     Q_OBJECT
+     Q_INTERFACES( KDevelop::IDefinesAndIncludesManager )
+-public :
++
++public:
+     explicit DefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
+-    ///@return list of all custom defines for @p item
+-    QHash<QString, QString> defines( ProjectBaseItem* item, Type type ) const override;
++    // NOTE: Part of a fix for build failures on <GCC-4.7
++    virtual ~DefinesAndIncludesManager() noexcept;
+ 
++    ///@return list of all custom defines for @p item
++    KDevelop::Defines defines( KDevelop::ProjectBaseItem* item, Type type ) const override;
+     ///@return list of all custom includes for @p item
+-    Path::List includes( ProjectBaseItem* item, Type type  ) const override;
++    KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item, Type type  ) const override;
+ 
+     virtual void registerProvider( Provider* provider ) override;
+-
+     virtual bool unregisterProvider( Provider* provider ) override;
+ 
+-    // NOTE: Part of a fix for build failures on <GCC-4.7
+-    virtual ~DefinesAndIncludesManager() noexcept;
+-
+ private:
+     QVector<Provider*> m_providers;
++    SettingsManager m_settings;
+ };
+-}
++
+ #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/CMakeLists.txt b/languages/plugins/custom-definesandincludes/kcm_widget/CMakeLists.txt
+index d14bad8..3b627d4 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/CMakeLists.txt
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ../)
++include_directories(../)
+ 
+ set( kcm_customdefinesandincludes_SRCS
+         projectpathsmodel.cpp
+@@ -9,7 +9,6 @@ set( kcm_customdefinesandincludes_SRCS
+         projectpathswidget.cpp
+         kcm_customdefinesandincludes.cpp
+         ../debugarea.cpp
+-        ../compilerprovider/icompiler.cpp
+         compilersmodel.cpp
+         compilerswidget.cpp
+    )
+@@ -30,7 +29,7 @@ target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
+         ${KDEVPLATFORM_PROJECT_LIBRARIES}
+         ${KDEVPLATFORM_UTIL_LIBRARIES}
+         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+-        kdev4includesdefinessettings )
++        kdevcompilerprovider )
+ 
+ install( TARGETS kcm_kdevcustomdefinesandincludes
+          DESTINATION ${PLUGIN_INSTALL_DIR} )
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/compilersmodel.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/compilersmodel.cpp
+index 51edca0..42b9a84 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/compilersmodel.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/compilersmodel.cpp
+@@ -25,8 +25,6 @@
+ 
+ #include <KLocale>
+ 
+-#include "../compilerprovider/icompilerprovider.h"
+-
+ namespace
+ {
+ enum Columns {
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/compilerswidget.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/compilerswidget.cpp
+index 3bca90e..3eff394 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/compilerswidget.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/compilerswidget.cpp
+@@ -30,24 +30,10 @@
+ #include "ui_compilerswidget.h"
+ #include "compilersmodel.h"
+ #include "debugarea.h"
++#include "../compilerprovider/settingsmanager.h"
++#include "../compilerprovider/compilerprovider.h"
+ 
+-#include <interfaces/icore.h>
+-#include <interfaces/iplugincontroller.h>
+-
+-#include "../compilerprovider/icompilerprovider.h"
+-
+-namespace
+-{
+-ICompilerProvider* compilerProvider()
+-{
+-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+-        return {};
+-    }
+-
+-    return compilerProvider->extension<ICompilerProvider>();
+-}
+-}
++using namespace KDevelop;
+ 
+ CompilersWidget::CompilersWidget(QWidget* parent)
+     : QDialog(parent), m_ui(new Ui::CompilersWidget)
+@@ -63,16 +49,16 @@ CompilersWidget::CompilersWidget(QWidget* parent)
+ 
+     m_addMenu->clear();
+ 
+-    if (auto cp = compilerProvider()) {
+-        foreach (const auto& factory, cp->compilerFactories()) {
+-            QAction* action = new QAction(m_addMenu);
+-            action->setText(factory->name());
+-            connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
+-            m_mapper->setMapping(action, factory->name());
+-            m_addMenu->addAction(action);
+-        }
+-        m_ui->addButton->setMenu(m_addMenu);
++    auto settings = SettingsManager::globalInstance();
++    auto provider = settings->provider();
++    foreach (const auto& factory, provider->compilerFactories()) {
++        QAction* action = new QAction(m_addMenu);
++        action->setText(factory->name());
++        connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
++        m_mapper->setMapping(action, factory->name());
++        m_addMenu->addAction(action);
+     }
++    m_ui->addButton->setMenu(m_addMenu);
+ 
+     connect(m_ui->removeButton, SIGNAL(clicked()), SLOT(deleteCompiler()));
+ 
+@@ -104,7 +90,9 @@ void CompilersWidget::deleteCompiler()
+ 
+ void CompilersWidget::addCompiler(const QString& factoryName)
+ {
+-   foreach (const auto& factory, compilerProvider()->compilerFactories()) {
++    auto settings = SettingsManager::globalInstance();
++    auto provider = settings->provider();
++    foreach (const auto& factory, provider->compilerFactories()) {
+         if (factoryName == factory->name()) {
+             //add compiler without any information, the user will fill the data in later
+             m_compilersModel->addCompiler(factory->createCompiler(QString(), QString()));
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.cpp
+index 0121448..9fee860 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.cpp
+@@ -20,6 +20,8 @@
+ 
+ #include <klocale.h>
+ 
++using namespace KDevelop;
++
+ DefinesModel::DefinesModel( QObject* parent )
+     : QAbstractTableModel( parent )
+ {
+@@ -98,7 +100,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
+     if( index.row() == m_defines.count() ) {
+         if( index.column() == 0 && !value.toString().isEmpty() ) {
+             beginInsertRows( QModelIndex(), m_defines.count(), m_defines.count() );
+-            m_defines << qMakePair<QString,QVariant>( value.toString(), "" );
++            m_defines << qMakePair<QString,QString>( value.toString(), "" );
+             endInsertRows();
+         }
+     } else {
+@@ -107,7 +109,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
+             m_defines[ index.row() ].first = value.toString();
+             break;
+         case 1:
+-            m_defines[ index.row() ].second = QVariant( value.toString() );
++            m_defines[ index.row() ].second = value.toString();
+             break;
+         default:
+             Q_ASSERT_X( 0, "DefinesModel::setData", "Invalid column requested" );
+@@ -133,22 +135,23 @@ Qt::ItemFlags DefinesModel::flags( const QModelIndex& index ) const
+     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+ }
+ 
+-QHash<QString,QVariant> DefinesModel::defines() const
++Defines DefinesModel::defines() const
+ {
+-    typedef QPair<QString, QVariant> DefinePair;
+-    QHash<QString,QVariant> tmp;
+-    foreach(const DefinePair& pair, m_defines) {
+-        tmp[pair.first] = pair.second;
++    Defines ret;
++    ret.reserve(m_defines.size());
++    for (const auto& pair : m_defines) {
++        ret[pair.first] = pair.second;
+     }
+-    return tmp;
++    return ret;
+ }
+ 
+-void DefinesModel::setDefines(const QHash<QString,QVariant>& includes )
++void DefinesModel::setDefines(const Defines& includes )
+ {
+     beginResetModel();
+     m_defines.clear();
+-    foreach( const QString& k, includes.keys() ) {
+-        m_defines << qMakePair<QString,QVariant>( k, includes[k] );
++    m_defines.reserve(includes.size());
++    for ( auto it = includes.begin(); it != includes.end(); ++it ) {
++        m_defines << qMakePair<QString,QString>( it.key(), it.value() );
+     }
+     endResetModel();
+ }
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.h b/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.h
+index 8e2c9fb..619a8c4 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.h
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/definesmodel.h
+@@ -24,16 +24,13 @@
+ 
+ #include <language/interfaces/idefinesandincludesmanager.h>
+ 
+-using KDevelop::ConfigEntry;
+-using KDevelop::Defines;
+-
+ class DefinesModel : public QAbstractTableModel
+ {
+ Q_OBJECT
+ public:
+     DefinesModel( QObject* parent = 0 );
+-    void setDefines( const Defines&  );
+-    Defines defines() const;
++    void setDefines( const KDevelop::Defines& defines );
++    KDevelop::Defines defines() const;
+     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+@@ -42,7 +39,7 @@ public:
+     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+ private:
+-    QList<QPair<QString,QVariant> > m_defines;
++    QList<QPair<QString,QString> > m_defines;
+ };
+ 
+ #endif // DEFINESMODEL_H
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.cpp
+index 81f1ea3..5ba8e96 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.cpp
+@@ -24,6 +24,8 @@
+ #include "definesmodel.h"
+ #include "debugarea.h"
+ 
++using namespace KDevelop;
++
+ DefinesWidget::DefinesWidget( QWidget* parent )
+     : QWidget ( parent ), ui( new Ui::DefinesWidget )
+     , definesModel( new DefinesModel( this ) )
+@@ -60,7 +62,7 @@ void DefinesWidget::definesChanged()
+ 
+ void DefinesWidget::clear()
+ {
+-    definesModel->setDefines( QHash<QString,QVariant>() );
++    definesModel->setDefines( {} );
+ }
+ 
+ void DefinesWidget::deleteDefine()
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.h b/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.h
+index 714f336..bc65cd9 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.h
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/defineswidget.h
+@@ -24,9 +24,6 @@
+ #include <qabstractitemmodel.h>
+ #include <language/interfaces/idefinesandincludesmanager.h>
+ 
+-using KDevelop::ConfigEntry;
+-using KDevelop::Defines;
+-
+ class KFileDialog;
+ class KUrlRequester;
+ namespace Ui
+@@ -47,10 +44,10 @@ class DefinesWidget : public QWidget
+ Q_OBJECT
+ public:
+     DefinesWidget( QWidget* parent = 0 );
+-    void setDefines( const Defines& );
++    void setDefines( const KDevelop::Defines& defines );
+     void clear();
+ signals:
+-    void definesChanged( const Defines& );
++    void definesChanged( const KDevelop::Defines& defines );
+ private slots:
+     // Forward defines model changes
+     void definesChanged();
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/kcm_customdefinesandincludes.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/kcm_customdefinesandincludes.cpp
+index 423da2e..b6184a1 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/kcm_customdefinesandincludes.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/kcm_customdefinesandincludes.cpp
+@@ -21,8 +21,7 @@
+ 
+ #include "projectpathswidget.h"
+ #include "customdefinesandincludes.h"
+-#include "definesandincludesmanager.h"
+-#include "../compilerprovider/icompilerprovider.h"
++#include "../compilerprovider/compilerprovider.h"
+ 
+ #include <interfaces/iruncontroller.h>
+ #include <interfaces/iproject.h>
+@@ -35,22 +34,11 @@
+ 
+ #include "kcm_customdefinesandincludes.h"
+ 
+-namespace
+-{
+-ICompilerProvider* compilerProvider()
+-{
+-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+-        return {};
+-    }
+-
+-    return compilerProvider->extension<ICompilerProvider>();
+-}
+-}
+-
+ K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
+ K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
+ 
++using namespace KDevelop;
++
+ DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& args )
+     : ProjectKCModule<CustomDefinesAndIncludes>( DefinesAndIncludesFactory::componentData(), parent, args )
+ {
+@@ -75,32 +63,26 @@ DefinesAndIncludes::~DefinesAndIncludes()
+ void DefinesAndIncludes::loadFrom( KConfig* cfg )
+ {
+     configWidget->clear();
+-    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
+-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
++
++    auto settings = SettingsManager::globalInstance();
+     configWidget->setPaths( settings->readPaths( cfg ) );
+ 
+-    if (auto cp = compilerProvider()) {
+-        configWidget->setCompilers(cp->compilers());
+-        configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
+-    }
++    auto provider = settings->provider();
++    configWidget->setCompilers(provider->compilers());
++    configWidget->setCurrentCompiler(provider->currentCompiler(project())->name());
+ }
+ 
+ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
+ {
+-    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
+-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
++    auto settings = SettingsManager::globalInstance();
+     settings->writePaths( cfg, configWidget->paths() );
+ 
+-    if (auto cp = compilerProvider()) {
+-        settings->writeCurrentCompiler(cfg ,configWidget->currentCompiler());
+-
+-        cp->setCompiler(project(), settings->currentCompiler(cfg));
+-
+-        settings->writeUserDefinedCompilers(configWidget->compilers());
+-    }
++    auto provider = settings->provider();
++    settings->writeCurrentCompiler(cfg, configWidget->currentCompiler());
++    provider->setCompiler(project(), settings->currentCompiler(cfg));
++    settings->writeUserDefinedCompilers(configWidget->compilers());
+ 
+     if ( settings->needToReparseCurrentProject( cfg ) ) {
+-        using namespace KDevelop;
+         ICore::self()->projectController()->reparseProject(project(), true);
+ 
+         //TODO: BackgroundParser should check whether a document is currently opened and prioritize it then. The _focused_ one should be prioritized even further.
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop b/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop
+index d88a4b6..e9f226e 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop
+@@ -15,6 +15,8 @@ Name[en_GB]=Custom Defines And Includes
+ Name[es]=Personalizar definiciones e inclusiones
+ Name[et]=Kohandatud definitsioonid ja päised
+ Name[fi]=Mukautetut definet ja includet
++Name[fr]=Définitions et inclusions personnalisées
++Name[it]=Definizioni e inclusioni personalizzate
+ Name[nl]=Zelf gedefinieerd en invoegingen
+ Name[pl]=Własne definicje i pliki dołączane
+ Name[pt]=Definições e Inclusões Personalizadas
+@@ -22,6 +24,7 @@ Name[pt_BR]=Definições e inclusões personalizadas
+ Name[sk]=Vlastné definície a zahrnutia
+ Name[sl]=Določitve in vključitve po meri
+ Name[sv]=Egna definitioner och inkluderingar
++Name[tr]=Özel Tanımlamalar ve İçermeler
+ Name[uk]=Нетипові визначення і включення
+ Name[x-test]=xxCustom Defines And Includesxx
+ 
+@@ -32,6 +35,8 @@ Comment[en_GB]=Configure which macros and include directories/files will be adde
+ Comment[es]=Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.
+ Comment[et]=Aitab seadistada, millised makrod ja päistekataloogid või -failid lisada parserile projekti parsimiseks.
+ Comment[fi]=Määritä, mitkä makrot ja include-hakemistot/tiedostot lisätään jäsentimelle projektin jäsentämisen aikana.
++Comment[fr]=Configurer quelles macros et dossiers ou fichiers d'inclusions seront ajoutés à l'analyseur pendant l'analyse du projet.
++Comment[it]=Configura quali macro e cartelle/file di inclusione saranno aggiunti all'analizzatore durante l'analisi del progetto.
+ Comment[nl]=Stel in welke macro's en ingevoegde mappen/bestanden toegevoegd zullen worden aan de parser bij het ontleden van het project.
+ Comment[pl]=Ustaw jakie pliki/katalogi makr i plików dołączanych będą dodawane do przetwarzania przy przetwarzaniu projektu.
+ Comment[pt]=Configure quais as macros e pastas/ficheiros de inclusão que serão adicionados ao processador do projecto.
+@@ -39,5 +44,6 @@ Comment[pt_BR]=Configura quais macros e arquivos/pastas incluídos serão adicio
+ Comment[sk]=Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.
+ Comment[sl]=Nastavite, kateri makri in mape oz. datoteke z vključitvami bodo dodane razčlenjevalniku med razčlenjevanjem projekta.
+ Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning
++Comment[tr]=Proje ayrıştırılırken hangi makroların ve içerme dizinlerinin/dosyaların ayrıştırıcıya ekleneceğini yapılandırın.
+ Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
+ Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.cpp
+index 02019e7..af6bd32 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.cpp
+@@ -23,9 +23,11 @@
+ #include <language/duchain/indexedstring.h>
+ #include <util/path.h>
+ 
++using namespace KDevelop;
++
+ namespace{
+ //TODO: Port the model to the Path api.
+-KUrl projectFolder( KDevelop::IProject* project )
++KUrl projectFolder( IProject* project )
+ {
+     auto url = project->path().toUrl();
+     url.adjustPath( KUrl::AddTrailingSlash );
+@@ -38,7 +40,7 @@ ProjectPathsModel::ProjectPathsModel( QObject* parent )
+ {
+ }
+ 
+-void ProjectPathsModel::setProject(KDevelop::IProject* w_project)
++void ProjectPathsModel::setProject(IProject* w_project)
+ {
+     project = w_project;
+ }
+@@ -55,7 +57,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
+         return pathConfig.includes;
+         break;
+     case DefinesDataRole:
+-        return pathConfig.defines;
++        return QVariant::fromValue(pathConfig.defines);
+         break;
+     case Qt::EditRole:
+         return sanitizePath( pathConfig.path, true, false );
+@@ -109,7 +111,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
+         pathConfig.includes = value.toStringList();
+         break;
+     case DefinesDataRole:
+-        pathConfig.defines = value.toHash();
++        pathConfig.defines = value.value<Defines>();
+         break;
+     case Qt::EditRole:
+         pathConfig.path = sanitizePath( value.toString(), false );
+@@ -217,7 +219,7 @@ QString ProjectPathsModel::sanitizeUrl( KUrl url, bool needRelative ) const
+ QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelative, bool needRelative ) const
+ {
+     Q_ASSERT( project );
+-    Q_ASSERT( expectRelative || project->inProject(KDevelop::IndexedString(path)) );
++    Q_ASSERT( expectRelative || project->inProject(IndexedString(path)) );
+ 
+     KUrl url;
+     if( expectRelative ) {
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.h b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.h
+index 7790899..4844e0e 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.h
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathsmodel.h
+@@ -24,9 +24,7 @@
+ 
+ #include <KUrl>
+ 
+-#include <language/interfaces/idefinesandincludesmanager.h>
+-
+-using KDevelop::ConfigEntry;
++#include "../compilerprovider/settingsmanager.h"
+ 
+ namespace KDevelop
+ {
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.cpp b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.cpp
+index 60165f8..778b79e 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.cpp
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.cpp
+@@ -29,7 +29,7 @@
+ #include <interfaces/icore.h>
+ #include <interfaces/iplugincontroller.h>
+ 
+-#include "../compilerprovider/icompilerprovider.h"
++#include "../compilerprovider/compilerprovider.h"
+ 
+ #include "compilerswidget.h"
+ 
+@@ -38,18 +38,7 @@
+ #include "projectpathsmodel.h"
+ #include "debugarea.h"
+ 
+-namespace
+-{
+-ICompilerProvider* compilerProvider()
+-{
+-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+-        return {};
+-    }
+-
+-    return compilerProvider->extension<ICompilerProvider>();
+-}
+-}
++using namespace KDevelop;
+ 
+ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
+     : QWidget(parent),
+@@ -79,7 +68,7 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
+     connect( ui->compiler, SIGNAL(activated(QString)), SIGNAL(changed()) );
+ 
+     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
+-    connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
++    connect( ui->definesWidget, SIGNAL(definesChanged(KDevelop::Defines)), SLOT(definesChanged(KDevelop::Defines)) );
+ 
+     connect(ui->configureCompilers, SIGNAL(clicked(bool)), SLOT(configureCompilers()));
+ }
+@@ -104,7 +93,7 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
+ void ProjectPathsWidget::definesChanged( const Defines& defines )
+ {
+     definesAndIncludesDebug() << "defines changed";
+-    updatePathsModel( defines, ProjectPathsModel::DefinesDataRole );
++    updatePathsModel( QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole );
+ }
+ 
+ void ProjectPathsWidget::includesChanged( const QStringList& includes )
+@@ -132,7 +121,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
+     Q_ASSERT(index >= 0);
+     const QModelIndex midx = pathsModel->index( index, 0 );
+     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
+-    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).toHash() );
++    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).value<Defines>() );
+     updateEnablements();
+ }
+ 
+@@ -201,7 +190,7 @@ void ProjectPathsWidget::batchEdit()
+         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
+ 
+         for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
+-            be.textEdit->append(it.key() + "=" + it.value().toString());
++            be.textEdit->append(it.key() + "=" + it.value());
+         }
+ 
+         dialog.setWindowTitle(i18n("Edit defined macros"));
+@@ -232,7 +221,7 @@ void ProjectPathsWidget::batchEdit()
+             defines[r.cap(1).trimmed()] = r.cap(3).trimmed();
+         }
+ 
+-        pathsModel->setData(midx, defines, ProjectPathsModel::DefinesDataRole);
++        pathsModel->setData(midx, QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole);
+     }
+ 
+     projectPathSelected(index);
+@@ -277,23 +266,25 @@ void ProjectPathsWidget::configureCompilers()
+         return;
+     }
+ 
+-    auto compilers = compilerProvider()->compilers();
++    auto settings = SettingsManager::globalInstance();
++    auto provider = settings->provider();
++    auto compilers = provider->compilers();
+ 
+     for (auto c: cw.compilers()) {
+         if (!compilers.contains(c)) {
+-            compilerProvider()->registerCompiler(c);
++            provider->registerCompiler(c);
+         }
+     }
+ 
+-    compilers = compilerProvider()->compilers();
++    compilers = provider->compilers();
+     for (auto c: compilers) {
+         if (!cw.compilers().contains(c)) {
+-            compilerProvider()->unregisterCompiler(c);
++            provider->unregisterCompiler(c);
+         }
+     }
+ 
+-    setCompilers(compilerProvider()->compilers());
+-    setCurrentCompiler(compilerProvider()->currentCompiler(m_project)->name());
++    setCompilers(provider->compilers());
++    setCurrentCompiler(provider->currentCompiler(m_project)->name());
+     emit changed();
+ }
+ 
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.h b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.h
+index 19e2142..1968b8a 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.h
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/projectpathswidget.h
+@@ -23,11 +23,8 @@
+ 
+ #include <qabstractitemmodel.h>
+ 
+-#include <language/interfaces/idefinesandincludesmanager.h>
+ #include "../compilerprovider/icompiler.h"
+-
+-using KDevelop::ConfigEntry;
+-using KDevelop::Defines;
++#include "../compilerprovider/settingsmanager.h"
+ 
+ class KUrlRequester;
+ namespace Ui
+@@ -75,7 +72,7 @@ private slots:
+     void includesChanged( const QStringList& includes );
+ 
+     // Forward defines model changes into the pathsModel
+-    void definesChanged( const Defines& defines );
++    void definesChanged( const KDevelop::Defines& defines );
+ private:
+     Ui::ProjectPathsWidget* ui;
+     ProjectPathsModel* pathsModel;
+diff --git a/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake b/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake
+index 57f845d..61472b0 100644
+--- a/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake
++++ b/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake
+@@ -7,6 +7,8 @@ Name[en_GB]=Custom Defines And Includes Manager
+ Name[es]=Gestor de definiciones e inclusiones personalizadas
+ Name[et]=Kohandatud definitsioonide ja päiste haldur
+ Name[fi]=Mukautettujen definejen ja includejen hallinta
++Name[fr]=Gestionnaire de définitions et inclusions personnalisées
++Name[it]=Gestore delle definizioni e inclusioni personalizzate
+ Name[nl]=Beheerder van zelf gedefinieerd en invoegingen
+ Name[pl]=Zarządzanie własnymi definicjami i plikami dołączanymi
+ Name[pt]=Gestor de Definições e Inclusões Personalizadas
+@@ -14,6 +16,7 @@ Name[pt_BR]=Gerenciador de definições e inclusões personalizadas
+ Name[sk]=Správca vlastných definícií a zahrnutí
+ Name[sl]=Upravljalnik določitev in vključitev po meri
+ Name[sv]=Hantering av egna definitioner och inkluderingar
++Name[tr]=Özel Tanımlama ve İçerme Yöneticisi
+ Name[uk]=Керування нетиповими визначеннями і включеннями
+ Name[x-test]=xxCustom Defines And Includes Managerxx
+ GenericName=Custom Defines And Includes Manager
+@@ -23,6 +26,8 @@ GenericName[en_GB]=Custom Defines And Includes Manager
+ GenericName[es]=Gestor de definiciones e inclusiones personalizadas
+ GenericName[et]=Kohandatud definitsioonide ja päiste haldur
+ GenericName[fi]=Mukautettujen definejen ja includejen hallinta
++GenericName[fr]=Gestionnaire de définitions et inclusions personnalisées
++GenericName[it]=Gestore delle definizioni e inclusioni personalizzate
+ GenericName[nl]=Beheerder van zelf gedefinieerd en invoegingen
+ GenericName[pl]=Zarządzanie własnymi definicjami i plikami dołączanymi
+ GenericName[pt]=Gestor de Definições e Inclusões Personalizadas
+@@ -30,6 +35,7 @@ GenericName[pt_BR]=Gerenciador de definições e inclusões personalizadas
+ GenericName[sk]=Správca vlastných definícií a zahrnutí
+ GenericName[sl]=Upravljalnik določitev in vključitev po meri
+ GenericName[sv]=Hantering av egna definitioner och inkluderingar
++GenericName[tr]=Özel Tanımlama ve İçerme Yöneticisi
+ GenericName[uk]=Керування нетиповими визначеннями і включеннями
+ GenericName[x-test]=xxCustom Defines And Includes Managerxx
+ Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
+@@ -39,6 +45,8 @@ Comment[en_GB]=Configure which macros and include directories/files will be adde
+ Comment[es]=Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.
+ Comment[et]=Aitab seadistada, millised makrod ja päistekataloogid või -failid lisada parserile projekti parsimiseks.
+ Comment[fi]=Määritä, mitkä makrot ja include-hakemistot/tiedostot lisätään jäsentimelle projektin jäsentämisen aikana.
++Comment[fr]=Configurer quelles macros et dossiers ou fichiers d'inclusions seront ajoutés à l'analyseur pendant l'analyse du projet.
++Comment[it]=Configura quali macro e cartelle/file di inclusione saranno aggiunti all'analizzatore durante l'analisi del progetto.
+ Comment[nl]=Stel in welke macro's en ingevoegde mappen/bestanden toegevoegd zullen worden aan de parser bij het ontleden van het project.
+ Comment[pl]=Ustaw jakie pliki/katalogi makr i plików dołączanych będą dodawane do przetwarzania przy przetwarzaniu projektu.
+ Comment[pt]=Configure quais as macros e pastas/ficheiros de inclusão que serão adicionados ao processador do projecto.
+@@ -46,6 +54,7 @@ Comment[pt_BR]=Configura quais macros e arquivos/pastas incluídos serão adicio
+ Comment[sk]=Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.
+ Comment[sl]=Nastavite, kateri makri in mape oz. datoteke z vključitvami bodo dodane razčlenjevalniku med razčlenjevanjem projekta.
+ Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning
++Comment[tr]=Proje ayrıştırılırken hangi makroların ve içerme dizinlerinin/dosyaların ayrıştırıcıya ekleneceğini yapılandırın.
+ Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
+ Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
+ Icon=kdevelop
+diff --git a/languages/plugins/custom-definesandincludes/settingsmanager.cpp b/languages/plugins/custom-definesandincludes/settingsmanager.cpp
+deleted file mode 100644
+index 9e09798..0000000
+--- a/languages/plugins/custom-definesandincludes/settingsmanager.cpp
++++ /dev/null
+@@ -1,263 +0,0 @@
+-/*
+- * This file is part of KDevelop
+- *
+- * Copyright 2010 Andreas Pakulat <apaku@gmx.de>
+- * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License along
+- * with this program; if not, write to the Free Software Foundation, Inc.,
+- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+- *
+- */
+-
+-#include "settingsmanager.h"
+-
+-#include <KConfig>
+-#include <KConfigGroup>
+-
+-#include <interfaces/iproject.h>
+-#include <interfaces/icore.h>
+-#include <interfaces/iplugincontroller.h>
+-
+-#include "compilerprovider/icompilerprovider.h"
+-
+-using KDevelop::ConfigEntry;
+-
+-namespace ConfigConstants
+-{
+-const QString configKey = QLatin1String( "CustomDefinesAndIncludes" );
+-const QString definesKey = QLatin1String( "Defines" );
+-const QString includesKey = QLatin1String( "Includes" );
+-const QString projectPathPrefix = QLatin1String( "ProjectPath" );
+-const QString projectPathKey = QLatin1String( "Path" );
+-
+-const QString customBuildSystemGroup = QLatin1String( "CustomBuildSystem" );
+-const QString definesAndIncludesGroup = QLatin1String( "Defines And Includes" );
+-
+-const QString compilersGroup = QLatin1String( "Compilers" );
+-const QString compilerNameKey = QLatin1String( "Name" );
+-const QString compilerPathKey = QLatin1String( "Path" );
+-const QString compilerTypeKey = QLatin1String( "Type" );
+-}
+-
+-SettingsManager::SettingsManager()
+-{
+-}
+-
+-namespace
+-{
+-void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
+-{
+-    int pathIndex = 0;
+-    for ( const auto& path : paths ) {
+-        KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
+-        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
+-        {
+-            QByteArray tmp;
+-            QDataStream s( &tmp, QIODevice::WriteOnly );
+-            s.setVersion( QDataStream::Qt_4_5 );
+-            s << path.includes;
+-            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
+-        }
+-        {
+-            QByteArray tmp;
+-            QDataStream s( &tmp, QIODevice::WriteOnly );
+-            s.setVersion( QDataStream::Qt_4_5 );
+-            s << path.defines;
+-            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
+-        }
+-    }
+-}
+-
+-/// @param remove if true all read entries will be removed from the config file
+-QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
+-{
+-    QList<ConfigEntry> paths;
+-    for( const QString &grpName : grp.groupList() ) {
+-        if ( grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
+-            KConfigGroup pathgrp = grp.group( grpName );
+-
+-            ConfigEntry path;
+-            path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
+-
+-            {
+-                QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
+-                QDataStream s( tmp );
+-                s.setVersion( QDataStream::Qt_4_5 );
+-                s >> path.defines;
+-            }
+-
+-            {
+-                QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
+-                QDataStream s( tmp );
+-                s.setVersion( QDataStream::Qt_4_5 );
+-                s >> path.includes;
+-            }
+-            if ( remove ) {
+-                pathgrp.deleteGroup();
+-            }
+-            paths << path;
+-        }
+-    }
+-
+-    return paths;
+-}
+-
+-/**
+- * Reads and converts paths from old (Custom Build System's) format to the current one.
+- * @return all converted paths (if any)
+- */
+-QList<ConfigEntry> convertedPaths( KConfig* cfg )
+-{
+-    KConfigGroup group = cfg->group( ConfigConstants::customBuildSystemGroup );
+-    if ( !group.isValid() )
+-        return {};
+-
+-    QList<ConfigEntry> paths;
+-    foreach( const QString &grpName, group.groupList() ) {
+-        KConfigGroup subgroup = group.group( grpName );
+-        if ( !subgroup.isValid() )
+-            continue;
+-
+-        paths += doReadSettings( subgroup, true );
+-    }
+-
+-    return paths;
+-}
+-
+-ICompilerProvider* currentCompilerProvider()
+-{
+-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
+-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
+-        return {};
+-    }
+-
+-    return compilerProvider->extension<ICompilerProvider>();
+-}
+-}
+-
+-void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
+-{
+-    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
+-    if ( !grp.isValid() )
+-        return;
+-
+-    grp.deleteGroup();
+-
+-    doWriteSettings( grp, paths );
+-}
+-
+-QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
+-{
+-    auto converted = convertedPaths( cfg );
+-    if ( !converted.isEmpty() ) {
+-        const_cast<SettingsManager*>(this)->writePaths( cfg, converted );
+-        return converted;
+-    }
+-
+-    KConfigGroup grp = cfg->group( ConfigConstants::configKey );
+-    if ( !grp.isValid() ) {
+-        return {};
+-    }
+-
+-    return doReadSettings( grp );
+-}
+-
+-CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPointer& defaultCompiler ) const
+-{
+-    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
+-    auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
+-    if (name.isEmpty()) {
+-        return {};
+-    }
+-
+-    for (auto c : currentCompilerProvider()->compilers()) {
+-        if (c->name() == name) {
+-            return c;
+-        }
+-    }
+-
+-    auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
+-    auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
+-
+-    auto cf = currentCompilerProvider()->compilerFactories();
+-    for (auto f : cf) {
+-        if (f->name() == type) {
+-            return f->createCompiler(name, path, true);
+-        }
+-    }
+-
+-    return defaultCompiler;
+-}
+-
+-bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
+-{
+-    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
+-    return grp.readEntry( "reparse", true );
+-}
+-
+-void SettingsManager::writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler)
+-{
+-    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup).group("Compiler");
+-    grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
+-    grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
+-    grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
+-}
+-
+-void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >& compilers)
+-{
+-    QVector< CompilerPointer > editableCompilers;
+-    for (const auto& compiler : compilers) {
+-        if (!compiler->editable()) {
+-            continue;
+-        }
+-        editableCompilers.append(compiler);
+-    }
+-
+-    KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
+-    config.deleteGroup();
+-    config.writeEntry("number", editableCompilers.count());
+-    int i = 0;
+-    for (const auto& compiler : editableCompilers) {
+-        KConfigGroup grp = config.group(QString::number(i));
+-        ++i;
+-
+-        grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
+-        grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
+-        grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
+-    }
+-    config.sync();
+-}
+-
+-QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
+-{
+-    QVector< CompilerPointer > compilers;
+-
+-    KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
+-    int count = config.readEntry("number", 0);
+-    for (int i = 0; i < count; i++) {
+-        KConfigGroup grp = config.group(QString::number(i));
+-
+-        auto name = grp.readEntry(ConfigConstants::compilerNameKey, QString());
+-        auto path = grp.readEntry(ConfigConstants::compilerPathKey, QString());
+-        auto type = grp.readEntry(ConfigConstants::compilerTypeKey, QString());
+-
+-        auto cf = currentCompilerProvider()->compilerFactories();
+-        for (auto f : cf) {
+-            if (f->name() == type) {
+-                compilers.append(f->createCompiler(name, path));
+-            }
+-        }
+-    }
+-    return compilers;
+-}
+\ No newline at end of file
+diff --git a/languages/plugins/custom-definesandincludes/settingsmanager.h b/languages/plugins/custom-definesandincludes/settingsmanager.h
+deleted file mode 100644
+index a329879..0000000
+--- a/languages/plugins/custom-definesandincludes/settingsmanager.h
++++ /dev/null
+@@ -1,61 +0,0 @@
+-/*
+- * This file is part of KDevelop
+- *
+- * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License along
+- * with this program; if not, write to the Free Software Foundation, Inc.,
+- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+- *
+- */
+-
+-#ifndef SETTINGSMANAGER_H
+-#define SETTINGSMANAGER_H
+-
+-#include <language/interfaces/idefinesandincludesmanager.h>
+-
+-#include "definesandincludesexport.h"
+-
+-#include "compilerprovider/icompiler.h"
+-
+-class KConfig;
+-namespace KDevelop
+-{
+-class IProject;
+-}
+-
+-class KDEVDEFINESANDINCLUDESMANAGER_EXPORT SettingsManager
+-{
+-public:
+-    SettingsManager();
+-
+-    QList<KDevelop::ConfigEntry> readPaths(KConfig* cfg) const;
+-
+-    void writePaths(KConfig* cfg, const QList<KDevelop::ConfigEntry>& paths);
+-
+-    void writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler);
+-
+-    /// @param defaultCompiler the compiler that will be returned, if the @see ICompilerProvider doesn't have a factory to create the needed type of compiler
+-    /// @return stored compiler or nullptr if the project is opened for the first time.
+-    CompilerPointer currentCompiler(KConfig* cfg, const CompilerPointer& defaultCompiler = {}) const;
+-
+-    void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);
+-
+-    QVector<CompilerPointer> userDefinedCompilers() const;
+-
+-    bool needToReparseCurrentProject( KConfig* cfg ) const;
+-
+-    ~SettingsManager(){}
+-};
+-
+-#endif // SETTINGSMANAGER_H
+diff --git a/languages/plugins/custom-definesandincludes/tests/definesandincludestest.cpp b/languages/plugins/custom-definesandincludes/tests/definesandincludestest.cpp
+index 9c421bb..5bd37a8 100644
+--- a/languages/plugins/custom-definesandincludes/tests/definesandincludestest.cpp
++++ b/languages/plugins/custom-definesandincludes/tests/definesandincludestest.cpp
+@@ -34,12 +34,7 @@
+ 
+ #include <language/interfaces/idefinesandincludesmanager.h>
+ 
+-using KDevelop::ICore;
+-using KDevelop::IDefinesAndIncludesManager;
+-using KDevelop::IProject;
+-using KDevelop::TestCore;
+-using KDevelop::AutoTestShell;
+-using KDevelop::Path;
++using namespace KDevelop;
+ 
+ static IProject* s_currentProject = nullptr;
+ 
+@@ -64,15 +59,19 @@ void DefinesAndIncludesTest::loadSimpleProject()
+     s_currentProject = ProjectsGenerator::GenerateSimpleProject();
+     QVERIFY( s_currentProject );
+ 
+-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
++    auto manager = IDefinesAndIncludesManager::manager();
+     QVERIFY( manager );
+-    Path::List includes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
++    const auto actualIncludes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
++    const auto actualDefines = manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
+ 
+-    QHash<QString,QString> defines;
++    qDebug() << actualDefines << actualIncludes;
++
++    QCOMPARE( actualIncludes, Path::List() << Path( "/usr/include/mydir") );
++
++    Defines defines;
+     defines.insert( "_DEBUG", "" );
+     defines.insert( "VARIABLE", "VALUE" );
+-    QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
+-    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
++    QCOMPARE( actualDefines, defines );
+ }
+ 
+ void DefinesAndIncludesTest::loadMultiPathProject()
+@@ -80,7 +79,7 @@ void DefinesAndIncludesTest::loadMultiPathProject()
+     s_currentProject = ProjectsGenerator::GenerateMultiPathProject();
+     QVERIFY( s_currentProject );
+ 
+-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
++    auto manager = IDefinesAndIncludesManager::manager();
+     QVERIFY( manager );
+     Path::List includes = Path::List() << Path("/usr/include/otherdir");
+ 
+@@ -91,8 +90,8 @@ void DefinesAndIncludesTest::loadMultiPathProject()
+     QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
+     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
+ 
+-    KDevelop::ProjectBaseItem* mainfile = 0;
+-    foreach( KDevelop::ProjectBaseItem* i, s_currentProject->files() ) {
++    ProjectBaseItem* mainfile = 0;
++    foreach( ProjectBaseItem* i, s_currentProject->files() ) {
+         if( i->text() == "main.cpp" ) {
+             mainfile = i;
+             break;
+diff --git a/projectbuilders/cmakebuilder/kcm_kdev_cmakebuilder.desktop b/projectbuilders/cmakebuilder/kcm_kdev_cmakebuilder.desktop
+index ff8af67..76c6429 100644
+--- a/projectbuilders/cmakebuilder/kcm_kdev_cmakebuilder.desktop
++++ b/projectbuilders/cmakebuilder/kcm_kdev_cmakebuilder.desktop
+@@ -81,6 +81,7 @@ Comment[ru]=Настраивает глобальные параметры CMake
+ Comment[sk]=Konfigurovať globálne nastavenia CMake
+ Comment[sl]=Nastavite splošne možnosti za CMake
+ Comment[sv]=Anpassa globala inställningar för CMake
++Comment[tr]=Genel CMake ayarlarını yapılandır
+ Comment[uk]=Налаштування загальних параметрів CMake
+ Comment[x-test]=xxConfigure global CMake settingsxx
+ Comment[zh_CN]=配置全局 CMake 设置
+diff --git a/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop b/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop
+index 425aec3..b26784a 100644
+--- a/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop
++++ b/projectbuilders/ninjabuilder/kcm_kdev_ninjabuilder.desktop
+@@ -61,6 +61,7 @@ Comment[pt_BR]=Configure as opções do Ninja
+ Comment[sk]=Konfigurovať nastavenia Ninja
+ Comment[sl]=Nastavite možnosti za Ninja
+ Comment[sv]=Anpassa inställningar för Ninja
++Comment[tr]=Ninja ayarlarını yapılandır
+ Comment[uk]=Налаштувати параметри Ninja
+ Comment[x-test]=xxConfigure Ninja settingsxx
+ Comment[zh_TW]=設定 Ninja
+diff --git a/projectbuilders/ninjabuilder/kdevninja.desktop.cmake b/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
+index d7bcc24..4746a88 100644
+--- a/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
++++ b/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
+@@ -25,6 +25,7 @@ Name[pt_BR]=Compilador de projetos Ninja
+ Name[sk]=Zostavovač projektov Ninja
+ Name[sl]=Izgrajevalnik projektov Ninja
+ Name[sv]=Ninja projektbyggverktyg
++Name[tr]=Ninja Proje Oluşturucu
+ Name[uk]=Збирач проектів Ninja
+ Name[x-test]=xxNinja Project Builderxx
+ Name[zh_TW]=Ninja 專案編譯器
+@@ -88,6 +89,7 @@ Comment[pt_BR]=Compilador Ninja do KDevelop
+ Comment[sk]=Zostavovač KDevelop Ninja
+ Comment[sl]=Izgrajevalnik Ninja za KDevelop
+ Comment[sv]=KDevelop byggverktyg för Ninja
++Comment[tr]=KDevelop Ninja Oluşturucu
+ Comment[uk]=Збирач Ninja для KDevelop
+ Comment[x-test]=xxKDevelop Ninja Builderxx
+ Comment[zh_TW]=KDevelop Ninja 建立器
+diff --git a/projectmanagers/cmake/settings/cmakepreferences.cpp b/projectmanagers/cmake/settings/cmakepreferences.cpp
+index 6db6974..8b91cfd 100644
+--- a/projectmanagers/cmake/settings/cmakepreferences.cpp
++++ b/projectmanagers/cmake/settings/cmakepreferences.cpp
+@@ -82,7 +82,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
+     connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
+     connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()), this, SLOT(removeBuildDir()));
+     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
+-    connect(m_prefsUi->environment, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
++    connect(m_prefsUi->environment, SIGNAL(currentProfileChanged(QString)), this, SLOT(changed()));
+     
+     showInternal(m_prefsUi->showInternal->checkState());
+     m_subprojFolder=KUrl(args[1].toString()).upUrl();
+diff --git a/projectmanagers/custom-buildsystem/kcm_kdevcustombuildsystem.desktop b/projectmanagers/custom-buildsystem/kcm_kdevcustombuildsystem.desktop
+index 9bdfe5d..49361de 100644
+--- a/projectmanagers/custom-buildsystem/kcm_kdevcustombuildsystem.desktop
++++ b/projectmanagers/custom-buildsystem/kcm_kdevcustombuildsystem.desktop
+@@ -35,6 +35,7 @@ Name[ru]=Собственная система сборки
+ Name[sk]=Vlastný buildovací systém
+ Name[sl]=BuildSystem po meri
+ Name[sv]=Eget byggsystem
++Name[tr]=Özel İnşa Sistemi
+ Name[uk]=Нетипова система збирання
+ Name[x-test]=xxCustom BuildSystemxx
+ Name[zh_CN]=自定义构建系统
+diff --git a/projectmanagers/custom-buildsystem/kdevcustombuildsystem.desktop.cmake b/projectmanagers/custom-buildsystem/kdevcustombuildsystem.desktop.cmake
+index 837dacf..b174efc 100644
+--- a/projectmanagers/custom-buildsystem/kdevcustombuildsystem.desktop.cmake
++++ b/projectmanagers/custom-buildsystem/kdevcustombuildsystem.desktop.cmake
+@@ -26,6 +26,7 @@ Name[ru]=Собственная система сборки
+ Name[sk]=Vlastný buildovací systém
+ Name[sl]=BuildSystem po meri
+ Name[sv]=Eget byggsystem
++Name[tr]=Özel İnşa Sistemi
+ Name[uk]=Нетипова система збирання
+ Name[x-test]=xxCustom BuildSystemxx
+ Name[zh_CN]=自定义构建系统
+@@ -55,6 +56,7 @@ Comment[ru]=Позволяет использовать для проектов
+ Comment[sk]=Povolí použiť vlastné buildovacie systémy pre projekty KDevelop
+ Comment[sl]=Dovoli uporabo buildsystems po meri za projekte KDevelop
+ Comment[sv]=Gör det möjligt att använda egna byggsystem för projekt i KDevelop
++Comment[tr]=KDevelop projeleri için özel inşa sistemleri kullanmaya izin verir
+ Comment[uk]=Надає змогу використовувати нетипові системи збирання у проектах KDevelop
+ Comment[x-test]=xxAllows to use custom buildsystems for KDevelop projectsxx
+ Comment[zh_CN]=允许对 KDevelop 工程使用自定义构建系统
+diff --git a/providers/ghprovider/kdevghprovider.desktop.cmake b/providers/ghprovider/kdevghprovider.desktop.cmake
+index 619ff35..ae8b858 100644
+--- a/providers/ghprovider/kdevghprovider.desktop.cmake
++++ b/providers/ghprovider/kdevghprovider.desktop.cmake
+@@ -26,6 +26,7 @@ Comment[pt_BR]=Este plugin ajuda a obter projetos a partir do Github
+ Comment[sk]=Tento modul pomáha získavať projekty z Github
+ Comment[sl]=Ta vstavek pomaga pri pridobivanju projektov iz Github-a
+ Comment[sv]=Insticksprogrammet hjälper till att erhålla projekt Github
++Comment[tr]=Bu eklenti projelerin Github'tan alınmasına yardımcı olur
+ Comment[uk]=За допомогою цього додатка можна отримувати проекти з Github
+ Comment[x-test]=xxThis plugin helps to obtain projects from Githubxx
+ Comment[zh_TW]=此外掛程式能協助您從 Github 取得專案
+@@ -33,7 +34,7 @@ Name=Github Provider
+ Name[bs]=Github pružalac
+ Name[ca]=Proveïdor de Github
+ Name[ca@valencia]=Proveïdor de Github
+-Name[cs]=Poskytovatel Github
++Name[cs]=Poskytovatel GitHubu
+ Name[da]=Github-udbyder
+ Name[de]=GitHub-Provider
+ Name[el]=Πάροχος Github
+@@ -55,6 +56,7 @@ Name[pt_BR]=Fornecedor do Github
+ Name[sk]=Poskytovateľ Github
+ Name[sl]=Ponudnik za Github
+ Name[sv]=Github-leverantör
++Name[tr]=Github Sağlayıcı
+ Name[uk]=Надавач даних Github
+ Name[x-test]=xxGithub Providerxx
+ Name[zh_TW]=Github 提供者
+@@ -62,7 +64,7 @@ GenericName=Github Provider
+ GenericName[bs]=Github pružalac
+ GenericName[ca]=Proveïdor de Github
+ GenericName[ca@valencia]=Proveïdor de Github
+-GenericName[cs]=Poskytovatel Github
++GenericName[cs]=Poskytovatel GitHubu
+ GenericName[da]=Github-udbyder
+ GenericName[de]=GitHub-Provider
+ GenericName[el]=Πάροχος Github
+@@ -84,6 +86,7 @@ GenericName[pt_BR]=Fornecedor do Github
+ GenericName[sk]=Poskytovateľ Github
+ GenericName[sl]=Ponudnik za Github
+ GenericName[sv]=Github-leverantör
++GenericName[tr]=Github Sağlayıcı
+ GenericName[uk]=Надавач даних Github
+ GenericName[x-test]=xxGithub Providerxx
+ GenericName[zh_TW]=Github 提供者

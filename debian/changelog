@@ -1,3 +1,9 @@
+kdevelop (4:4.7.0-0ubuntu2.1+gite52e820) utopic; urgency=medium
+
+  * integrate latest changes from 4.7 branch
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Mon, 17 Nov 2014 18:56:17 +0100
+
 kdevelop (4:4.7.0-0ubuntu2) vivid; urgency=medium
 
   * Remove kde-workspace-dev build-depend, it's removed from archive
