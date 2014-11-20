@@ -3,4 +3,4 @@ usr/bin/kdevelop!
 usr/lib/kde4/*
 usr/share/applications/kde4/*
 usr/share/kde4/services/*
-usr/lib/libkdev4*.so
+usr/lib/libkdev*.so
