@@ -1,2 +1,3 @@
 fix-parallel.diff
-4.7+gite52e820.diff
+4.7+git052cb8b.diff
+4.7-gdb-all+git0b9f976.diff
