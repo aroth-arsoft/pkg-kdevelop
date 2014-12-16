@@ -1,3 +1,11 @@
+kdevelop (4:4.7.0-0ubuntu2.3+git052cb8b) utopic; urgency=medium
+
+  * includes the latest changes from 4.7 branch (sha1 052cb8b)
+  * includes the latest gdb related changes for 4.7 branch from
+    https://github.com/aroth-arsoft/kdevelop.git (sha1 0b9f976)
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Tue, 16 Dec 2014 07:28:43 +0100
+
 kdevelop (4:4.7.0-0ubuntu2.2+gite52e821) utopic; urgency=medium
 
   * fixed missing module

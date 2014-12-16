@@ -1,3 +1,74 @@
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index d84253d..9c5e5de 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -39,13 +39,17 @@ install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OW
+ 
+ kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+ 
+-if (Q_WS_MAC)
+-	#sets MacOSX bundle properties for all targets in this cmake file
+-	#make those assignments target-dependent when cmake 2.6 is useful on MacOSX
+-	set(MACOSX_BUNDLE_BUNDLE_NAME KDevelop)
+-	set(MACOSX_BUNDLE_BUNDLE_VERSION "4.0")
+-	set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
+-endif (Q_WS_MAC)
++if (APPLE)
++    #sets MacOSX bundle properties for all targets in this cmake file
++    #make those assignments target-dependent when cmake 2.6 is useful on MacOSX
++    set(MACOSX_BUNDLE_BUNDLE_NAME KDevelop)
++    set(MACOSX_BUNDLE_BUNDLE_VERSION "4.0")
++    set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
++    # We provide our own Info.plist to disable AppNap for KDevelop.
++    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
++    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.KDevelop")
++    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "The KDevelop Integrated Development Environment")
++endif (APPLE)
+ 
+ 
+ ########### install files ###############
+diff --git a/app/Info.plist.in b/app/Info.plist.in
+new file mode 100644
+index 0000000..3208a73
+--- /dev/null
++++ b/app/Info.plist.in
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++    <key>CFBundleDevelopmentRegion</key>
++    <string>English</string>
++    <key>CFBundleExecutable</key>
++    <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
++    <key>CFBundleGetInfoString</key>
++    <string>${MACOSX_BUNDLE_INFO_STRING}</string>
++    <key>CFBundleIconFile</key>
++    <string>${MACOSX_BUNDLE_ICON_FILE}</string>
++    <key>CFBundleIdentifier</key>
++    <string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
++    <key>CFBundleInfoDictionaryVersion</key>
++    <string>6.0</string>
++    <key>CFBundleLongVersionString</key>
++    <string>${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>
++    <key>CFBundleName</key>
++    <string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
++    <key>CFBundlePackageType</key>
++    <string>APPL</string>
++    <key>CFBundleShortVersionString</key>
++    <string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
++    <key>CFBundleVersion</key>
++    <string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
++    <key>CSResourcesFileMapped</key>
++    <true/>
++    <key>LSRequiresCarbon</key>
++    <true/>
++    <key>NSAppSleepDisabled</key>
++    <true/>
++    <key>NSHumanReadableCopyright</key>
++    <string>${MACOSX_BUNDLE_COPYRIGHT}</string>
++</dict>
++</plist>
 diff --git a/app/kdevelop.notifyrc b/app/kdevelop.notifyrc
 index 1f040e7..5dc5782 100644
 --- a/app/kdevelop.notifyrc
@@ -177,7 +248,7 @@ index 8fe222c..592c1fc 100644
 +endif(NOT WIN32)
  
 diff --git a/debuggers/gdb/CMakeLists.txt b/debuggers/gdb/CMakeLists.txt
-index 3d1125c..c09cc8d 100644
+index 3d1125c..bf0ef80 100644
 --- a/debuggers/gdb/CMakeLists.txt
 +++ b/debuggers/gdb/CMakeLists.txt
 @@ -1,11 +1,25 @@
@@ -206,7 +277,20 @@ index 3d1125c..c09cc8d 100644
  
  if(KDE4WORKSPACE_FOUND)
      include_directories(
-@@ -80,7 +94,7 @@ set(kdevgdb_PART_UI
+@@ -16,6 +30,12 @@ if(KDE4WORKSPACE_FOUND)
+     )
+ endif(KDE4WORKSPACE_FOUND)
+ 
++if (CMAKE_VERSION VERSION_GREATER "2.9" OR NOT CMAKE_GENERATOR MATCHES "Ninja")
++    set(HAVE_PATH_WITH_SPACES_TEST TRUE)
++else()
++    message(WARNING "Disabling 'path with spaces' test, this CMake version would create a faulty build.ninja file. Upgrade to at least CMake v3.0")
++endif()
++
+ add_subdirectory(unittests)
+ add_subdirectory(printers)
+ 
+@@ -80,7 +100,7 @@ set(kdevgdb_PART_UI
  
  kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
  kde4_add_plugin(kdevgdb ${kdevgdb_PART_SRCS})
@@ -215,6 +299,16 @@ index 3d1125c..c09cc8d 100644
      ${KDEVPLATFORM_INTERFACES_LIBRARIES}
      ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
      ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
+@@ -153,6 +173,9 @@ target_link_libraries(gdbtest
+     ${KDE4WORKSPACE_PROCESSUI_LIBS}
+ )
+ 
++if (HAVE_PATH_WITH_SPACES_TEST)
++    set_target_properties(gdbtest PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
++endif()
+ 
+ ########### install files ###############
+ 
 diff --git a/debuggers/gdb/debugsession.cpp b/debuggers/gdb/debugsession.cpp
 index e37c5b7..edc0d34 100644
 --- a/debuggers/gdb/debugsession.cpp
@@ -367,16 +461,21 @@ index 736fff4..606977b 100644
  
      // first we try UNIX PTY's
 diff --git a/debuggers/gdb/unittests/CMakeLists.txt b/debuggers/gdb/unittests/CMakeLists.txt
-index 17ec6ae..8a24f7e 100644
+index 17ec6ae..c5d912a 100644
 --- a/debuggers/gdb/unittests/CMakeLists.txt
 +++ b/debuggers/gdb/unittests/CMakeLists.txt
-@@ -1,26 +1,18 @@
+@@ -1,26 +1,20 @@
 -# force debug symbols for our debugees
 -if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 -  set(CMAKE_BUILD_TYPE debugfull)
 -else()
 -  set(CMAKE_BUILD_TYPE Debug)
 -endif()
+-
+-add_executable(debugee debugee.cpp)
+-add_executable(debugeeslow debugeeslow.cpp)
+-add_executable(debugeecrash debugeecrash.cpp)
+-add_executable(debugeerecursion debugeerecursion.cpp)
 +add_debuggable_executable(debugee SRCS debugee.cpp)
 +add_debuggable_executable(debugeeslow SRCS debugeeslow.cpp)
 +add_debuggable_executable(debugeecrash SRCS debugeecrash.cpp)
@@ -385,11 +484,6 @@ index 17ec6ae..8a24f7e 100644
 +add_debuggable_executable(debugeemultilocbreakpoint SRCS debugeemultilocbreakpoint.cpp)
 +add_debuggable_executable(debugeemultiplebreakpoint SRCS debugeemultiplebreakpoint.cpp)
  
--add_executable(debugee debugee.cpp)
--add_executable(debugeeslow debugeeslow.cpp)
--add_executable(debugeecrash debugeecrash.cpp)
--add_executable(debugeerecursion debugeerecursion.cpp)
--
 -add_executable(debugeethreads debugeethreads.cpp)
 +add_debuggable_executable(debugeethreads SRCS debugeethreads.cpp)
  target_link_libraries(debugeethreads ${QT_QTCORE_LIBRARY})
@@ -402,16 +496,18 @@ index 17ec6ae..8a24f7e 100644
 -
 -set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 -add_executable("debugeeexception" "debugeeexception.cpp")
--
--add_executable(debugeemultilocbreakpoint debugeemultilocbreakpoint.cpp)
 +add_debuggable_executable(debugeeexception SRCS debugeeexception.cpp)
 +set_target_properties(debugeeexception PROPERTIES COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
  
+-add_executable(debugeemultilocbreakpoint debugeemultilocbreakpoint.cpp)
+-
 -add_executable(debugeemultiplebreakpoint debugeemultiplebreakpoint.cpp)
 \ No newline at end of file
-+add_subdirectory("path with space")
++if (HAVE_PATH_WITH_SPACES_TEST)
++    add_subdirectory("path with space")
++endif()
 diff --git a/debuggers/gdb/unittests/gdbtest.cpp b/debuggers/gdb/unittests/gdbtest.cpp
-index 172c48b..951737b 100644
+index 172c48b..ef3cd42 100644
 --- a/debuggers/gdb/unittests/gdbtest.cpp
 +++ b/debuggers/gdb/unittests/gdbtest.cpp
 @@ -106,12 +106,15 @@ void GdbTest::init()
@@ -431,13 +527,14 @@ index 172c48b..951737b 100644
      }
      ~TestLaunchConfiguration() {
          delete c;
-@@ -1829,6 +1832,23 @@ void GdbTest::testDebugInExternalTerminal()
+@@ -1829,6 +1832,25 @@ void GdbTest::testDebugInExternalTerminal()
      }
  }
  
 +// see: https://bugs.kde.org/show_bug.cgi?id=339231
 +void GdbTest::testPathWithSpace()
 +{
++#ifdef HAVE_PATH_WITH_SPACES_TEST
 +    TestDebugSession* session = new TestDebugSession;
 +
 +    auto debugee = findExecutable("path with space/spacedebugee");
@@ -450,6 +547,7 @@ index 172c48b..951737b 100644
 +    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
 +    session->run();
 +    WAIT_FOR_STATE(session, DebugSession::EndedState);
++#endif
 +}
 +
  void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
@@ -727,12 +825,15 @@ index ca74280..0b60dff 100644
  Name[x-test]=xxUser Interfacexx
  Name[zh_CN]=用户界面
 diff --git a/file_templates/other/cmake_module/cmake_module.desktop b/file_templates/other/cmake_module/cmake_module.desktop
-index 6c7b51d..ad7a96d 100644
+index 6c7b51d..409c22b 100644
 --- a/file_templates/other/cmake_module/cmake_module.desktop
 +++ b/file_templates/other/cmake_module/cmake_module.desktop
-@@ -24,6 +24,7 @@ Name[ru]=Расширение CMake с pkg-config
+@@ -22,8 +22,9 @@ Name[pt]=Módulo do CMake com o 'pkg-config'
+ Name[pt_BR]=Módulo do CMake com o pkg-config
+ Name[ru]=Расширение CMake с pkg-config
  Name[sk]=CMake modul s pkg-config
- Name[sl]=Modul CMake z pkg-config
+-Name[sl]=Modul CMake z pkg-config
++Name[sl]=Modul CMake s pkg-config
  Name[sv]=CMake-modul med pkg-config
 +Name[tr]=pkg-config içeren CMake Modülü
  Name[uk]=Модуль CMake з pkg-config
@@ -783,12 +884,15 @@ index 4298d5b..057da7c 100644
  Name[x-test]=xxImplementationxx
  Name[zh_CN]=实现
 diff --git a/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop b/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop
-index cea33cb..4b26938 100644
+index cea33cb..ee42e10 100644
 --- a/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop
 +++ b/file_templates/testing/cpp_qtestlib_kde/cpp_qtestlib_kde.desktop
-@@ -25,6 +25,7 @@ Name[ru]=QTestLib с KDE
+@@ -23,8 +23,9 @@ Name[pt]=QTestLib com o KDE
+ Name[pt_BR]=QTestLib com o KDE
+ Name[ru]=QTestLib с KDE
  Name[sk]=QTestLib s KDE
- Name[sl]=QTestLib z KDE
+-Name[sl]=QTestLib z KDE
++Name[sl]=QTestLib s KDE
  Name[sv]=QTest-bibliotek med KDE
 +Name[tr]=KDE ile QTestLib
  Name[uk]=QTestLib з KDE
@@ -803,7 +907,7 @@ index cea33cb..4b26938 100644
  Name[x-test]=xxImplementationxx
  Name[zh_CN]=实现
 diff --git a/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop b/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop
-index ef7693c..fe711a2 100644
+index ef7693c..f4fdeb3 100644
 --- a/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop
 +++ b/file_templates/testing/cpp_qtestlib_kdevelop/cpp_qtestlib_kdevelop.desktop
 @@ -24,6 +24,7 @@ Name[ru]=Тест для KDevPlatform
@@ -814,6 +918,15 @@ index ef7693c..fe711a2 100644
  Name[uk]=Перевірка для KDevPlatform
  Name[x-test]=xxA test for KDevPlatformxx
  Name[zh_CN]=一个 KDevPlatform 的测试
+@@ -51,7 +52,7 @@ Comment[pt]=Um teste unitário, usando a biblioteca QTest, com os auxiliares de
+ Comment[pt_BR]=Teste unitário que usa a biblioteca QTest com os auxiliares de testes do KDevPlatform
+ Comment[ru]=Модульный тест на базе библиотеки QTest с использованием вспомогательных средств KDevPlatform
+ Comment[sk]=Unit test pomocou knižnice QTest s testovými pomôckami KDevPlatform
+-Comment[sl]=Preizkus enot z uporabo knjižnice QTest z pomočniki za testiranje KDevPlatform
++Comment[sl]=Preizkus enot z uporabo knjižnice QTest s pomočniki za preizkušanje KDevPlatform
+ Comment[sv]=En enhetstest som använder biblioteket QTest med testhjälp från KDevPlatform
+ Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з допоміжними програмами перевірки KDevPlatform
+ Comment[x-test]=xxA unit test using the QTest library with KDevPlatform test helpersxx
 @@ -159,6 +160,7 @@ Name[ru]=Реализация
  Name[sk]=Implementácia
  Name[sl]=Izvedba
@@ -911,6 +1024,34 @@ index 087c0ed..5b13410 100644
    m_document = {};
    m_view.clear();
  }
+diff --git a/languages/cpp/cppduchain/missingdeclarationassistant.cpp b/languages/cpp/cppduchain/missingdeclarationassistant.cpp
+index 48862a1..a1ed991 100644
+--- a/languages/cpp/cppduchain/missingdeclarationassistant.cpp
++++ b/languages/cpp/cppduchain/missingdeclarationassistant.cpp
+@@ -208,7 +208,7 @@ public:
+     DUChainReadLocker lock;
+     DUContext* container = targetContext();
+     if(container)
+-      return container->scopeIdentifier(false).toString();
++      return container->scopeIdentifier(true).toString();
+     else
+       return QString();
+   }
+@@ -313,8 +313,13 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
+ {
+   bool actionAdded = false;
+   DUChainReadLocker lock;
+-  if(p->type->identifier().identifier().identifier().isEmpty())
++
++  // support for namespaced types/variable names is broken atm, so just rather disable it
++  // i.e. writing 'foo::bar()' will just add 'bar' to the container
++  auto qualifiedIdentifier = p->type->identifier().identifier().identifier();
++  if (qualifiedIdentifier.isEmpty() || qualifiedIdentifier.count() > 1)
+     return;
++
+   kDebug() << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();
+ 
+   DUContext* searchFrom = type->searchStartContext.data();
 diff --git a/languages/cpp/includepathcomputer.cpp b/languages/cpp/includepathcomputer.cpp
 index 61c3646..323577a 100644
 --- a/languages/cpp/includepathcomputer.cpp
@@ -961,6 +1102,231 @@ index ace64b7..2b6a843 100644
      stream->append(token);
      }
      Token* current_token = &(session->token_stream->last());
+diff --git a/languages/cpp/parser/rpp/CMakeLists.txt b/languages/cpp/parser/rpp/CMakeLists.txt
+index b87d866..e81ddcf 100644
+--- a/languages/cpp/parser/rpp/CMakeLists.txt
++++ b/languages/cpp/parser/rpp/CMakeLists.txt
+@@ -1,4 +1,3 @@
+-
+ add_subdirectory( tests )
+ 
+ ########### next target ###############
+@@ -27,17 +26,3 @@ target_link_libraries(kdev4cpprpp LINK_PRIVATE
+   ${KDE4_KTEXTEDITOR_LIBS}
+ )
+ install(TARGETS kdev4cpprpp ${INSTALL_TARGETS_DEFAULT_ARGS} )
+-
+-########### install files ###############
+-
+-# install(FILES
+-#     pp-engine.h
+-#     pp-internal.h
+-#     pp-macro-expander.h
+-#     pp-macro.h
+-#     pp-scanner.h
+-#     pp-stream.h
+-#     pp-environment.h
+-#     preprocessor.h
+-#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
+-# )
+diff --git a/languages/cpp/parser/rpp/test/t001.cpp b/languages/cpp/parser/rpp/test/t001.cpp
+deleted file mode 100644
+index ce68c21..0000000
+--- a/languages/cpp/parser/rpp/test/t001.cpp
++++ /dev/null
+@@ -1,23 +0,0 @@
+-.
+-/*
+-  ciao roberto
+-*/
+-.
+-#define A 1
+-.
+-#if A - 1 == 0
+-OK
+-#else
+-KO
+-#endif
+-.
+-#undef A
+-.
+-#define A(a,b) a + b
+-#define C(a,b) A(b,a)
+-.
+-#define comp(a,b) #a #b
+-#define str(a) #a
+-.
+-C(1,2) comp(me, you) str(kdevelop is cool)
+-.
+diff --git a/languages/cpp/parser/rpp/test/t002.cpp b/languages/cpp/parser/rpp/test/t002.cpp
+deleted file mode 100644
+index 2846659..0000000
+--- a/languages/cpp/parser/rpp/test/t002.cpp
++++ /dev/null
+@@ -1,15 +0,0 @@
+-EXPECT 2x DIV0 ERROR
+-#define A 0
+-.
+-#if 10 / A
+-KO
+-#else
+-OK
+-#endif
+-.
+-#if 10 % A
+-KO
+-#else
+-OK
+-#endif
+-.
+diff --git a/languages/cpp/parser/rpp/test/t003.cpp b/languages/cpp/parser/rpp/test/t003.cpp
+deleted file mode 100644
+index b5c68f7..0000000
+--- a/languages/cpp/parser/rpp/test/t003.cpp
++++ /dev/null
+@@ -1,10 +0,0 @@
+-.
+-#define B
+-#define A defined B
+-.
+-#if A
+-OK
+-#else
+-KO
+-#endif
+-.
+diff --git a/languages/cpp/parser/rpp/test/t004.cpp b/languages/cpp/parser/rpp/test/t004.cpp
+deleted file mode 100644
+index 05cac09..0000000
+--- a/languages/cpp/parser/rpp/test/t004.cpp
++++ /dev/null
+@@ -1,9 +0,0 @@
+-.
+-#define M A\
+-  B C
+-.
+-M
+-.
+-.
+-.
+-.
+diff --git a/languages/cpp/parser/rpp/test/t005.cpp b/languages/cpp/parser/rpp/test/t005.cpp
+deleted file mode 100644
+index c86563e..0000000
+--- a/languages/cpp/parser/rpp/test/t005.cpp
++++ /dev/null
+@@ -1,10 +0,0 @@
+-.
+-#define COND 1 \
+-    && 0
+-.
+-#if COND
+-KO
+-#else
+-OK
+-#endif
+-.
+diff --git a/languages/cpp/parser/rpp/test/t006.cpp b/languages/cpp/parser/rpp/test/t006.cpp
+deleted file mode 100644
+index 69498b4..0000000
+--- a/languages/cpp/parser/rpp/test/t006.cpp
++++ /dev/null
+@@ -1,10 +0,0 @@
+-.
+-#define code(more) \
+- int main () \
+- { more \
+- }
+-.
+-code(int x;
+-     int y)
+-.
+-.
+diff --git a/languages/cpp/parser/rpp/test/t007.cpp b/languages/cpp/parser/rpp/test/t007.cpp
+deleted file mode 100644
+index f6bdf5a..0000000
+--- a/languages/cpp/parser/rpp/test/t007.cpp
++++ /dev/null
+@@ -1,6 +0,0 @@
+-/*
+-,
+-,
+-*/
+-ciao
+-.
+diff --git a/languages/cpp/parser/rpp/test/t008.cpp b/languages/cpp/parser/rpp/test/t008.cpp
+deleted file mode 100644
+index e9cdd90..0000000
+--- a/languages/cpp/parser/rpp/test/t008.cpp
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#define Q_FOO(a) blah(int a)
+-
+-#define qfoo(a) Q_FOO(a)
+-
+-// Should be blah(int j)
+-qfoo(j)
+diff --git a/languages/cpp/parser/rpp/test/t009.cpp b/languages/cpp/parser/rpp/test/t009.cpp
+deleted file mode 100644
+index 35bb0e7..0000000
+--- a/languages/cpp/parser/rpp/test/t009.cpp
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# define __nonnull(params) params
+-__nonnull((1));
+-#ifdef blah
+-#define blah2(a) ((a).)
+-#endif
+diff --git a/languages/cpp/parser/rpp/test/t010.cpp b/languages/cpp/parser/rpp/test/t010.cpp
+deleted file mode 100644
+index 4b476df..0000000
+--- a/languages/cpp/parser/rpp/test/t010.cpp
++++ /dev/null
+@@ -1,15 +0,0 @@
+-#include "test.h"
+-
+-#define TEST_H
+-
+-#if defined(TEST_H)
+-OK
+-#else
+-ERROR
+-#endif
+-
+-#if !defined(TEST_H)
+-ERROR
+-#else
+-OK
+-#endif
+diff --git a/languages/cpp/parser/rpp/test/t011.cpp b/languages/cpp/parser/rpp/test/t011.cpp
+deleted file mode 100644
+index 0dc8ad1..0000000
+--- a/languages/cpp/parser/rpp/test/t011.cpp
++++ /dev/null
+@@ -1,9 +0,0 @@
+-#define BLANK_MACRO
+-
+-class BLANK_MACRO Blah
+-{
+-public:
+-  void BLANK_MACRO testFoo() const;
+-
+-  void testMe();
+-};
+diff --git a/languages/cpp/parser/tests/test_pool.cpp b/languages/cpp/parser/tests/test_pool.cpp
+index 14b090d..58b741f 100644
+--- a/languages/cpp/parser/tests/test_pool.cpp
++++ b/languages/cpp/parser/tests/test_pool.cpp
+@@ -8,7 +8,8 @@ QTEST_MAIN(TestPool)
+ 
+ 
+ PoolObject::PoolObject() { foo = 3; }
+-PoolObject::~PoolObject() { foo = 0; }
++// Prevent compiler from optimizing out call to dtor, at least true for GCC 4.9.1 and -O2
++PoolObject::~PoolObject() { *static_cast<volatile int*>(&foo) = 0; }
+ 
+ TestPool::TestPool()
+ {
 diff --git a/languages/plugins/custom-definesandincludes/CMakeLists.txt b/languages/plugins/custom-definesandincludes/CMakeLists.txt
 index 4dc013c..c7ceffe 100644
 --- a/languages/plugins/custom-definesandincludes/CMakeLists.txt
@@ -1038,7 +1404,7 @@ index 06c6729..76cd466 100644
 \ No newline at end of file
 +add_subdirectory(tests)
 diff --git a/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp b/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp
-index 6c53e57..fdb2a10 100644
+index 6c53e57..fcf71bc 100644
 --- a/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp
 +++ b/languages/plugins/custom-definesandincludes/compilerprovider/compilerprovider.cpp
 @@ -26,6 +26,7 @@
@@ -1133,10 +1499,13 @@ index 6c53e57..fdb2a10 100644
      }
      definesAndIncludesDebug() << " compiler is: " << compiler->name();
  
-@@ -158,48 +191,6 @@ void CompilerProvider::projectClosed( KDevelop::IProject* project )
-     definesAndIncludesDebug() << "Removed project: " << project->name();
- }
- 
+@@ -155,49 +188,6 @@ void CompilerProvider::projectOpened( KDevelop::IProject* project )
+ void CompilerProvider::projectClosed( KDevelop::IProject* project )
+ {
+     removePoject( project );
+-    definesAndIncludesDebug() << "Removed project: " << project->name();
+-}
+-
 -K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
 -K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
 -            "kdevcompilerprovider", ki18n( "Compiler Provider" ), "0.1", ki18n( "" ),
@@ -1177,12 +1546,10 @@ index 6c53e57..fdb2a10 100644
 -
 -    //Add a provider for files without project
 -    addPoject( nullptr, checkCompilerExists({}));
--}
--
+ }
+ 
  QVector< CompilerPointer > CompilerProvider::compilers() const
- {
-     return m_compilers;
-@@ -254,8 +245,7 @@ QVector< CompilerFactoryPointer > CompilerProvider::compilerFactories() const
+@@ -254,8 +244,7 @@ QVector< CompilerFactoryPointer > CompilerProvider::compilerFactories() const
  
  void CompilerProvider::retrieveUserDefinedCompilers()
  {
@@ -3438,6 +3805,15 @@ index 425aec3..b26784a 100644
  Comment[uk]=Налаштувати параметри Ninja
  Comment[x-test]=xxConfigure Ninja settingsxx
  Comment[zh_TW]=設定 Ninja
+diff --git a/projectbuilders/ninjabuilder/kdev-ninja.kdev4 b/projectbuilders/ninjabuilder/kdev-ninja.kdev4
+deleted file mode 100644
+index 6fbfdac..0000000
+--- a/projectbuilders/ninjabuilder/kdev-ninja.kdev4
++++ /dev/null
+@@ -1,3 +0,0 @@
+-[Project]
+-Manager=KDevCMakeManager
+-Name=kdev-ninja
 diff --git a/projectbuilders/ninjabuilder/kdevninja.desktop.cmake b/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
 index d7bcc24..4746a88 100644
 --- a/projectbuilders/ninjabuilder/kdevninja.desktop.cmake
