@@ -10,10 +10,8 @@ Uploaders: Fathi Boudra <fabo@debian.org>,
 Build-Depends: cmake,
                debhelper,
                kdevplatform-dev (>= 1.7.0),
-               kde-workspace-dev (>= 4:4.5.2),
                libqjson-dev,
                libqtwebkit-dev,
-               okteta-dev,
                pkg-kde-tools,
                shared-mime-info
 Standards-Version: 3.9.4

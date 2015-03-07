@@ -12,10 +12,132 @@ index ddefb70..2ee03ba 100644
       
  
 diff --git a/debuggers/gdb/breakpointcontroller.cpp b/debuggers/gdb/breakpointcontroller.cpp
-index 744e750..52f1761 100644
+index 744e750..ca58192 100644
 --- a/debuggers/gdb/breakpointcontroller.cpp
 +++ b/debuggers/gdb/breakpointcontroller.cpp
-@@ -148,7 +148,7 @@ BreakpointController::BreakpointController(DebugSession* parent)
+@@ -57,10 +57,21 @@ QString unquoteExpression(QString expr)
+ struct Handler : public GDBCommandHandler
+ {
+     Handler(BreakpointController *c, KDevelop::Breakpoint *b)
+-        : controller(c), breakpoint(b) {}
++        : controller(c)
++        , breakpointIndex(c->breakpointModel()->breakpointIndex(b, 0))
++    {
++    }
++
++    Breakpoint * breakpoint()
++    {
++        if (breakpointIndex.isValid()) {
++            return controller->breakpointModel()->breakpoint(breakpointIndex.row());
++        }
++        return nullptr;
++    }
+ 
+     BreakpointController *controller;
+-    KDevelop::Breakpoint *breakpoint;
++    QPersistentModelIndex breakpointIndex;
+ };
+ 
+ struct UpdateHandler : public Handler
+@@ -70,6 +81,10 @@ struct UpdateHandler : public Handler
+ 
+     void handle(const GDBMI::ResultRecord &r)
+     {
++        Breakpoint * breakpoint = this->breakpoint();
++        if (!breakpoint)
++            return;
++
+         if (r.reason == "error") {
+             controller->error(breakpoint, r["msg"].literal(), m_column);
+             kWarning() << r["msg"].literal();
+@@ -92,39 +107,55 @@ struct InsertedHandler : public Handler
+ 
+     virtual void handle(const GDBMI::ResultRecord &r)
+     {
+-        kDebug() << controller->m_dirty[breakpoint];
++        Breakpoint * breakpoint = this->breakpoint();
+ 
+         if (r.reason == "error") {
+-            controller->error(breakpoint, r["msg"].literal(), KDevelop::Breakpoint::LocationColumn);
+-            kWarning() << r["msg"].literal();
++            if (breakpoint) {
++                controller->error(breakpoint, r["msg"].literal(), KDevelop::Breakpoint::LocationColumn);
++                kWarning() << r["msg"].literal();
++            }
+         } else {
+-            controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+-            if (r.hasField("bkpt")) {
+-                controller->update(breakpoint, r["bkpt"]);
+-            } else if (r.hasField("wpt")) {
+-                // For watchpoint creation, GDB basically does not say
+-                // anything.  Just record id.
+-                controller->m_ids[breakpoint] = r["wpt"]["number"].literal();
+-            } else if (r.hasField("hw-rwpt")) {
+-                controller->m_ids[breakpoint] = r["hw-rwpt"]["number"].literal();
+-            } else if (r.hasField("hw-awpt")) {
+-                controller->m_ids[breakpoint] = r["hw-awpt"]["number"].literal();
++            QString id;
++
++            for (auto kind : {"bkpt", "wpt", "hw-rwpt", "hw-awpt"}) {
++                if (r.hasField(kind)) {
++                    id = r[kind]["number"].literal();
++                    break;
++                }
++            }
++            Q_ASSERT(!id.isEmpty());
++
++            if (breakpoint) {
++                controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
++                controller->m_ids[breakpoint] = id;
++                if (r.hasField("bkpt")) {
++                    controller->update(breakpoint, r["bkpt"]);
++                }
++                kDebug() << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
++            } else {
++                // breakpoint was deleted while insertion was in flight
++                controller->debugSession()->addCommandToFront(
++                    new GDBCommand(BreakDelete, id));
+             }
+-            Q_ASSERT(!controller->m_ids[breakpoint].isEmpty());
+-            kDebug() << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
+         }
+-        controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+-        controller->breakpointStateChanged(breakpoint);
+-        controller->sendMaybe(breakpoint);
++
++        if (breakpoint) {
++            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
++            controller->breakpointStateChanged(breakpoint);
++            controller->sendMaybe(breakpoint);
++        }
+     }
+ 
+     virtual bool handlesError() { return true; }
+ };
+ 
+-struct DeletedHandler : public Handler
++struct DeletedHandler : public GDBCommandHandler
+ {
+     DeletedHandler(BreakpointController *c, KDevelop::Breakpoint *b)
+-        : Handler(c, b) {}
++        : controller(c)
++        , breakpoint(b)
++    {
++    }
+ 
+     void handle(const GDBMI::ResultRecord &r)
+     {
+@@ -137,6 +168,9 @@ struct DeletedHandler : public Handler
+             delete breakpoint;
+         }
+     }
++
++    BreakpointController * controller;
++    Breakpoint * breakpoint;
+ };
+ 
+ 
+@@ -148,7 +182,7 @@ BreakpointController::BreakpointController(DebugSession* parent)
      // a base class that does this connect.
      connect(debugSession(),     SIGNAL(event(IDebugSession::event_t)),
              this,       SLOT(slotEvent(IDebugSession::event_t)));
@@ -24,7 +146,91 @@ index 744e750..52f1761 100644
  }
  
  DebugSession *BreakpointController::debugSession() const
-@@ -525,7 +525,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
+@@ -300,13 +334,16 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
+         kDebug() << "deleted";
+         m_dirty.remove(breakpoint);
+         m_errors.remove(breakpoint);
+-        if (m_ids.contains(breakpoint)) { //if id is 0 breakpoint insertion is still pending, InsertedHandler will call sendMaybe again and delete it
++        if (m_ids.contains(breakpoint)) {
+             kDebug() << "breakpoint id" << m_ids[breakpoint];
+             if (!m_ids[breakpoint].isEmpty()) {
+                 debugSession()->addCommandToFront(
+                     new GDBCommand(BreakDelete, m_ids[breakpoint],
+                                 new DeletedHandler(this, breakpoint)));
+                 addedCommand = true;
++            } else {
++                kDebug() << "insertion is still in flight, just delete it";
++                delete breakpoint;
+             }
+         } else {
+             kDebug() << "breakpoint doesn't have yet an id, just delete it";
+@@ -459,41 +496,36 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
+ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI::Value &b)
+ {
+     m_dontSendChanges++;
+-    
++
+     m_ids[breakpoint] = b["number"].literal();
+ 
+-    if (b.hasField("original-location")) {
+-        if (breakpoint->address().isEmpty()) {
+-            /* If the address is not empty, it means that the breakpoint
+-               is set by KDevelop, not by the user, and that we want to
+-               show the original expression, not the address, in the table.
+-               TODO: this also means that if used added a watchpoint in gdb
+-               like "watch foo", then we'll show it in the breakpoint table
+-               just fine, but after KDevelop restart, we'll try to add the
+-               breakpoint using basically "watch *&(foo)".  I'm not sure if
+-               that's a problem or not.  */
+-            QString location = b["original-location"].literal();
+-            kDebug() << "location" << location;
+-            if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+-                QRegExp rx("^(.+):(\\d+)$");
+-                if (rx.indexIn(location) != -1) {
+-                    breakpoint->setLocation(KUrl(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
+-                } else {
+-                    //for regular expression breakpoints and not only...
+-                    if(b.hasField("fullname") && b.hasField("line")){
+-                        breakpoint->setLocation(KUrl(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
+-                    }else{
+-                        breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
+-                    }
+-                }
+-            } else {
+-                breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
+-            }
++    /* If the address is not empty, it means that the breakpoint
++        is set by KDevelop, not by the user, and that we want to
++        show the original expression, not the address, in the table.
++        TODO: this also means that if used added a watchpoint in gdb
++        like "watch foo", then we'll show it in the breakpoint table
++        just fine, but after KDevelop restart, we'll try to add the
++        breakpoint using basically "watch *&(foo)".  I'm not sure if
++        that's a problem or not.  */
++    const bool emptyAddress = breakpoint->address().isEmpty();
++    const bool isCodeBreakpoint = breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint;
++
++    if (emptyAddress && isCodeBreakpoint && b.hasField("fullname") && b.hasField("line")){
++        breakpoint->setLocation(QUrl::fromLocalFile(unquoteExpression(b["fullname"].literal())),
++                                b["line"].toInt()-1);
++    } else if (emptyAddress && isCodeBreakpoint && b.hasField("original-location")) {
++        QRegExp rx("^(.+):(\\d+)$");
++        QString location = b["original-location"].literal();
++        kDebug() << "location" << location;
++        if (rx.indexIn(location) != -1) {
++            breakpoint->setLocation(KUrl(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
++        } else {
++            breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
+         }
+     } else if (b.hasField("what") && b["what"].literal() == "exception throw") {
+         breakpoint->setExpression("catch throw");
+     } else {
+-        kWarning() << "That's too bad, breakpoint doesn't contain \"original-location\" field ";
++        kWarning() << "Breakpoint doesn't contain required location/expression data: " << m_ids[breakpoint];
+     }
+ 
+     if (!m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)
+@@ -525,7 +557,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
      m_dontSendChanges--;
  }
  
@@ -34,7 +240,7 @@ index 744e750..52f1761 100644
      QString reason;
      if (r.hasField("reason")) {
 diff --git a/debuggers/gdb/breakpointcontroller.h b/debuggers/gdb/breakpointcontroller.h
-index 1b8ae0e..e5338f4 100644
+index 1b8ae0e..f415922 100644
 --- a/debuggers/gdb/breakpointcontroller.h
 +++ b/debuggers/gdb/breakpointcontroller.h
 @@ -32,6 +32,7 @@
@@ -45,9 +251,14 @@ index 1b8ae0e..e5338f4 100644
  struct ResultRecord;
  struct Value;
  }
-@@ -58,7 +59,7 @@ public:
+@@ -56,9 +57,11 @@ class BreakpointController : public IBreakpointController
+ public:
+     BreakpointController(DebugSession* parent);
  
- private slots:
+-private slots:
++    using IBreakpointController::breakpointModel;
++
++private Q_SLOTS:
      void slotEvent(IDebugSession::event_t);
 -    void programStopped(const GDBMI::ResultRecord &r);
 +    void programStopped(const GDBMI::AsyncRecord &r);
@@ -55,7 +266,7 @@ index 1b8ae0e..e5338f4 100644
  private:
      DebugSession* debugSession() const;
 diff --git a/debuggers/gdb/debuggerplugin.cpp b/debuggers/gdb/debuggerplugin.cpp
-index ca2bbaf..fb2c189 100644
+index ca2bbaf..a920e55 100644
 --- a/debuggers/gdb/debuggerplugin.cpp
 +++ b/debuggers/gdb/debuggerplugin.cpp
 @@ -137,7 +137,7 @@ private:
@@ -67,7 +278,21 @@ index ca2bbaf..fb2c189 100644
  {
      KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
      
-@@ -302,16 +302,6 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
+@@ -177,13 +177,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
+         Q_ASSERT(type);
+         type->addLauncher( new GdbLauncher( this, iface ) );
+     }
+-    // The output from tracepoints goes to "application" window, because
+-    // we don't have any better alternative, and using yet another window
+-    // is undesirable. Besides, this makes tracepoint look even more similar
+-    // to printf debugging.
+-// PORTING TODO broken - need intermediate signal?
+-//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(QByteArray)),
+-//              procLineMaker,         SLOT(slotReceivedStdout(QByteArray)));
+ }
+ 
+ void CppDebuggerPlugin::unload()
+@@ -302,16 +295,6 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
  
      m_contextIdent = econtext->currentWord();
  
@@ -85,10 +310,18 @@ index ca2bbaf..fb2c189 100644
      {
          // PORTING TODO
 diff --git a/debuggers/gdb/debuggerplugin.h b/debuggers/gdb/debuggerplugin.h
-index 0ec300a..9a4f794 100644
+index 0ec300a..27c0a93 100644
 --- a/debuggers/gdb/debuggerplugin.h
 +++ b/debuggers/gdb/debuggerplugin.h
-@@ -140,14 +140,8 @@ private:
+@@ -51,7 +51,6 @@ class ProcessLineMaker;
+ 
+ namespace GDBDebugger
+ {
+-class GDBBreakpointWidget;
+ class FramestackWidget;
+ class DisassembleWidget;
+ class Breakpoint;
+@@ -140,14 +139,8 @@ private:
  
      QString m_contextIdent;
  
@@ -119,7 +352,7 @@ index 2807484..e6d7c8a 100644
  
  bool DebugJob::doKill()
 diff --git a/debuggers/gdb/debugsession.cpp b/debuggers/gdb/debugsession.cpp
-index edc0d34..a3f5d46 100644
+index edc0d34..330d5a7 100644
 --- a/debuggers/gdb/debugsession.cpp
 +++ b/debuggers/gdb/debugsession.cpp
 @@ -28,6 +28,7 @@
@@ -152,7 +385,18 @@ index edc0d34..a3f5d46 100644
  KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
      return m_sessionState;
  }
-@@ -150,73 +156,46 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
+@@ -128,10 +134,6 @@ KDevelop::IFrameStackModel* DebugSession::createFrameStackModel()
+ 
+ void DebugSession::setupController()
+ {
+-    // variableTree -> gdbBreakpointWidget
+-//     connect( variableTree,          SIGNAL(toggleWatchpoint(QString)),
+-//              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(QString)));
+-
+     // controller -> procLineMaker
+     connect( this,            SIGNAL(ttyStdout(QByteArray)),
+              m_procLineMaker,         SLOT(slotReceivedStdout(QByteArray)));
+@@ -150,73 +152,46 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
  {
      QString message;
  
@@ -255,7 +499,7 @@ index edc0d34..a3f5d46 100644
      }
  
      // And now? :-)
-@@ -225,44 +204,55 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
+@@ -225,44 +200,55 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
      if (!message.isEmpty())
          emit showMessage(message, 3000);
  
@@ -325,7 +569,7 @@ index edc0d34..a3f5d46 100644
      // Currently, we always start debugger with a name of binary,
      // we might be connecting to a different binary completely,
      // so cancel all symbol tables gdb has.
-@@ -528,11 +518,6 @@ void DebugSession::addCommandToFront(GDBCommand* cmd)
+@@ -528,11 +514,6 @@ void DebugSession::addCommandToFront(GDBCommand* cmd)
      queueCmd(cmd, QueueAtFront);
  }
  
@@ -337,7 +581,7 @@ index edc0d34..a3f5d46 100644
  // Fairly obvious that we'll add whatever command you give me to a queue
  // If you tell me to, I'll put it at the head of the queue so it'll run ASAP
  // Not quite so obvious though is that if we are going to run again. then any
-@@ -556,7 +541,7 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
+@@ -556,7 +537,7 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
  
      commandQueue_->enqueue(cmd, queue_where);
  
@@ -346,7 +590,7 @@ index edc0d34..a3f5d46 100644
  
      bool varCommandWithContext= (cmd->type() >= GDBMI::VarAssign
                                   && cmd->type() <= GDBMI::VarUpdate
-@@ -661,7 +646,7 @@ void DebugSession::destroyCmds()
+@@ -661,7 +642,7 @@ void DebugSession::destroyCmds()
  }
  
  
@@ -355,7 +599,7 @@ index edc0d34..a3f5d46 100644
  {
      /* By default, reload all state on program stop.  */
      state_reload_needed = true;
-@@ -776,6 +761,19 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
+@@ -776,6 +757,19 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
  }
  
  
@@ -375,7 +619,7 @@ index edc0d34..a3f5d46 100644
  void DebugSession::reloadProgramState()
  {
      raiseEvent(program_state_changed);
-@@ -836,25 +834,6 @@ void DebugSession::programFinished(const QString& msg)
+@@ -836,25 +830,6 @@ void DebugSession::programFinished(const QString& msg)
  }
  
  
@@ -401,7 +645,7 @@ index edc0d34..a3f5d46 100644
  bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
  {
      kDebug(9012) << "Starting debugger controller";
-@@ -886,31 +865,35 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
+@@ -886,31 +861,35 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
  
      connect(gdb, SIGNAL(ready()), this, SLOT(gdbReady()));
      connect(gdb, SIGNAL(gdbExited()), this, SLOT(gdbExited()));
@@ -455,7 +699,7 @@ index edc0d34..a3f5d46 100644
      }
  
      setStateOff(s_dbgNotStarted);
-@@ -938,6 +921,10 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
+@@ -938,6 +917,10 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
  
      QString fileName = KStandardDirs::locate("data", "kdevgdb/printers/gdbinit");
      if (!fileName.isEmpty()) {
@@ -466,7 +710,7 @@ index edc0d34..a3f5d46 100644
          queueCmd(new GDBCommand(GDBMI::NonMI, "source " + fileName));
      }
  
-@@ -951,9 +938,10 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
+@@ -951,9 +934,10 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
          emit showMessage(i18n("Running program"), 1000);
      }
  
@@ -478,7 +722,7 @@ index edc0d34..a3f5d46 100644
  
      if (stateIsOn(s_shuttingDown)) {
          kDebug() << "Tried to run when debugger shutting down";
-@@ -1102,8 +1090,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
+@@ -1102,8 +1086,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
          queueCmd(new GDBCommand(GDBMI::ExecRun));
      }
  
@@ -487,7 +731,7 @@ index edc0d34..a3f5d46 100644
      {
          QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
          if (startWith == "GdbConsole") {
-@@ -1155,8 +1141,6 @@ void DebugSession::slotKill()
+@@ -1155,8 +1137,6 @@ void DebugSession::slotKill()
      // The -exec-abort is not implemented in gdb
      // queueCmd(new GDBCommand(GDBMI::ExecAbort));
      queueCmd(new GDBCommand(GDBMI::NonMI, "kill"));
@@ -496,7 +740,7 @@ index edc0d34..a3f5d46 100644
  }
  
  // **************************************************************************
-@@ -1474,22 +1458,6 @@ void DebugSession::handleTargetAttach(const GDBMI::ResultRecord& r)
+@@ -1474,22 +1454,6 @@ void DebugSession::handleTargetAttach(const GDBMI::ResultRecord& r)
      }
  }
  
@@ -618,21 +862,29 @@ index 7a1a3d9..146900f 100644
  public Q_SLOTS:
      void slotKill();
 diff --git a/debuggers/gdb/disassemblewidget.cpp b/debuggers/gdb/disassemblewidget.cpp
-index 91194ed..c62d64a 100644
+index 91194ed..a000f1e 100644
 --- a/debuggers/gdb/disassemblewidget.cpp
 +++ b/debuggers/gdb/disassemblewidget.cpp
-@@ -114,6 +114,43 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
+@@ -108,12 +108,50 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
+     connect(m_selectAddrAction, SIGNAL(triggered()), widget, SLOT(slotChangeAddress()));
+ 
+     m_jumpToLocation = new QAction(KIcon("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
+-    m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
++    m_jumpToLocation->setToolTip(i18n("Sets the execution pointer to the current cursor position."));
+     connect(m_jumpToLocation,SIGNAL(triggered()), widget, SLOT(jumpToCursor()));
+ 
      m_runUntilCursor = new QAction(KIcon("debug-run-cursor"), i18n("&Run to Cursor"), this);
-     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
+-    m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
++    m_runUntilCursor->setToolTip(i18n("Continues execution until the cursor position is reached."));
      connect(m_runUntilCursor,SIGNAL(triggered()), widget, SLOT(runToCursor()));
 +
 +    m_disassemblyFlavorAtt = new QAction(i18n("&AT&&T"), this);
-+    m_disassemblyFlavorAtt->setWhatsThis(i18n("GDB will use the AT&T disassembly style (e.g. mov 0xc(%ebp),%eax)."));
++    m_disassemblyFlavorAtt->setToolTip(i18n("GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."));
 +    m_disassemblyFlavorAtt->setData(DisassemblyFlavorATT);
 +    m_disassemblyFlavorAtt->setCheckable(true);
 +
 +    m_disassemblyFlavorIntel = new QAction(i18n("&Intel"), this);
-+    m_disassemblyFlavorIntel->setWhatsThis(i18n("GDB will use the Intel disassembly style (e.g. mov eax, DWORD PTR [ebp+0xc])."));
++    m_disassemblyFlavorIntel->setToolTip(i18n("GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp+0xc])."));
 +    m_disassemblyFlavorIntel->setData(DisassemblyFlavorIntel);
 +    m_disassemblyFlavorIntel->setCheckable(true);
 +
@@ -641,7 +893,8 @@ index 91194ed..c62d64a 100644
 +    m_disassemblyFlavorActionGroup->addAction(m_disassemblyFlavorAtt);
 +    m_disassemblyFlavorActionGroup->addAction(m_disassemblyFlavorIntel);
 +
-+    connect(m_disassemblyFlavorActionGroup,SIGNAL(triggered(QAction*)), widget, SLOT(setDisassemblyFlavor(QAction*)));
++    connect(m_disassemblyFlavorActionGroup, SIGNAL(triggered(QAction*)),
++            widget, SLOT(setDisassemblyFlavor(QAction*)));
 +    }
 +}
 +
@@ -665,7 +918,7 @@ index 91194ed..c62d64a 100644
      }
  }
  
-@@ -123,6 +160,9 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
+@@ -123,6 +161,9 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
          popup.addAction(m_selectAddrAction);
          popup.addAction(m_jumpToLocation);
          popup.addAction(m_runUntilCursor);
@@ -675,7 +928,7 @@ index 91194ed..c62d64a 100644
          popup.exec(e->globalPos());
  }
  /***************************************************************************/
-@@ -284,6 +324,7 @@ void DisassembleWidget::slotActivate(bool activate)
+@@ -284,6 +325,7 @@ void DisassembleWidget::slotActivate(bool activate)
          active_ = activate;
          if (active_)
          {
@@ -683,7 +936,7 @@ index 91194ed..c62d64a 100644
              m_registersManager->updateRegisters();
              if (!displayCurrent())
                  disassembleMemoryRegion();
-@@ -321,17 +362,16 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
+@@ -321,17 +363,16 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
  
      //only get $pc
      if (from.isEmpty()){
@@ -704,7 +957,18 @@ index 91194ed..c62d64a 100644
     }
  }
  
-@@ -438,6 +478,66 @@ void DisassembleWidget::update(const QString &address)
+@@ -405,7 +446,9 @@ void DisassembleWidget::enableControls(bool enabled)
+ 
+ void DisassembleWidget::slotChangeAddress()
+ {
+-    if(!m_dlg) return;
++    if(!m_dlg) {
++        return;
++    }
+     m_dlg->updateOkState();
+     
+     if (!m_disassembleWindow->selectedItems().isEmpty()) {
+@@ -438,6 +481,70 @@ void DisassembleWidget::update(const QString &address)
      m_registersManager->updateRegisters();
  }
  
@@ -712,7 +976,9 @@ index 91194ed..c62d64a 100644
 +{
 +    DebugSession* s = qobject_cast<DebugSession*>(KDevelop::ICore::
 +            self()->debugController()->currentSession());
-+    if(!s || !s->isRunning()) return;
++    if(!s || !s->isRunning()) {
++        return;
++    }
 +
 +    DisassemblyFlavor disassemblyFlavor = static_cast<DisassemblyFlavor>(action->data().toInt());
 +    QString cmd;
@@ -730,17 +996,16 @@ index 91194ed..c62d64a 100644
 +    }
 +    kDebug(9012) << "Disassemble widget set " << cmd;
 +
-+    if(!cmd.isEmpty()) {
++    if (!cmd.isEmpty()) {
 +        s->addCommand(
-+                new GDBCommand(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler ) );
++                new GDBCommand(GdbSet, cmd, this, &DisassembleWidget::setDisassemblyFlavorHandler));
 +    }
 +}
 +
 +void DisassembleWidget::setDisassemblyFlavorHandler(const GDBMI::ResultRecord& r)
 +{
-+    if (r.reason == "done") {
-+        if (active_)
-+            disassembleMemoryRegion();
++    if (r.reason == "done" && active_) {
++        disassembleMemoryRegion();
 +    }
 +}
 +
@@ -748,10 +1013,12 @@ index 91194ed..c62d64a 100644
 +{
 +    DebugSession* s = qobject_cast<DebugSession*>(KDevelop::ICore::
 +            self()->debugController()->currentSession());
-+    if(!s || !s->isRunning()) return;
++    if(!s || !s->isRunning()) {
++        return;
++    }
 +
 +    s->addCommand(
-+                new GDBCommand(GdbShow, "disassembly-flavor", this, &DisassembleWidget::showDisassemblyFlavorHandler ) );
++                new GDBCommand(GdbShow, "disassembly-flavor", this, &DisassembleWidget::showDisassemblyFlavorHandler));
 +}
 +
 +void DisassembleWidget::showDisassemblyFlavorHandler(const GDBMI::ResultRecord& r)
@@ -760,10 +1027,11 @@ index 91194ed..c62d64a 100644
 +    kDebug(9012) << "Disassemble widget disassembly flavor" << value.literal();
 +
 +    DisassemblyFlavor disassemblyFlavor = DisassemblyFlavorUnknown;
-+    if(value.literal() == "att")
++    if (value.literal() == "att") {
 +        disassemblyFlavor = DisassemblyFlavorATT;
-+    else if(value.literal() == "intel")
++    } else if (value.literal() == "intel") {
 +        disassemblyFlavor = DisassemblyFlavorIntel;
++    }
 +    m_disassembleWindow->setDisassemblyFlavor(disassemblyFlavor);
 +}
 +
@@ -772,7 +1040,7 @@ index 91194ed..c62d64a 100644
  
  #include "disassemblewidget.moc"
 diff --git a/debuggers/gdb/disassemblewidget.h b/debuggers/gdb/disassemblewidget.h
-index ccffc2f..0489e37 100644
+index ccffc2f..c4f86dd 100644
 --- a/debuggers/gdb/disassemblewidget.h
 +++ b/debuggers/gdb/disassemblewidget.h
 @@ -75,11 +75,19 @@ private:
@@ -830,18 +1098,19 @@ index ccffc2f..0489e37 100644
  
      //for str to uint conversion.
      bool ok;
-@@ -151,9 +166,9 @@ private:
+@@ -151,10 +166,9 @@ private:
      unsigned long    upper_;
      unsigned long    address_;
  
 -    RegistersManager* m_registersManager ;
 +    RegistersManager* m_registersManager;
++    DisassembleWindow* m_disassembleWindow;
  
 -    DisassembleWindow * m_disassembleWindow;
-+    DisassembleWindow* m_disassembleWindow;
-     
+-    
      static const KIcon icon_;
      SelectAddrDialog* m_dlg;
+ 
 diff --git a/debuggers/gdb/gdb.cpp b/debuggers/gdb/gdb.cpp
 index 4642087..3ea9ede 100644
 --- a/debuggers/gdb/gdb.cpp
@@ -1241,7 +1510,7 @@ index 31688cd..6c7193b 100644
  }
  
 diff --git a/debuggers/gdb/gdbcommand.cpp b/debuggers/gdb/gdbcommand.cpp
-index 67abbd8..e9f9ac1 100644
+index 67abbd8..817962a 100644
 --- a/debuggers/gdb/gdbcommand.cpp
 +++ b/debuggers/gdb/gdbcommand.cpp
 @@ -14,6 +14,7 @@
@@ -1252,37 +1521,60 @@ index 67abbd8..e9f9ac1 100644
  
  using namespace GDBMI;
  
-@@ -21,20 +22,23 @@ namespace GDBDebugger
+@@ -21,20 +22,46 @@ namespace GDBDebugger
  {
  
  GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
 -: type_(type), command_(command), handler_method(0), commandHandler_(0),
 -  run(false), stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
-+: type_(type), token_(0), command_(command), handler_method(0), commandHandler_(0),
-+  stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1),
-+  m_enqueueTimestamp(0), m_submitTimestamp(0), m_completeTimestamp(0)
++    : type_(type)
++    , command_(command)
++    , handler_method(0)
++    , commandHandler_(0)
++    , stateReloading_(false)
++    , handlesError_(false)
++    , m_thread(-1)
++    , m_frame(-1)
++    , m_enqueueTimestamp(0)
++    , m_submitTimestamp(0)
++    , m_completeTimestamp(0)
  {
  }
  
  GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
 -: type_(type), command_(QString::number(index)), handler_method(0), commandHandler_(0),
 -  run(false), stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
-+: type_(type), token_(0), command_(QString::number(index)), handler_method(0), commandHandler_(0),
-+  stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1),
-+  m_enqueueTimestamp(0), m_submitTimestamp(0), m_completeTimestamp(0)
++    : type_(type)
++    , command_(QString::number(index))
++    , handler_method(0)
++    , commandHandler_(0)
++    , stateReloading_(false)
++    , handlesError_(false)
++    , m_thread(-1)
++    , m_frame(-1)
++    , m_enqueueTimestamp(0)
++    , m_submitTimestamp(0)
++    , m_completeTimestamp(0)
  {
  }
  
  GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
 -: type_(type), command_(arguments), handler_method(0), commandHandler_(handler),
 -  run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
-+: type_(type), token_(0), command_(arguments), handler_method(0), commandHandler_(handler),
-+  stateReloading_(false), m_thread(-1), m_frame(-1),
-+  m_enqueueTimestamp(0), m_submitTimestamp(0), m_completeTimestamp(0)
++    : type_(type)
++    , command_(arguments)
++    , handler_method(0)
++    , commandHandler_(handler)
++    , stateReloading_(false)
++    , m_thread(-1)
++    , m_frame(-1)
++    , m_enqueueTimestamp(0)
++    , m_submitTimestamp(0)
++    , m_completeTimestamp(0)
  {
      handlesError_ = handler->handlesError();
  }
-@@ -46,11 +50,13 @@ QString GDBCommand::cmdToSend()
+@@ -46,11 +73,13 @@ QString GDBCommand::cmdToSend()
  
  QString GDBCommand::initialString() const
  {
@@ -1300,7 +1592,7 @@ index 67abbd8..e9f9ac1 100644
  
          if (m_thread != -1)
              result = result + QString(" --thread %1").arg(m_thread);
-@@ -59,9 +65,9 @@ QString GDBCommand::initialString() const
+@@ -59,9 +88,9 @@ QString GDBCommand::initialString() const
  
          if (!command_.isEmpty())
              result += ' ' + command_;
@@ -1312,7 +1604,7 @@ index 67abbd8..e9f9ac1 100644
  }
  
  bool GDBCommand::isUserCommand() const
-@@ -107,16 +113,6 @@ GDBCommand::~GDBCommand()
+@@ -107,16 +136,6 @@ GDBCommand::~GDBCommand()
  {
  }
  
@@ -1329,7 +1621,7 @@ index 67abbd8..e9f9ac1 100644
  
  UserCommand::UserCommand(GDBMI::CommandType type, const QString& s)
  : GDBCommand(type, s)
-@@ -607,5 +603,34 @@ bool GDBCommand::stateReloading() const
+@@ -607,5 +626,34 @@ bool GDBCommand::stateReloading() const
      return stateReloading_;
  }
  
@@ -1472,7 +1764,7 @@ index e1ebc69..aa5e437 100644
    handlesError_(handlesError),
    m_thread(-1),
 diff --git a/debuggers/gdb/gdbcommandqueue.cpp b/debuggers/gdb/gdbcommandqueue.cpp
-index 801bc41..3a708e0 100644
+index 801bc41..8ae7067 100644
 --- a/debuggers/gdb/gdbcommandqueue.cpp
 +++ b/debuggers/gdb/gdbcommandqueue.cpp
 @@ -15,6 +15,8 @@
@@ -1507,7 +1799,7 @@ index 801bc41..3a708e0 100644
      switch (insertPosition) {
          case QueueAtFront:
              m_commandList.prepend(command);
-@@ -41,25 +49,49 @@ void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition inse
+@@ -41,25 +49,48 @@ void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition inse
          case QueueAtEnd:
              m_commandList.append(command);
              break;
@@ -1553,8 +1845,7 @@ index 801bc41..3a708e0 100644
 +
 +void GDBDebugger::CommandQueue::removeObsoleteExecCommands(GDBCommand* command)
 +{
-+    if(command->type() == ExecContinue || command->type() == ExecUntil)
-+    {
++    if (command->type() == ExecContinue || command->type() == ExecUntil) {
 +        // Remove all exec commands up the latest ExecContinue or ExecUntil
 +        QMutableListIterator<GDBCommand*> it = m_commandList;
 +        while (it.hasNext()) {
@@ -1568,7 +1859,7 @@ index 801bc41..3a708e0 100644
  }
  
  void GDBDebugger::CommandQueue::removeVariableUpdates()
-@@ -67,9 +99,26 @@ void GDBDebugger::CommandQueue::removeVariableUpdates()
+@@ -67,9 +98,26 @@ void GDBDebugger::CommandQueue::removeVariableUpdates()
      QMutableListIterator<GDBCommand*> it = m_commandList;
  
      while (it.hasNext()) {
@@ -1597,7 +1888,7 @@ index 801bc41..3a708e0 100644
      }
  }
  
-@@ -89,7 +138,7 @@ bool GDBDebugger::CommandQueue::isEmpty() const
+@@ -89,7 +137,7 @@ bool GDBDebugger::CommandQueue::isEmpty() const
      return m_commandList.isEmpty();
  }
  
@@ -1654,10 +1945,14 @@ index e9e1fce..d10e004 100644
      }
      setThreads(threadsList);
 diff --git a/debuggers/gdb/gdbglobal.h b/debuggers/gdb/gdbglobal.h
-index ef31c02..6a64cce 100644
+index ef31c02..da6fe32 100644
 --- a/debuggers/gdb/gdbglobal.h
 +++ b/debuggers/gdb/gdbglobal.h
-@@ -47,8 +47,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(DBGStateFlags)
+@@ -43,12 +43,10 @@ enum DBGStateFlag
+ };
+ 
+ Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
+-Q_DECLARE_OPERATORS_FOR_FLAGS(DBGStateFlags)
  
  enum QueuePosition {
      QueueAtEnd,
@@ -1667,6 +1962,13 @@ index ef31c02..6a64cce 100644
  };
  
  
+@@ -58,4 +56,6 @@ enum DataType { typeUnknown, typeValue, typePointer, typeReference,
+ 
+ }
+ 
++Q_DECLARE_OPERATORS_FOR_FLAGS(GDBDebugger::DBGStateFlags)
++
+ #endif
 diff --git a/debuggers/gdb/gdblaunchconfig.cpp b/debuggers/gdb/gdblaunchconfig.cpp
 index 7200998..3937f71 100644
 --- a/debuggers/gdb/gdblaunchconfig.cpp
@@ -1701,42 +2003,44 @@ index 7200998..3937f71 100644
          if( depjob ) 
          {
 diff --git a/debuggers/gdb/memviewdlg.cpp b/debuggers/gdb/memviewdlg.cpp
-index cf9d0b4..acc1e82 100644
+index cf9d0b4..ba88d51 100644
 --- a/debuggers/gdb/memviewdlg.cpp
 +++ b/debuggers/gdb/memviewdlg.cpp
 @@ -153,6 +153,7 @@ namespace GDBDebugger
      void MemoryView::initWidget()
      {
          QVBoxLayout *l = new QVBoxLayout(this);
-+        l->setContentsMargins(0,0,0,0);
++        l->setContentsMargins(0, 0, 0, 0);
  
          khexedit2_widget = KHE::createBytesEditWidget(this);
          if (!khexedit2_widget)
-@@ -236,8 +237,12 @@ namespace GDBDebugger
+@@ -236,9 +237,11 @@ namespace GDBDebugger
              KDevelop::ICore::self()->debugController()->currentSession());
          if (!session) return;
  
+-        session->addCommand(new ExpressionValueCommand(
+-                rangeSelector_->amountLineEdit->text(),
+-                this, &MemoryView::sizeComputed));
 +        QString amount = rangeSelector_->amountLineEdit->text();
 +        if(amount.isEmpty())
 +            amount = QString("sizeof(%1)").arg(rangeSelector_->startAddressLineEdit->text());
 +
-         session->addCommand(new ExpressionValueCommand(
--                rangeSelector_->amountLineEdit->text(),
-+                amount,
-                 this, &MemoryView::sizeComputed));
++        session->addCommand(new ExpressionValueCommand(amount, this, &MemoryView::sizeComputed));
      }
  
-@@ -464,8 +469,7 @@ namespace GDBDebugger
+     void MemoryView::sizeComputed(const QString& size)
+@@ -463,9 +466,7 @@ namespace GDBDebugger
+     {
          bool app_started = !(debuggerState_ & s_appNotStarted);
  
-         bool enabled_ = app_started &&
+-        bool enabled_ = app_started &&
 -            !rangeSelector_->startAddressLineEdit->text().isEmpty() &&
 -            !rangeSelector_->amountLineEdit->text().isEmpty();
-+            !rangeSelector_->startAddressLineEdit->text().isEmpty();
++        bool enabled_ = app_started && !rangeSelector_->startAddressLineEdit->text().isEmpty();
  
          rangeSelector_->okButton->setEnabled(enabled_);
      }
-@@ -486,10 +490,14 @@ namespace GDBDebugger
+@@ -486,10 +487,14 @@ namespace GDBDebugger
          addAction(newMemoryViewerAction);
  
          QVBoxLayout *l = new QVBoxLayout(this);
@@ -1752,26 +2056,34 @@ index cf9d0b4..acc1e82 100644
          slotAddMemoryView();
      }
 diff --git a/debuggers/gdb/mi/gdbmi.h b/debuggers/gdb/mi/gdbmi.h
-index d5e92b8..4781809 100644
+index d5e92b8..4a81a8a 100644
 --- a/debuggers/gdb/mi/gdbmi.h
 +++ b/debuggers/gdb/mi/gdbmi.h
-@@ -346,19 +346,42 @@ namespace GDBMI
+@@ -338,7 +338,6 @@ namespace GDBMI
+         const Value& operator[](int index) const;
+ 
+         QList<Result*> results;
+-
+     };
+ 
+     struct Record
+@@ -346,19 +345,42 @@ namespace GDBMI
          virtual ~Record() {}
          virtual QString toString() const { Q_ASSERT( 0 ); return QString::null; }
  
 -        enum { Prompt, Stream, Result } kind;
 +        enum { Prompt, Stream, Result, Async } kind;
++    };
++
++    struct TupleRecord : public Record, public TupleValue
++    {
      };
  
 -    struct ResultRecord : public Record, public TupleValue
-+    struct TupleRecord : public Record, public TupleValue
++    struct ResultRecord : public TupleRecord
      {
 -        ResultRecord()
 -            : subkind(CommandResult)
-+    };
-+
-+    struct ResultRecord : public TupleRecord
-+    {
 +        ResultRecord(const QString& reason)
 +            : token(0)
 +            , reason(reason)
@@ -1783,7 +2095,7 @@ index d5e92b8..4781809 100644
 +        uint32_t token;
 +        QString reason;
 +    };
-+
+ 
 +    struct AsyncRecord : public TupleRecord
 +    {
 +        enum Subkind {
@@ -1798,12 +2110,12 @@ index d5e92b8..4781809 100644
 +        {
 +            Record::kind = Async;
 +        }
- 
++
 +        Subkind subkind;
          QString reason;
      };
  
-@@ -372,9 +395,25 @@ namespace GDBMI
+@@ -372,9 +394,25 @@ namespace GDBMI
  
      struct StreamRecord : public Record
      {
@@ -2106,7 +2418,7 @@ index 0000000..ffa43c0
 @@ -0,0 +1 @@
 +# Dummy script used for testing purposes
 diff --git a/debuggers/gdb/unittests/gdbtest.cpp b/debuggers/gdb/unittests/gdbtest.cpp
-index ef3cd42..e9f4a3a 100644
+index ef3cd42..82f080c 100644
 --- a/debuggers/gdb/unittests/gdbtest.cpp
 +++ b/debuggers/gdb/unittests/gdbtest.cpp
 @@ -67,11 +67,35 @@ KUrl findExecutable(const QString& name)
@@ -2465,6 +2777,30 @@ index ef3cd42..e9f4a3a 100644
      QCOMPARE(stackModel->currentFrame(), 0);
      stackModel->setCurrentFrame(1);
      QCOMPARE(stackModel->currentFrame(), 1);
+@@ -1328,7 +1419,7 @@ void GdbTest::testPickupManuallyInsertedBreakpoint()
+     KDevelop::Breakpoint *b = breakpoints()->breakpoint(1);
+     QVERIFY(b);
+     QCOMPARE(b->line(), 31); //we start with 0, gdb with 1
+-    QCOMPARE(b->url().url(), QString("debugee.cpp"));
++    QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
+ }
+ 
+ //Bug 270970
+@@ -1356,12 +1447,12 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
+     KDevelop::Breakpoint *b = breakpoints()->breakpoint(0);
+     QVERIFY(b);
+     QCOMPARE(b->line(), 31); //we start with 0, gdb with 1
+-    QCOMPARE(b->url().url(), QString("debugee.cpp"));
++    QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
+ 
+     b = breakpoints()->breakpoint(1);
+     QVERIFY(b);
+     QCOMPARE(b->line(), 21);
+-    QCOMPARE(b->url().url(), QString("debugee.cpp"));
++    QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
+ }
+ 
+ void GdbTest::testRunGdbScript()
 @@ -1382,7 +1473,7 @@ void GdbTest::testRunGdbScript()
  
      QVERIFY(session->startProgram(&cfg, m_iface));
@@ -2574,7 +2910,20 @@ index ef3cd42..e9f4a3a 100644
          session->stepInto();
          WAIT_FOR_STATE(session, DebugSession::PausedState);
          session->run();
-@@ -1852,32 +1943,34 @@ void GdbTest::testPathWithSpace()
+@@ -1841,43 +1932,45 @@ void GdbTest::testPathWithSpace()
+     auto debugee = findExecutable("path with space/spacedebugee");
+     TestLaunchConfiguration c(debugee, debugee.upUrl());
+     KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
+-    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
++    QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
+     session->startProgram(&c, m_iface);
+ 
+     WAIT_FOR_STATE(session, DebugSession::PausedState);
+-    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
++    QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
+     session->run();
+     WAIT_FOR_STATE(session, DebugSession::EndedState);
+ #endif
  }
  
  void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
@@ -2687,3 +3036,92 @@ index f5ac8c1..924e87e 100644
      void stateChanged(KDevelop::IDebugSession::DebuggerState);
  
  private:
+diff --git a/formatters/customscript/kdevcustomscript.desktop.cmake b/formatters/customscript/kdevcustomscript.desktop.cmake
+index 7b8c9f8..0569eed 100644
+--- a/formatters/customscript/kdevcustomscript.desktop.cmake
++++ b/formatters/customscript/kdevcustomscript.desktop.cmake
+@@ -52,7 +52,7 @@ Name[it]=Backend formattatore script personalizzato
+ Name[kk]=Пайдаланушы скрипттер пішімдегіш тетігі
+ Name[nb]=Bakgrunnsmotor for formattering med egne skripter
+ Name[nds]=Egen Skript-Formateerhülpprogramm
+-Name[nl]=Eigen script voor formatteerbackend
++Name[nl]=Backend voor formatteerprogramma met eigen scripts
+ Name[pl]=Silnik formatowania przy użyciu własnych skryptów
+ Name[pt]=Infra-Estrutura de Formatação Personalizada
+ Name[pt_BR]=Infraestrutura de formatação de scripts personalizados
+diff --git a/languages/cpp/codegen/makeimplementationprivate.h b/languages/cpp/codegen/makeimplementationprivate.h
+index 1db7489..bab7be1 100644
+--- a/languages/cpp/codegen/makeimplementationprivate.h
++++ b/languages/cpp/codegen/makeimplementationprivate.h
+@@ -86,8 +86,8 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
+     //DocumentChange insertConstructorInitializations(ClassFunctionDeclaration * constructor, const QList<ClassMemberDeclaration *>)
+ };
+ 
+-Q_DECLARE_OPERATORS_FOR_FLAGS(MakeImplementationPrivate::Policies)
+-
+ }
+ 
++Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::MakeImplementationPrivate::Policies)
++
+ #endif // MAKEIMPLEMENTATIONPRIVATE_H
+diff --git a/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop b/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop
+index e9f226e..e6708b3 100644
+--- a/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop
++++ b/languages/plugins/custom-definesandincludes/kcm_widget/kcm_kdevcustomdefinesandincludes.desktop
+@@ -9,6 +9,7 @@ X-KDE-ParentApp=kdevplatformproject
+ X-KDE-ParentComponents=kdevplatformproject
+ 
+ Name=Custom Defines And Includes
++Name[bs]=Vlastite definicije i uključivanja
+ Name[ca]=Personalitza les definicions i inclusions
+ Name[de]=Eigene Definitionen und Includes
+ Name[en_GB]=Custom Defines And Includes
+@@ -29,6 +30,7 @@ Name[uk]=Нетипові визначення і включення
+ Name[x-test]=xxCustom Defines And Includesxx
+ 
+ Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
++Comment[bs]=Konfiguriše koji makroi i direktoriji/uključivanja će se dodati parseru tokom parsiranja projekta.
+ Comment[ca]=Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.
+ Comment[de]=Einstellung der Makros und Include-Ordner/-Dateien, die zum für den Parser während des Einlesens des Projekts hinzugefügt werden.
+ Comment[en_GB]=Configure which macros and include directories/files will be added to the parser during project parsing.
+@@ -47,3 +49,4 @@ Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som lä
+ Comment[tr]=Proje ayrıştırılırken hangi makroların ve içerme dizinlerinin/dosyaların ayrıştırıcıya ekleneceğini yapılandırın.
+ Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
+ Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
++Comment[zh_CN]=配置在解析项目时加入哪些宏、引用目录和文件。
+diff --git a/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake b/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake
+index 61472b0..2b351ec 100644
+--- a/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake
++++ b/languages/plugins/custom-definesandincludes/kdevdefinesandincludesmanager.desktop.cmake
+@@ -1,6 +1,7 @@
+ [Desktop Entry]
+ Type=Service
+ Name=Custom Defines And Includes Manager
++Name[bs]=Menadžer vlastitih definicija i uključivanja
+ Name[ca]=Gestor per personalitzar les definicions i inclusions
+ Name[de]=Verwaltung eigener Definitionen und Includes
+ Name[en_GB]=Custom Defines And Includes Manager
+@@ -20,6 +21,7 @@ Name[tr]=Özel Tanımlama ve İçerme Yöneticisi
+ Name[uk]=Керування нетиповими визначеннями і включеннями
+ Name[x-test]=xxCustom Defines And Includes Managerxx
+ GenericName=Custom Defines And Includes Manager
++GenericName[bs]=Menadžer vlastitih definicija i uključivanja
+ GenericName[ca]=Gestor per personalitzar les definicions i inclusions
+ GenericName[de]=Verwaltung eigener Definitionen und Includes
+ GenericName[en_GB]=Custom Defines And Includes Manager
+@@ -39,6 +41,7 @@ GenericName[tr]=Özel Tanımlama ve İçerme Yöneticisi
+ GenericName[uk]=Керування нетиповими визначеннями і включеннями
+ GenericName[x-test]=xxCustom Defines And Includes Managerxx
+ Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
++Comment[bs]=Konfiguriše koji makroi i direktoriji/uključivanja će se dodati parseru tokom parsiranja projekta.
+ Comment[ca]=Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.
+ Comment[de]=Einstellung der Makros und Include-Ordner/-Dateien, die zum für den Parser während des Einlesens des Projekts hinzugefügt werden.
+ Comment[en_GB]=Configure which macros and include directories/files will be added to the parser during project parsing.
+@@ -57,6 +60,7 @@ Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som lä
+ Comment[tr]=Proje ayrıştırılırken hangi makroların ve içerme dizinlerinin/dosyaların ayrıştırıcıya ekleneceğini yapılandırın.
+ Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
+ Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
++Comment[zh_CN]=配置在解析项目时加入哪些宏、引用目录和文件。
+ Icon=kdevelop
+ ServiceTypes=KDevelop/Plugin
+ X-KDE-Library=kdevdefinesandincludesmanager
