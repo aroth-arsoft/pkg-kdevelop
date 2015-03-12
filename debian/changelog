@@ -1,3 +1,27 @@
+kdevelop (4:4.7.1-0ubuntu1.1+gitbbf779c) vivid; urgency=medium
+
+  * sync with ubuntu
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Thu, 12 Mar 2015 06:45:28 +0100
+
+kdevelop (4:4.7.1-0ubuntu1) vivid; urgency=medium
+
+  * Release to Archive 
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Tue, 10 Mar 2015 19:03:33 -0700
+
+kdevelop (4:4.7.1-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release (LP: #1417659)
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Thu, 19 Feb 2015 11:22:49 -0800
+
+kdevelop (4:4.7.1-0ubuntu0.2.1+gitbbf779c) utopic; urgency=medium
+
+  * require kdevplatform >= 1.7.1
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Sun, 08 Mar 2015 10:12:24 +0100
+
 kdevelop (4:4.7.1-0ubuntu0.1+gitbbf779c) vivid; urgency=medium
 
   * new upstream version 4.7.1
