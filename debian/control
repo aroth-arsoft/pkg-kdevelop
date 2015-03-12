@@ -13,7 +13,8 @@ Build-Depends: cmake,
                libqjson-dev,
                libqtwebkit-dev,
                pkg-kde-tools,
-               shared-mime-info
+               shared-mime-info,
+               zlib1g-dev
 Standards-Version: 3.9.4
 XS-Testsuite: autopkgtest
 Homepage: http://www.kdevelop.org/
