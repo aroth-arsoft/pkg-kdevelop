@@ -413,7 +413,7 @@ index 0000000..670fb8d
 +#cmakedefine HAVE_XRES 1
 +
 diff --git a/debuggers/gdb/debuggerplugin.cpp b/debuggers/gdb/debuggerplugin.cpp
-index ca2bbaf..437a554 100644
+index ca2bbaf..d2f3bfa 100644
 --- a/debuggers/gdb/debuggerplugin.cpp
 +++ b/debuggers/gdb/debuggerplugin.cpp
 @@ -71,9 +71,7 @@
@@ -449,7 +449,21 @@ index ca2bbaf..437a554 100644
  }
  
  void CppDebuggerPlugin::unload()
-@@ -302,16 +293,6 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
+@@ -208,13 +199,11 @@ void CppDebuggerPlugin::setupActions()
+     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExamineCore()));
+     ac->addAction("debug_core", action);
+ 
+-    #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
+     action = new KAction(KIcon("connect_creating"), i18n("Attach to Process"), this);
+     action->setToolTip( i18n("Attach to process...") );
+     action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"));
+     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));
+     ac->addAction("debug_attach", action);
+-    #endif
+ }
+ 
+ void CppDebuggerPlugin::setupDBus()
+@@ -302,16 +291,6 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
  
      m_contextIdent = econtext->currentWord();
  
@@ -466,7 +480,7 @@ index ca2bbaf..437a554 100644
      if (!m_contextIdent.isEmpty())
      {
          // PORTING TODO
-@@ -371,7 +352,6 @@ void CppDebuggerPlugin::slotExamineCore()
+@@ -371,7 +350,6 @@ void CppDebuggerPlugin::slotExamineCore()
      job->start();
  }
  
@@ -474,7 +488,7 @@ index ca2bbaf..437a554 100644
  void CppDebuggerPlugin::slotAttachProcess()
  {
      emit showMessage(this, i18n("Choose a process to attach to..."), 1000);
-@@ -387,7 +367,6 @@ void CppDebuggerPlugin::slotAttachProcess()
+@@ -387,7 +365,6 @@ void CppDebuggerPlugin::slotAttachProcess()
      else
          attachProcess(pid);
  }

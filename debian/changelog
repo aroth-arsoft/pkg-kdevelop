@@ -1,3 +1,15 @@
+kdevelop (4:4.7.1-0ubuntu1.5+gitf3c6735) vivid; urgency=medium
+
+  * fixed missing UI add for attach action
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Fri, 13 Mar 2015 07:25:52 +0100
+
+kdevelop (4:4.7.1-0ubuntu1.4+gitf718078) vivid; urgency=medium
+
+  * add X11 depends
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Fri, 13 Mar 2015 06:43:52 +0100
+
 kdevelop (4:4.7.1-0ubuntu1.3+gitf718078) vivid; urgency=medium
 
   * add zlib depend
