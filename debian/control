@@ -9,14 +9,14 @@ Uploaders: Fathi Boudra <fabo@debian.org>,
            Andreas Cord-Landwehr <cola@uni-paderborn.de>
 Build-Depends: cmake,
                debhelper,
-               kdevplatform-dev (>= 1.7.1),
+               kdevplatform-dev (>= 1.7.2),
                libqjson-dev,
                libqtwebkit-dev,
                pkg-kde-tools,
                shared-mime-info,
                zlib1g-dev,
                libx11-dev
-Standards-Version: 3.9.4
+Standards-Version: 3.9.6
 XS-Testsuite: autopkgtest
 Homepage: http://www.kdevelop.org/
 Vcs-Browser: http://git.debian.org/?p=pkg-kde/kde-std/kdevelop.git
