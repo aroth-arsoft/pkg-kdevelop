@@ -1,3 +1,28 @@
+kdevelop (4:4.7.3-0ubuntu1.1~aroth~ppa1) xenial; urgency=medium
+
+  * integrate latest ubuntu version
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Tue, 29 Mar 2016 19:13:46 +0200
+
+kdevelop (4:4.7.3-0ubuntu1) xenial; urgency=medium
+
+  * Debian merge: remaining change:
+    keep autopkgtest 
+  * New upstream bugfix release.
+  * Fix watch file. 
+  * Fix version.
+  * Add dep libkasten3okteta1core1 to fix
+    optional dep failure. 
+  * Add some more missing kastenokteta libs. 
+  * Build is still not happy with kastenokteta
+    Adding kasten libs as well. 
+  * wrap-and-sort. 
+  * Remove okteta kasten support. It has been ported to kf5 and
+    not compatible.
+  * Release to Archive. 
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Sun, 06 Mar 2016 08:06:52 -0800
+
 kdevelop (4:4.7.2-0ubuntu1.1+git49271c0) wily; urgency=medium
 
   * integrate changes from https://github.com/aroth-arsoft/kdevelop.git
@@ -5,12 +30,49 @@ kdevelop (4:4.7.2-0ubuntu1.1+git49271c0) wily; urgency=medium
 
  -- Andreas Roth <aroth@arsoft-online.com>  Sun, 15 Nov 2015 14:35:40 +0100
 
-kdevelop (4:4.7.2-0ubuntu1~ubuntu15.10~ppa1) wily; urgency=medium
+kdevelop (4:4.7.2-1) unstable; urgency=medium
 
-  * Final 4 series upstream bugfix release. 
-  * Fix version cruft. 
+  * Team upload.
+  * New upstream release.
+  * Update the patches:
+    - dont-use-removed-temporaries.diff: drop, backported from upstream
+  * Drop menu file and its pixmap, since kdevelop already provides a .desktop
+    file.
+  * Remove extra libsoprano-dev build dependency, which was added as workaround
+    for a bug in kdelibs5-dev.
+  * Bump Standards-Version to 3.9.6, no changes required.
+  * Bump kdevplatform-dev build dependency to >= 1.7.2.
 
- -- Scarlett Clark <sgclark@kubuntu.org>  Tue, 10 Nov 2015 08:32:58 -0800
+ -- Pino Toscano <pino@debian.org>  Thu, 21 Jan 2016 22:02:43 +0100
+
+kdevelop (4:4.7.1-2) unstable; urgency=medium
+
+  * Add libkdevcompilerprovider to ensure that code navigation works.
+  * Backport patch from upstream to fix a crash when parsing bits/c++config.h.
+
+ -- Sune Vuorela <sune@debian.org>  Sat, 26 Sep 2015 08:41:23 +0200
+
+kdevelop (4:4.7.1-1) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Pino Toscano ]
+  * Change section of kdevelop-dev to libdevel.
+  * Add ${misc:Depends} in kdevelop-dbg and kdevelop-l10n.
+
+  [ Sune Vuorela ]
+  * Make KDevelop recommend kapptemplate to have more meaningful project
+    templates available.
+
+  [ Lisandro Damián Nicanor Pérez Meyer ]
+  * New upstream release.
+    - Bump kdevplatform-dev build dependency to 1.7.1.
+  * Remove kde-workspace from build dependencies. We no longer provide
+    a KDE 4 based workspace.
+    - Add libsoprano-dev as a build dependency, it was probably previously
+      pulled in by kde-workspace.
+
+ -- Lisandro Damián Nicanor Pérez Meyer <lisandro@debian.org>  Wed, 02 Sep 2015 21:10:24 -0300
 
 kdevelop (4:4.7.1-0ubuntu3.1+gitf3c6735) vivid; urgency=medium
 
@@ -86,6 +148,30 @@ kdevelop (4:4.7.1-0ubuntu0.1+gitbbf779c) vivid; urgency=medium
   * integrated my gdb improvements (gdb-all branch)
 
  -- Andreas Roth <aroth@arsoft-online.com>  Sat, 07 Mar 2015 18:37:41 +0100
+
+kdevelop (4:4.7.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+
+  [ Andreas Cord-Landwehr ]
+  * Bump kdevplatform-dev build dependency to 1.7.0.
+  * Refresh patches.
+  * Update copyright.
+
+  [ Pino Toscano ]
+  * Update copyright.
+  * Add the pkg-config build dependency.
+  * Update install files.
+  * Install kdevelop.xpm using .install file.
+  * Bump the debhelper compatibility to 9:
+    - bump compat to 9
+    - bump the debhelper build dependency to 9
+  * Convert rules to the dh sequencer with kde addon.
+  * Remove unused cdbs build dependency.
+  * Suggest ninja-build in kdevelop, as there is a plugin using it.
+
+ -- Pino Toscano <pino@debian.org>  Tue, 23 Sep 2014 22:18:30 +0200
 
 kdevelop (4:4.7.0-0ubuntu3) vivid; urgency=medium
 
@@ -202,12 +288,59 @@ kdevelop (4:4.5.60-0.1) raring; urgency=low
 
  -- Andreas Roth <aroth@arsoft-online.com>  Tue, 20 Aug 2013 07:01:26 +0200
 
+kdevelop (4:4.5.2-1) unstable; urgency=low
+
+  * Team upload.
+  * New upstream release.
+
+  [ Andreas Cord-Landwehr ]
+  * Remove patch okteta_optional_structures_tool.diff, applied upstream.
+  * Bump build dependency for kdevplatform-dev to 1.5.2.
+  * Bump Standards-Version to 3.9.5: no changes needed.
+  * Update debian/watch file to track xz compressed tarballs (Closes: #731896)
+
+ -- Pino Toscano <pino@debian.org>  Sat, 18 Jan 2014 10:13:08 +0100
+
 kdevelop (4:4.5.2-0ubuntu1) trusty; urgency=low
 
   * New upstream release
   * Bump required version of kdevplatform-dev to 1.5.2
 
  -- Rohan Garg <rohangarg@kubuntu.org>  Mon, 04 Nov 2013 16:02:55 +0100
+
+kdevelop (4:4.5.1-2) unstable; urgency=low
+
+  * Team upload. Upload to unstable.
+
+  [ Andreas Cord-Landwehr ]
+  * Fix build on big endian platforms.
+  * Release fixes parser crashes: (Closes: #721968, #719284)
+
+  [ Pino Toscano ]
+  * Bump the okteta-dev build dependency to > 4.10, as previous versions are
+    not recognized. (Closes: #718076)
+  * Fix Vcs-* headers.
+
+ -- Pino Toscano <pino@debian.org>  Fri, 06 Sep 2013 19:46:51 +0200
+
+kdevelop (4:4.5.1-1) experimental; urgency=low
+
+  [ Pino Toscano ]
+  * Make kdevelop-data break/replace kdevelop-doc << 4.3 (it was part of
+    kdevelop 3.5).
+
+  [ Andreas Cord-Landwehr]
+  * Bump build dependency for kdevplatform-dev to 1.5.1.
+  * Remove patch for compile switch for Okteta structure tool since
+    BIG_ENDIAN compile switch implemented by upstream
+    (remove patch okteta_optional_structures_tool.diff)
+  * Add libqjson-dev build dependency.
+  * New upstream release:
+    - fixes parsing of libc header files (Closes: #707215)
+  * Bump Standards-Version to 3.9.4: no changes needed.
+  * Update copyright.
+
+ -- Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>  Fri, 25 May 2012 23:56:49 +0200
 
 kdevelop (4:4.5.1-0ubuntu5) saucy; urgency=low
 
@@ -393,6 +526,16 @@ kdevelop (4:4.2.81-0ubuntu1) precise; urgency=low
     - Recommend new package kdevelop-custom-buildsystem
 
  -- Rohan Garg <rohangarg@kubuntu.org>  Tue, 17 Jan 2012 18:05:47 +0530
+
+kdevelop (4:4.2.3-1) unstable; urgency=low
+
+  [ Andreas Cord-Landwehr ]
+  * New upstream release.
+
+  [ Pino Toscano ]
+  * Bump the kdevplatform-dev build dependency to 1.2.3.
+
+ -- Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>  Mon, 12 Dec 2011 21:22:18 +0100
 
 kdevelop (4:4.2.3-0ubuntu5) precise; urgency=low
 

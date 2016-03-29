@@ -1,16 +1,29 @@
 #!/usr/bin/make -f
 
-include /usr/share/pkg-kde-tools/qt-kde-team/2/debian-qt-kde.mk
+export DEB_LDFLAGS_MAINT_APPEND := -Wl,--as-needed
 
-override_dh_install:
-	install -D -p -m0644 debian/kdevelop.xpm \
-		debian/kdevelop/usr/share/pixmaps/kdevelop.xpm
-	$(overridden_command)
+%:
+	dh $@ --parallel --with kde
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf debian/man/out
+	-rmdir debian/man
+
+override_dh_auto_build:
+	dh_auto_build --parallel
+	if ! test -d debian/man/out; then mkdir -p debian/man/out; fi
+	for f in $$(find debian/man -name '*.man'); do \
+		soelim -I debian/man $$f \
+		> debian/man/out/`basename $$f .man`.`head -n1 $$f | awk '{print $$NF}'`; \
+	done
+
+override_dh_auto_install:
+	dh_auto_install
+	# Work around a conflict with kapptemplate
+	find debian/tmp -type f -name qmake_qt4guiapp.tar.bz2 | xargs rm -fv
 
 override_dh_strip:
-	$(overridden_command) --dbg-package=kdevelop-dbg
+	dh_strip --dbg-package=kdevelop-dbg
 
-override_dh_builddeb:
-	dh_builddeb -- -Zxz
-	
 .PHONY: override_dh_auto_test
